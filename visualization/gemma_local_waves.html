@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Waves and Clipping</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            width: 400px;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            text-align: center;
+            color: #bb86fc;
+        }
+        canvas {
+            width: 100%;
+            height: 200px;
+            background-color: #000;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        .slider-container {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+        span#freqValue, span#clippingValue {
+            color: #bb86fc;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #bb86fc;
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #9965f4;
+        }
+        button.playing {
+            background-color: #ff5252;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Audio Waves & Clipping</h1>
+        <canvas id="visualizer"></canvas>
+        <div class="slider-container">
+            <label for="freqSlider">Frequency: <span id="freqValue">350</span> Hz</label>
+            <input type="range" id="freqSlider" min="200" max="500" step="1" value="350">
+        </div>
+        <div class="slider-container">
+            <label for="clippingSlider">Soft Clipping: <span id="clippingValue">0</span></label>
+            <input type="range" id="clippingSlider" min="0" max="10" step="0.1" value="0">
+        </div>
+        <button id="playBtn">Start Audio</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        const freqSlider = document.getElementById('freqSlider');
+        const freqValue = document.getElementById('freqValue');
+        const clippingSlider = document.getElementById('clippingSlider');
+        const clippingValue = document.getElementById('clippingValue');
+        const playBtn = document.getElementById('playBtn');
+
+        let audioCtx = null;
+        let oscillator = null;
+        let gainNode = null;
+        let analyser = null;
+        let clippingNode = null;
+        let isPlaying = false;
+
+        // Setup Canvas Resolution
+        function setupCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        window.addEventListener('resize', setupCanvas);
+        setupCanvas();
+
+        function initAudioGraph() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            oscillator = audioCtx.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(parseFloat(freqSlider.value), audioCtx.currentTime);
+
+            // Using ScriptProcessor for the clipping effect
+            // 4096 buffer size
+            clippingNode = audioCtx.createScriptProcessor(4096, 1, 1);
+            clippingNode.onaudioprocess = (e) => {
+                console.log(e);
+                const input = e.input[0].getChannelData(0);
+                const output = e.output[0].getChannelData(0);
+                const amount = parseFloat(clippingSlider.value);
+                
+                if (amount <= 0.01) {
+                    output.set(input);
+                } else {
+                    // The "softness" factor. Higher amount = more saturation/clipping
+                    // We scale the input to push it into the tanh function's non-linear region
+                    const drive = 1 + (amount * 2); 
+                    for (let i = 0; i < input.length; i++) {
+                        output[i] = Math.tanh(input[i] * drive);
+                    }
+                }
+            };
+
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+
+            gainNode = audioCtx.createGain();
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+            // Connect the graph
+            oscillator.connect(clippingNode);
+            clippingNode.connect(analyser);
+            analyser.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+        }
+
+        freqSlider.addEventListener('input', () => {
+            const val = parseFloat(freqSlider.value);
+            freqValue.textContent = val;
+            if (oscillator) {
+                oscillator.frequency.setTargetAtTime(val, audioCtx.currentTime, 0.05);
+            }
+        });
+
+        clippingSlider.addEventListener('input', () => {
+            clippingValue.textContent = parseFloat(clippingSlider.value).toFixed(1);
+        });
+
+        playBtn.addEventListener('click', async () => {
+            if (!audioCtx) {
+                initAudioGraph();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
+
+            if (!isPlaying) {
+                // Start Playback
+                gainNode.gain.setTargetAtTime(0.5, audioCtx.currentTime, 0.1);
+                playBtn.textContent = 'Stop Audio';
+                playBtn.classList.add('playing');
+                isPlaying = true;
+                draw();
+            } else {
+                // Stop Playback
+                gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                playBtn.textContent = 'Start Audio';
+                playBtn.classList.remove('playing');
+                isPlaying = false;
+            }
+        });
+
+        function draw() {
+            if (!isPlaying) return;
+            requestAnimationFrame(draw);
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteTimeDomainData(dataArray);
+
+            ctx.fillStyle = 'rgb(0, 0, 0)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#bb86fc';
+            ctx.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * (canvas.height / 2);
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>
