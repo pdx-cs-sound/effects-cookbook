@@ -26,5 +26,8 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Compression: compression.md
-  - Automatic Gain Control: agc.md
+  - "Chapter 1 — Conventions & AGC":
+      - Conventions: conventions.md
+      - Automatic Gain Control: agc.md
+  - "Chapter 2 — Companding":
+      - Compression: compression.md
