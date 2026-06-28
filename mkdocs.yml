@@ -1,4 +1,5 @@
 site_name: Digital Audio Effects Cookbook
+site_url: https://pdx-cs-sound.github.io/effects-cookbook/
 docs_dir: prototype
 
 theme:
@@ -26,8 +27,11 @@ markdown_extensions:
       permalink: true
 
 nav:
+  - Home: index.md
   - "Chapter 1 — Conventions & AGC":
       - Conventions: conventions.md
       - Automatic Gain Control: agc.md
   - "Chapter 2 — Companding":
       - Compression: compression.md
+      - Limiting: limiter.md
+      - Expanding: expander.md

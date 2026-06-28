@@ -13,8 +13,9 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 ## Content
 - [ ] Chapter 2 — Compression: refine existing prototype; answer the "Further complexity"
       knee questions (parabolic knee, smoothing before/after the transfer fn)
-- [ ] Chapter 2 — Limiting page (refs: `thirdparty/compare/` audacity look-ahead, sox)
-- [ ] Chapter 2 — Expanding page (refs: dafx `compexp.m`, sox `compand`)
+- [x] Chapter 2 — Limiting page drafted (`prototype/limiter.md`)
+- [x] Chapter 2 — Expanding page drafted (`prototype/expander.md`)
+- [ ] Add "Hear it" / Visualization content to limiter + expander once stack is settled
 - [ ] Conventions: confirm depth/altitude after feedback
 - [x] Gather citable audio-evaluation-metric sources (`research/audio-quality-metrics.md`)
 - [ ] Consider a per-effect "How do we measure it?" section — crest factor + LUFS (BS.1770/R128)

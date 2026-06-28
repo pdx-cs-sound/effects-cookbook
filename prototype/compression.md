@@ -99,8 +99,8 @@ def compress(x, sr, threshold_db=-20.0, ratio=4.0,
 ## Related effects
 
 - **[Automatic Gain Control](agc.md)** — its slower, target-seeking cousin (the pair).
-- **Limiter** — compression with an ∞:1 ratio and fast attack.
-- **Expander / Gate** — the inverse: turns *down* the quiet parts.
+- **[Limiting](limiter.md)** — compression with an ∞:1 ratio and fast attack.
+- **[Expanding](expander.md) / Gate** — the inverse: turns *down* the quiet parts.
 
 ## Learn more
 

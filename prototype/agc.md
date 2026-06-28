@@ -138,7 +138,7 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
 
 - **[Conventions](conventions.md)** — the level detector and one-pole follower AGC is built from.
 - **[Compression](compression.md)** — faster, feed-forward, reshapes short-term dynamics.
-- **Limiting** — AGC's flattening with a compressor's speed; the bridge between the chapters.
+- **[Limiting](limiter.md)** — AGC's flattening with a compressor's speed; the bridge between the chapters.
 
 ## Learn more
 
