@@ -112,6 +112,14 @@ Proposed sections for every effect entry:
 **Chapter 2 — Companding** (compression, limiting, expanding)
 - *Compression:* reduces dynamic range above a threshold (ratio, attack, release, knee, makeup).
   Existing prototype: [prototype/compression.md](prototype/compression.md).
+  - **POSA-inspired "design decision map" experiment (2026-06-27):** frame building a compressor
+    as a graph of decisions + ramifications (after Schmidt's POSA web-server diagram). Borrow the
+    *method*, not POSA2's concurrency patterns (which are the no-threading material we exclude).
+    Note: [research/compressor-design-decisions.md](research/compressor-design-decisions.md);
+    interactive flow: `visualization/compressor_decision_map.html` (single start "no design" →
+    one option per row → single end "complete compressor"; the five `compare/` implementations
+    toggle on as distinct paths). The map's *resolution* is itself a design choice — it must be
+    granular enough to separate designs that actually sound different.
 - *Limiting:* compression at ∞:1 (or very high) ratio with fast attack.
 - *Expanding:* the inverse — turns *down* quiet parts (gate = extreme expander).
 - Resources: the `thirdparty/compare/` folder + its `analysis.md` cover compression,

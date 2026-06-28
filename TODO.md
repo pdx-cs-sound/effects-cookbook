@@ -16,10 +16,18 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [ ] Chapter 2 — Limiting page (refs: `thirdparty/compare/` audacity look-ahead, sox)
 - [ ] Chapter 2 — Expanding page (refs: dafx `compexp.m`, sox `compand`)
 - [ ] Conventions: confirm depth/altitude after feedback
+- [x] Gather citable audio-evaluation-metric sources (`research/audio-quality-metrics.md`)
+- [ ] Consider a per-effect "How do we measure it?" section — crest factor + LUFS (BS.1770/R128)
+      for the dynamics effects; reproducible counterpoint to subjective listening tests
 
 ## Visualization
 - [ ] Decide the browser viz stack (plain Canvas vs a charting lib) — DESIGN §4
 - [ ] Adopt "two visuals per effect" (static curve + time-domain) per the AGC finding
+- [x] POSA-style compressor "design decision map" — single start/end flow, refined granularity,
+      interactive five-implementation overlay (`visualization/compressor_decision_map.html`,
+      note in `research/compressor-design-decisions.md`)
+- [ ] Next on the decision map: hover-for-ramification per option; then generalize the flow to
+      limiter / AGC / expander (other paths through the same decisions)
 - [ ] Embed visuals into the MkDocs pages (currently `visualization/` is outside `docs_dir`)
 
 ## Open design decisions (DESIGN §4)
