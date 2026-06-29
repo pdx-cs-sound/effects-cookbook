@@ -166,7 +166,7 @@ mainly in *what* it does with the smoothed level once it has it.
 
 !!! note "Interactive visual"
     *Placeholder — a browser-based plot of amplitude, dBFS, and an envelope follower slots in
-    here.* Static now; client-side interactive later (see `visualization/`).
+    here.* Static now; client-side interactive later (see the [Visualizations](visualizations.md) page).
 
 ## Pitfalls
 

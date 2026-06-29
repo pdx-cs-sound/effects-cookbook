@@ -69,7 +69,7 @@ See [Compression](compression.md) for the fast, dynamics-reshaping cousin.
 ## Visualization
 
 !!! note "Static curve vs. time domain"
-    See `visualization/agc_static_vs_time.html` (a mock for review). A *steady-state* transfer
+    See the [Visualizations](visualizations.md) page (a mock for review). A *steady-state* transfer
     curve **cannot tell AGC from a limiter** — they share the same flattened characteristic.
     What separates them — AGC's slow release — only shows up in the **time domain**. That's why
     every effect page pairs a static transfer curve with a time-domain view. *(Embedding into

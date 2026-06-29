@@ -116,7 +116,7 @@ Proposed sections for every effect entry:
     as a graph of decisions + ramifications (after Schmidt's POSA web-server diagram). Borrow the
     *method*, not POSA2's concurrency patterns (which are the no-threading material we exclude).
     Note: [research/compressor-design-decisions.md](research/compressor-design-decisions.md);
-    interactive flow: `visualization/compressor_decision_map.html` (single start "no design" →
+    interactive flow: `prototype/visualization/compressor_decision_map.html` (single start "no design" →
     one option per row → single end "complete compressor"; the five `compare/` implementations
     toggle on as distinct paths). The map's *resolution* is itself a design choice — it must be
     granular enough to separate designs that actually sound different.
@@ -169,7 +169,7 @@ Wikipedia *Automatic gain control* (definition only — heavily analog/radio).
 - Open: verify the Woodgate/IEC + WebRTC license details before publishing (per §7).
 - Add the **Visualization** section per page once a browser stack is settled — likely
   **two** views per effect (static curve + time-domain). Two viz prototypes exist under
-  `visualization/`.
+  `prototype/visualization/`.
 
 ## 6. Prototypes / Samples
 

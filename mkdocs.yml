@@ -35,3 +35,4 @@ nav:
       - Compression: compression.md
       - Limiting: limiter.md
       - Expanding: expander.md
+  - Visualizations: visualizations.md

@@ -110,7 +110,7 @@ sound different.
 
 ## Diagram
 
-`visualization/compressor_decision_map.html` — **interactive**: single start ("no design") →
+`prototype/visualization/compressor_decision_map.html` — **interactive**: single start ("no design") →
 one option per row → single end ("complete compressor"), with the five `compare/`
 implementations toggleable as distinct colored paths (parallel-nudged where they share a
 choice). Next: hover-for-ramification per option; then generalize the flow to limiter / AGC /

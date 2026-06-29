@@ -7,7 +7,7 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Chapter 1 — Conventions page drafted (`prototype/conventions.md`)
 - [x] AGC research pass → Woodgate/IEC taxonomy (DESIGN §5)
 - [x] Chapter 1 — AGC page drafted (`prototype/agc.md`)
-- [x] Two-panel static-transfer + time-domain visualization mock (`visualization/agc_static_vs_time.html`)
+- [x] Two-panel static-transfer + time-domain visualization mock (`prototype/visualization/agc_static_vs_time.html`)
 - [ ] Monday meeting with Massey — gather high- and low-level feedback
 
 ## Content
@@ -25,11 +25,14 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [ ] Decide the browser viz stack (plain Canvas vs a charting lib) — DESIGN §4
 - [ ] Adopt "two visuals per effect" (static curve + time-domain) per the AGC finding
 - [x] POSA-style compressor "design decision map" — single start/end flow, refined granularity,
-      interactive five-implementation overlay (`visualization/compressor_decision_map.html`,
+      interactive five-implementation overlay (`prototype/visualization/compressor_decision_map.html`,
       note in `research/compressor-design-decisions.md`)
 - [ ] Next on the decision map: hover-for-ramification per option; then generalize the flow to
       limiter / AGC / expander (other paths through the same decisions)
-- [ ] Embed visuals into the MkDocs pages (currently `visualization/` is outside `docs_dir`)
+- [x] Visualizations gallery page (`prototype/visualizations.md`); moved `visualization/` into
+      `docs_dir` (now `prototype/visualization/`) so the figures are served and embeddable
+- [ ] Embed individual visuals directly into their effect pages (beyond the gallery)
+- [ ] Build the "Planned" gallery figures (static transfer curve, crest factor/LUFS, envelope follower)
 
 ## Open design decisions (DESIGN §4)
 - [ ] Conventions chapter scope: how much foundational material in Ch1 vs per effect
