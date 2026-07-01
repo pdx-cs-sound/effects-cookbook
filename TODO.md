@@ -17,6 +17,10 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Chapter 2 — Expanding page drafted (`prototype/expander.md`)
 - [ ] Add "Hear it" / Visualization content to limiter + expander once stack is settled
 - [ ] Conventions: confirm depth/altitude after feedback
+- [x] Units-rigor pass on Conventions (dB always names a reference; power=10·log/amplitude=20·log;
+      dBFS peak-primary + always label peak/RMS; decline AES17 offset; level vs loudness vs volume)
+      — addresses the "be rigorous about units" feedback
+- [ ] Later / TBD: loudness units (phon, sone), LUFS (BS.1770), psychoacoustics, A-weighting/dBA
 - [x] Gather citable audio-evaluation-metric sources (`research/audio-quality-metrics.md`)
 - [ ] Consider a per-effect "How do we measure it?" section — crest factor + LUFS (BS.1770/R128)
       for the dynamics effects; reproducible counterpoint to subjective listening tests

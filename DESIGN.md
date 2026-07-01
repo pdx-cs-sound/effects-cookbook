@@ -97,6 +97,8 @@ Proposed sections for every effect entry:
 - **Pseudocode style/conventions** (format, how close to the chosen language).
 - **Authoring workflow** (who writes, how reviewed, branch/PR process).
 - **Per-effect companion notebook?** (yes/no — pairs with MkDocs page).
+- **Loudness / LUFS / psychoacoustics** (phon, sone, LUFS, A-weighting/dBA): **deferred** —
+  mention only, marked TBD/later. In scope eventually? Undecided.
 - **Repo name / GitHub Pages URL.**
 
 ## 5. Content Notes — the two chapters
@@ -207,3 +209,6 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-06-27 | **Measurement unit dBA → dBFS** | dBFS is the natural sample-domain unit and what the code already computes; A-weighting out of scope as the working unit |
 | 2026-06-27 | Adopt Woodgate/IEC 60268-8 **loop-gain × release-time taxonomy** for AGC/limiting/compression; teach AGC as goal+technique | Authoritative, topology-agnostic; maps cleanly onto the two chapters (limiting bridges them) |
 | 2026-06-27 | Plan **two visuals per effect** (static transfer curve + time-domain) | A static curve can't distinguish AGC from a limiter; the difference is in the time domain |
+| 2026-06-30 | **Units-rigor policy** (Conventions page): dB always names a reference; power=10·log / amplitude=20·log; dBFS reference = full scale 1.0; **primary = dBFS (peak)**; always label peak/RMS; **decline the AES17 RMS offset** (full-scale sine = −3.01 dBFS RMS, so the peak/RMS gap teaches crest factor) | Direct response to "be rigorous about units" feedback; one honest reference beats meter-matching at depth 1–2 |
+| 2026-06-30 | Distinguish **level (objective dB) vs loudness (perceptual) vs volume (a control)**; "louder" = higher level in dB, never "twice as loud" | The exact confusion that makes unit usage sloppy |
+| 2026-06-30 | **Defer loudness/LUFS/psychoacoustics** (phon, sone, LUFS, A-weighting/dBA) — mention only, marked TBD | Needs SPL + hearing models, outside the sample domain; keep v1 scoped |
