@@ -11,6 +11,11 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [ ] Monday meeting with Massey — gather high- and low-level feedback
 
 ## Content
+- [x] Configurable reference compressor exercising every decision-map choice
+      (`code/compressor.py`, 5 reference presets) + stdlib unittest suite
+      (`code/test_compressor.py`, 23 tests) — run `python3 -m unittest discover -s code`
+- [ ] Cookbook page walking the configurable reference compressor ("the decision map as code")
+- [ ] Consider running the code tests in the publish GitHub Action (one extra step before deploy)
 - [ ] Chapter 2 — Compression: refine existing prototype; answer the "Further complexity"
       knee questions (parabolic knee, smoothing before/after the transfer fn)
 - [x] Chapter 2 — Limiting page drafted (`prototype/limiter.md`)
