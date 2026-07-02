@@ -1,0 +1,1341 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://pdx-cs-sound.github.io/effects-cookbook/conventions/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../agc/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Conventions - Digital Audio Effects Cookbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#conventions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Digital Audio Effects Cookbook" class="md-header__button md-logo" aria-label="Digital Audio Effects Cookbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Digital Audio Effects Cookbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Conventions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Digital Audio Effects Cookbook" class="md-nav__button md-logo" aria-label="Digital Audio Effects Cookbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Digital Audio Effects Cookbook
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 1 — Conventions & AGC
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 1 — Conventions & AGC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conventions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conventions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#audio-as-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio as samples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#measuring-level-decibels-and-dbfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measuring level: decibels and dBFS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Measuring level: decibels and dBFS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-decibel-is-a-ratio-so-it-always-needs-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A decibel is a ratio — so it always needs a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-vs-amplitude-the-10-vs-the-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power vs. amplitude — the 10 vs. the 20
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dbfs-our-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dBFS — our unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peak-vs-rms-dbfs-always-say-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peak vs. RMS dBFS — always say which
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-vs-loudness-vs-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level vs. loudness vs. volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gain-linear-and-in-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gain: linear and in dB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detecting-level-peak-vs-rms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting level: peak vs. RMS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#following-level-over-time-attack-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Following level over time: attack &amp; release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learn more
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic Gain Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chapter 2 — Companding
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Chapter 2 — Companding
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limiter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limiting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../expander/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Expanding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualizations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualizations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#audio-as-samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audio as samples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#measuring-level-decibels-and-dbfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measuring level: decibels and dBFS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Measuring level: decibels and dBFS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-decibel-is-a-ratio-so-it-always-needs-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A decibel is a ratio — so it always needs a reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-vs-amplitude-the-10-vs-the-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power vs. amplitude — the 10 vs. the 20
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dbfs-our-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dBFS — our unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peak-vs-rms-dbfs-always-say-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peak vs. RMS dBFS — always say which
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-vs-loudness-vs-volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level vs. loudness vs. volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gain-linear-and-in-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gain: linear and in dB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detecting-level-peak-vs-rms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting level: peak vs. RMS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#following-level-over-time-attack-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Following level over time: attack &amp; release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visualization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learn more
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>The shared vocabulary the rest of this cookbook leans on: how we represent audio, how we
+measure level in <strong>dBFS</strong>, how we convert between linear and decibel gain, and how an
+effect <em>follows</em> a signal's level over time. Every later chapter assumes these.</p>
+</blockquote>
+<p><em>Chapter 1 — Conventions &amp; AGC. Next up: <a href="../agc/">Automatic Gain Control</a>.</em></p>
+<hr />
+<h2 id="audio-as-samples">Audio as samples<a class="headerlink" href="#audio-as-samples" title="Permanent link">&para;</a></h2>
+<p>Digital audio is just a list of numbers. We measure the signal's amplitude many thousands of
+times per second (the <strong>sample rate</strong>, <code>sr</code>, e.g. 44 100 or 48 000 Hz) and store each
+measurement as one <strong>sample</strong>.</p>
+<p>Throughout this cookbook a mono signal is a plain Python list of floats in the range
+<strong><code>[-1.0, 1.0]</code></strong>:</p>
+<ul>
+<li><code>0.0</code> is silence,</li>
+<li><code>+1.0</code> and <code>-1.0</code> are the largest values the format can represent — <strong>full scale</strong>,</li>
+<li>anything beyond <code>±1.0</code> would <strong>clip</strong> (distort) on playback.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># One second of a 440 Hz sine at half amplitude, 48 kHz.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="n">sr</span> <span class="o">=</span> <span class="mi">48_000</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">440</span> <span class="o">*</span> <span class="n">n</span> <span class="o">/</span> <span class="n">sr</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sr</span><span class="p">)]</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Why <code>[-1, 1]</code>?</p>
+<p>It is the natural, format-independent range for floating-point audio: the math stays the
+same whether the file is later rendered to 16-bit, 24-bit, or anything else. We never
+work in raw integer sample values here.</p>
+</div>
+<h2 id="measuring-level-decibels-and-dbfs">Measuring level: decibels and dBFS<a class="headerlink" href="#measuring-level-decibels-and-dbfs" title="Permanent link">&para;</a></h2>
+<p>Signal levels span a huge range, so we measure them <strong>logarithmically</strong>, in <strong>decibels (dB)</strong>.
+But getting this rigorous means being careful about three things that everyday usage blurs: a dB
+always implies a <em>reference</em>, it depends on whether you're measuring <em>power or amplitude</em>, and
+"dBFS" itself is only fully specified once you say <em>peak or RMS</em>.</p>
+<h3 id="a-decibel-is-a-ratio-so-it-always-needs-a-reference">A decibel is a ratio — so it always needs a reference<a class="headerlink" href="#a-decibel-is-a-ratio-so-it-always-needs-a-reference" title="Permanent link">&para;</a></h3>
+<p>A decibel is <strong>dimensionless</strong>: it's a ratio, so on its own it means nothing. It always compares
+a measured value against a fixed <strong>reference</strong>:</p>
+<div class="highlight"><pre><span></span><code>dB = 10 · log10( measured / reference )      # (for power quantities — see below)
+</code></pre></div>
+<ul>
+<li>The <strong>numerator</strong> is what you're measuring; the <strong>denominator</strong> is a fixed, agreed reference.</li>
+<li>With <strong>no fixed reference</strong>, a dB is only a <em>relative change</em> — this is how we talk about
+  <strong>gain</strong> ("+6 dB" = ×2 amplitude). With a <strong>standard reference</strong>, it names an <em>absolute level</em>,
+  and the reference is exactly what the suffix means: dB<strong>FS</strong>, dB <strong>SPL</strong>, ….</li>
+</ul>
+<p>So <strong>never write a bare "dB" for a level.</strong> Write the referenced unit — it pins down both the
+reference <em>and</em> the power-vs-amplitude question below.</p>
+<h3 id="power-vs-amplitude-the-10-vs-the-20">Power vs. amplitude — the 10 vs. the 20<a class="headerlink" href="#power-vs-amplitude-the-10-vs-the-20" title="Permanent link">&para;</a></h3>
+<p>The reference must match the <em>kind</em> of quantity, and that sets the multiplier:</p>
+<ul>
+<li><strong>Power</strong> quantities (intensity, electrical power): <code>dB = 10 · log10(P / P₀)</code>.</li>
+<li><strong>Amplitude / field</strong> quantities (sound pressure, voltage, <strong>our sample values</strong>):
+  <code>dB = 20 · log10(A / A₀)</code> — the 20 appears because power ∝ amplitude².</li>
+</ul>
+<p>The two are built to <em>agree</em> for the same physical change (doubling amplitude and quadrupling
+power are both <strong>+6 dB</strong>), so the dB number itself <strong>never tells you which you measured</strong> — the
+<strong>unit</strong> does:</p>
+<table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Measures</th>
+<th>Reference</th>
+<th>Quantity → factor</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dBFS</strong></td>
+<td>sample amplitude</td>
+<td>full scale (1.0)</td>
+<td>amplitude → 20·log</td>
+<td>digital, absolute</td>
+</tr>
+<tr>
+<td><strong>dB SPL</strong></td>
+<td>sound pressure</td>
+<td>20 µPa</td>
+<td>amplitude → 20·log</td>
+<td>acoustic, absolute</td>
+</tr>
+<tr>
+<td><strong>dBV / dBu</strong></td>
+<td>voltage</td>
+<td>1 V / 0.775 V RMS</td>
+<td>amplitude → 20·log</td>
+<td>electrical, absolute</td>
+</tr>
+<tr>
+<td><strong>dBm</strong></td>
+<td>electrical power</td>
+<td>1 mW</td>
+<td>power → 10·log</td>
+<td>electrical, absolute</td>
+</tr>
+<tr>
+<td><strong>dB SIL / SWL</strong></td>
+<td>sound intensity / power</td>
+<td>10⁻¹² W/m² · W</td>
+<td>power → 10·log</td>
+<td>acoustic, absolute</td>
+</tr>
+<tr>
+<td><strong>dB</strong> (gain)</td>
+<td>a <em>change</em></td>
+<td>the other signal</td>
+<td>match the quantity</td>
+<td>relative</td>
+</tr>
+</tbody>
+</table>
+<p>The units audio work touches most (dBFS, dB SPL, dBV/dBu) are all <strong>amplitude</strong> quantities, so
+<strong>20·log</strong> is our default throughout — but the discipline is to <em>know</em> that, not assume it.</p>
+<h3 id="dbfs-our-unit">dBFS — our unit<a class="headerlink" href="#dbfs-our-unit" title="Permanent link">&para;</a></h3>
+<p>We work on samples, so our reference is <strong>full scale</strong> (amplitude <code>1.0</code>) and our unit is <strong>dBFS</strong>
+(decibels relative to full scale). Samples are amplitudes, so it's the 20·log form:</p>
+<div class="highlight"><pre><span></span><code>dBFS = 20 · log10( |sample| / 1.0 )
+</code></pre></div>
+<ul>
+<li>amplitude <code>1.0</code> → <strong>0 dBFS</strong> (the loudest representable level),</li>
+<li>everything quieter is <strong>negative</strong> (e.g. <code>0.5</code> → −6 dBFS),</li>
+<li><code>0.0</code> → −∞ dBFS (silence).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Linear amplitude</th>
+<th>dBFS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>−6.0</td>
+</tr>
+<tr>
+<td>0.25</td>
+<td>−12.0</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>−20.0</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>−40.0</td>
+</tr>
+<tr>
+<td>0.001</td>
+<td>−60.0</td>
+</tr>
+</tbody>
+</table>
+<p>Two rules of thumb fall out of the math: <strong>halving</strong> the amplitude is about <strong>−6 dB</strong>, and
+dividing by <strong>ten</strong> is exactly <strong>−20 dB</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">db_from_amplitude</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear amplitude -&gt; dBFS. Silence maps to -inf.&quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">amplitude_from_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;dBFS -&gt; linear amplitude.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">db</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="peak-vs-rms-dbfs-always-say-which">Peak vs. RMS dBFS — always say which<a class="headerlink" href="#peak-vs-rms-dbfs-always-say-which" title="Permanent link">&para;</a></h3>
+<p>Even "dBFS" is under-specified: the number depends on <em>how</em> you reduce the signal to one value.
+We fix <strong>one reference (full scale = 1.0)</strong> and always <strong>label the detector</strong>:</p>
+<ul>
+<li><strong>dBFS (peak)</strong> — the instantaneous sample magnitude, <code>20·log10(|x|)</code>. Sample-peak can't
+  exceed 0 dBFS. <strong>This is our primary unit</strong> — the per-sample detectors report it.</li>
+<li><strong>dBFS (RMS)</strong> — the energy average over a window, <code>20·log10(rms)</code>, against the <strong>same</strong>
+  1.0 reference.</li>
+</ul>
+<p>For one full-scale sine those give <strong>0 dBFS (peak)</strong> but <strong>−3.01 dBFS (RMS)</strong> — and that 3 dB gap
+<em>is</em> the signal's <strong>crest factor</strong>. Keeping a single honest reference means RMS reads exactly
+what the math says.</p>
+<div class="admonition note">
+<p class="admonition-title">We do not use the AES17 RMS offset</p>
+<p>Broadcast meters (AES17) <em>re-reference</em> RMS so that a full-scale <strong>sine</strong> reads 0 dBFS RMS —
+a fixed <strong>+3.01 dB</strong> offset (a full-scale square then reads +3 dBFS RMS). We deliberately
+<strong>don't</strong>: the offset is a magic constant that hides the crest factor. The cost is that our
+RMS numbers sit ~3 dB below what a typical DAW meter shows — if you compare to one, that's why.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Peak-to-peak is not a level</p>
+<p>In our range the signal <em>spans</em> up to 2 (from −1 to +1), but level is never measured
+peak-to-peak. A detector that uses <code>max − min</code> reads 6 dB hot next to a true peak detector
+(20·log₁₀ 2 ≈ 6.02 dB); one of the open-source compressors we surveyed makes exactly this
+mistake. Measure the magnitude <code>|x|</code> (peak) or the RMS, never the span. A useful sanity
+check for any reading: <strong>RMS ≤ peak ≤ 1.0</strong>, so nothing in this system can exceed 0 dBFS.</p>
+</div>
+<h3 id="level-vs-loudness-vs-volume">Level vs. loudness vs. volume<a class="headerlink" href="#level-vs-loudness-vs-volume" title="Permanent link">&para;</a></h3>
+<p>These everyday words hop between the <em>objective</em> and the <em>perceptual</em>, which is where rigor
+slips. Keep them separate:</p>
+<ul>
+<li><strong>Level</strong> — an <em>objective</em> signal measure, in dB (what we compute). When this book says
+  "louder," it means <strong>higher level, in dB</strong>.</li>
+<li><strong>Loudness</strong> — how loud a sound <em>seems</em>: a <em>perceptual</em> quantity, nonlinearly related to level.
+  Crucially, <strong>"+6 dB" is not "twice as loud."</strong></li>
+<li><strong>Volume</strong> — not a measurement at all; a <em>control</em> (a gain setting).</li>
+</ul>
+<p>"Double it" is really three different requests:</p>
+<table>
+<thead>
+<tr>
+<th>"Double it" means…</th>
+<th>dB change</th>
+<th>amplitude</th>
+<th>power</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>×2 <strong>amplitude</strong></td>
+<td>+6 dB</td>
+<td>×2</td>
+<td>×4</td>
+</tr>
+<tr>
+<td>×2 <strong>power</strong></td>
+<td>+3 dB</td>
+<td>×1.41</td>
+<td>×2</td>
+</tr>
+<tr>
+<td>×2 <strong>perceived loudness</strong></td>
+<td>≈ +10 dB</td>
+<td>×3.16</td>
+<td>×10</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Loudness, LUFS, and psychoacoustics — deferred (TBD)</p>
+<p>Perceived loudness has its own units (<strong>phon</strong>, <strong>sone</strong>) and a practical engineering proxy
+(<strong>LUFS</strong> / ITU-R BS.1770), and <strong>A-weighting / dBA</strong> is a perceptual frequency curve in the
+same family. Quantifying any of these needs actual sound-pressure levels plus models of
+hearing (<strong>psychoacoustics</strong>) — outside the sample domain, and <strong>out of scope for now
+(TBD / later)</strong>. This book stays in objective <strong>level (dBFS)</strong>: we may <em>name</em> loudness, but
+we don't measure it.</p>
+</div>
+<h2 id="gain-linear-and-in-db">Gain: linear and in dB<a class="headerlink" href="#gain-linear-and-in-db" title="Permanent link">&para;</a></h2>
+<p><strong>Gain</strong> is just multiplication: to make a signal louder or quieter you multiply every sample
+by a constant. A gain of <code>1.0</code> changes nothing; <code>0.5</code> is half amplitude (−6 dB); <code>2.0</code> is
+double (+6 dB).</p>
+<p>We <em>talk</em> about gain in dB but <em>apply</em> it linearly, so converting between the two is constant
+work in every effect:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_gain_db</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">gain_db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a new signal scaled by gain_db (in dB).&quot;&quot;&quot;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">amplitude_from_db</span><span class="p">(</span><span class="n">gain_db</span><span class="p">)</span>        <span class="c1"># dB -&gt; linear, once</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">s</span> <span class="o">*</span> <span class="n">g</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">signal</span><span class="p">]</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Keep dB and linear straight</p>
+<p>Decibels <strong>add</strong>; linear gains <strong>multiply</strong>. Two stages of +6 dB give +12 dB, which is
+×4 in linear terms — not ×2 + ×2. Mixing the two domains is the most common beginner bug.</p>
+</div>
+<h2 id="detecting-level-peak-vs-rms">Detecting level: peak vs. RMS<a class="headerlink" href="#detecting-level-peak-vs-rms" title="Permanent link">&para;</a></h2>
+<p>An effect that reacts to "how loud is it right now" first needs a number for the current
+level. Two common detectors:</p>
+<ul>
+<li><strong>Peak</strong> — the largest magnitude in a window. Fast, catches transients, good for catching
+  clipping.</li>
+<li><strong>RMS</strong> (root-mean-square) — the energy average over a window. Smoother, and closer to
+  perceived loudness.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">peak</span><span class="p">(</span><span class="n">block</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Peak amplitude of a block of samples.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">block</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rms</span><span class="p">(</span><span class="n">block</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Root-mean-square amplitude of a block of samples.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">block</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">block</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="p">))</span>
+</code></pre></div>
+<p>For a sine wave, RMS sits about <strong>3 dB below</strong> the peak (that gap is its <strong>crest factor</strong>) — so
+the choice of detector shifts your measured level. Most level effects in this book detect on one
+of these and report the result as <strong>dBFS (peak)</strong> or <strong>dBFS (RMS)</strong> — always labelled, per the
+convention above.</p>
+<h2 id="following-level-over-time-attack-release">Following level over time: attack &amp; release<a class="headerlink" href="#following-level-over-time-attack-release" title="Permanent link">&para;</a></h2>
+<p>Effects rarely react instantly — that would sound harsh and distort. Instead they <strong>smooth</strong>
+their response with time constants:</p>
+<ul>
+<li><strong>Attack</strong> — how quickly the effect responds when the level <em>rises</em>.</li>
+<li><strong>Release</strong> — how quickly it relaxes when the level <em>falls</em>.</li>
+</ul>
+<p>The standard tool is a <strong>one-pole smoother</strong> (a.k.a. exponential follower). A coefficient
+derived from a time-in-milliseconds controls how sluggish it is:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">smoothing_coeff</span><span class="p">(</span><span class="n">time_ms</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One-pole coefficient for a given time constant at sample rate sr.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">sr</span> <span class="o">*</span> <span class="n">time_ms</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">follow</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">attack_ms</span><span class="p">,</span> <span class="n">release_ms</span><span class="p">,</span> <span class="n">sr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trace a signal&#39;s envelope: fast up (attack), slow down (release).&quot;&quot;&quot;</span>
+    <span class="n">atk</span> <span class="o">=</span> <span class="n">smoothing_coeff</span><span class="p">(</span><span class="n">attack_ms</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">smoothing_coeff</span><span class="p">(</span><span class="n">release_ms</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">signal</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">atk</span> <span class="k">if</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">env</span> <span class="k">else</span> <span class="n">rel</span>   <span class="c1"># attack when rising, release when falling</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">env</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">coeff</span><span class="p">)</span> <span class="o">*</span> <span class="n">target</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+<p>This <code>follow</code> pattern — measure, then smooth toward the measurement — is the backbone of
+<a href="../agc/">AGC</a> and every effect in the <a href="../compression/">Companding</a> chapter. Each one differs
+mainly in <em>what</em> it does with the smoothed level once it has it.</p>
+<h2 id="visualization">Visualization<a class="headerlink" href="#visualization" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Interactive visual</p>
+<p><em>Placeholder — a browser-based plot of amplitude, dBFS, and an envelope follower slots in
+here.</em> Static now; client-side interactive later (see the <a href="../visualizations/">Visualizations</a> page).</p>
+</div>
+<h2 id="pitfalls">Pitfalls<a class="headerlink" href="#pitfalls" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Common mistakes</p>
+<ul>
+<li><strong><code>log10(0)</code> is undefined.</strong> Guard silence before taking a logarithm (we return −∞).</li>
+<li><strong>dB ≠ linear.</strong> Convert deliberately; never add a dB value to a sample.</li>
+<li><strong>Detector choice matters.</strong> Peak and RMS of the same signal differ by several dB —
+  state which one a measurement uses.</li>
+<li><strong>Sample rate is part of every time constant.</strong> The same <code>attack_ms</code> gives a different
+  coefficient at 44.1 kHz vs. 48 kHz; always pass <code>sr</code> through.</li>
+</ul>
+</div>
+<h2 id="learn-more">Learn more<a class="headerlink" href="#learn-more" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/DBFS">dBFS</a> and <a href="https://en.wikipedia.org/wiki/Decibel">Decibel</a> — Wikipedia, for the measurement basics.</li>
+<li><a href="https://en.wikipedia.org/wiki/Root_mean_square">Root mean square</a> — Wikipedia.</li>
+<li>Udo Zölzer (ed.), <strong>DAFX: Digital Audio Effects</strong>, 2nd ed., Wiley, 2011 — the standard reference for this whole cookbook.</li>
+<li>Julius O. Smith III, <strong>Introduction to Digital Filters</strong>, CCRMA (free online) — for one-pole smoothers / exponential followers.</li>
+</ul>
+<blockquote>
+<p><em>Citations above are starting points and should be verified before publication, per the
+project's attribution policy (DESIGN.md §7).</em></p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

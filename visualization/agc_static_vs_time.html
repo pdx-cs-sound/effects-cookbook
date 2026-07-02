@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGC vs limiter — static transfer vs time domain</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280; --grid: #e8e8e3; --border: #e2e2dc;
+    --panel: #fafaf8;
+    --unity: #9ca3af; --agc: #2a78d6; --limiter: #e34948;
+    --comp2: #1baf7a; --comp3: #eda100; --input: #b4b2a9; --target: #4a3aa7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1a1a19; --fg: #ececec; --muted: #9a988f; --grid: #2c2c2a; --border: #383835;
+            --panel: #232321;
+            --unity: #6b6a66; --agc: #3987e5; --limiter: #e66767;
+            --comp2: #199e70; --comp3: #c98500; --input: #5f5e5a; --target: #9085e9; }
+  }
+  body { margin: 0; padding: 22px; background: var(--bg); color: var(--fg);
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif; }
+  h1 { font-size: 1.1rem; font-weight: 500; margin: 0 0 4px; }
+  p.lede { color: var(--muted); margin: 0 0 18px; max-width: 70ch; font-size: 0.9rem; line-height: 1.6; }
+  .panels { display: flex; flex-wrap: wrap; gap: 18px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+           padding: 14px 16px; flex: 1 1 380px; }
+  .panel h2 { font-size: 0.92rem; font-weight: 500; margin: 0 0 2px; }
+  .panel .sub { color: var(--muted); font-size: 0.78rem; margin: 0 0 8px; }
+  canvas { width: 100%; height: auto; display: block; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; font-size: 0.76rem; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
+  .note { margin-top: 18px; font-size: 0.82rem; color: var(--muted); max-width: 78ch; line-height: 1.6; }
+  .note strong { color: var(--fg); font-weight: 500; }
+</style>
+</head>
+<body>
+  <h1>AGC vs. limiter — what a static curve can and can't show</h1>
+  <p class="lede">Left: steady-state transfer curves — AGC and a limiter are the same line.
+  Right: the same two effects over time, where they behave nothing alike. The thing that separates
+  them (release time) is a time-domain property, invisible on a static curve.</p>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>1 · static transfer (steady state)</h2>
+      <p class="sub">output dBFS vs input dBFS</p>
+      <canvas id="staticCanvas" width="520" height="360" role="img"
+        aria-label="Static transfer curves. Below threshold all are unity. Above threshold, AGC and limiter flatten identically while 2 to 1 and 3 to 1 compression reduce slope."></canvas>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--unity)"></i>unity (no processing)</span>
+        <span><i class="sw" style="background:var(--agc)"></i>AGC or limiter (∞:1)</span>
+        <span><i class="sw" style="background:var(--comp2)"></i>compression 2:1</span>
+        <span><i class="sw" style="background:var(--comp3)"></i>compression 3:1</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2 · time domain</h2>
+      <p class="sub">level over time, target = −20 dBFS</p>
+      <canvas id="timeCanvas" width="520" height="360" role="img"
+        aria-label="Level over time. AGC slowly drives the whole envelope toward the target and lets a fast transient through. The limiter ignores slow drift but caps the transient."></canvas>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--input)"></i>input level</span>
+        <span><i class="sw" style="background:var(--agc)"></i>AGC (slow → target)</span>
+        <span><i class="sw" style="background:var(--limiter)"></i>limiter (fast → caps peaks)</span>
+        <span><i class="sw" style="background:var(--target)"></i>target</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="note"><strong>The point:</strong> on the left, "AGC or limiter" is one curve — a
+  steady-state plot cannot distinguish them. On the right, the slow AGC loop flattens the whole
+  envelope toward the target (and lets a fast transient slip through — a known AGC pitfall), while
+  the fast limiter ignores the slow drift and only shaves the loud peak. Both axes matter, so each
+  effect page pairs a static curve with a time-domain view. <em>Illustrative mock; axes relabeled
+  to dBFS after Woodgate, ISCVE Engineering Note 27.1, Fig. 1.</em></p>
+
+<script>
+(function () {
+  const IN_MIN = -60, IN_MAX = 0, OUT_MIN = -60, OUT_MAX = 0, THRESH = -30;
+  const css = v => getComputedStyle(document.body).getPropertyValue(v).trim() || '#000';
+
+  function frame(canvas) {
+    const ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+    const padL = 46, padR = 14, padT = 14, padB = 34;
+    return { ctx, W, H, x0: padL, x1: W - padR, y0: H - padB, y1: padT };
+  }
+
+  function axes(f, xlabel, ylabel) {
+    const { ctx, x0, x1, y0, y1 } = f;
+    ctx.clearRect(0, 0, f.W, f.H);
+    ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted');
+    ctx.lineWidth = 1; ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    for (let v = IN_MIN; v <= IN_MAX; v += 10) {
+      const x = x0 + (v - IN_MIN) / (IN_MAX - IN_MIN) * (x1 - x0);
+      ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1); ctx.stroke();
+      ctx.fillText(v, x, y0 + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let v = OUT_MIN; v <= OUT_MAX; v += 10) {
+      const y = y0 + (v - OUT_MIN) / (OUT_MAX - OUT_MIN) * (y1 - y0);
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillText(v, x0 - 6, y + 3);
+    }
+    ctx.textAlign = 'center'; ctx.fillText(xlabel, (x0 + x1) / 2, y0 + 30);
+    ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText(ylabel, 0, 0); ctx.restore();
+  }
+
+  // Panel 1 — static transfer
+  (function () {
+    const f = frame(document.getElementById('staticCanvas'));
+    const { ctx, x0, x1, y0, y1 } = f;
+    axes(f, 'input dBFS', 'output dBFS');
+    const sx = v => x0 + (v - IN_MIN) / (IN_MAX - IN_MIN) * (x1 - x0);
+    const sy = v => y0 + (v - OUT_MIN) / (OUT_MAX - OUT_MIN) * (y1 - y0);
+
+    ctx.strokeStyle = css('--border'); ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx(THRESH), y0); ctx.lineTo(sx(THRESH), y1); ctx.stroke();
+    ctx.setLineDash([]);
+
+    const curve = (fn, color, dash, w) => {
+      ctx.strokeStyle = color; ctx.lineWidth = w || 2.4; ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      for (let i = IN_MIN; i <= IN_MAX; i += 0.5) {
+        const X = sx(i), Y = sy(fn(i));
+        i === IN_MIN ? ctx.moveTo(X, Y) : ctx.lineTo(X, Y);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    };
+    const comp = (i, r) => i <= THRESH ? i : THRESH + (i - THRESH) / r;
+    curve(i => i, css('--unity'), [5, 4], 1.6);   // unity
+    curve(i => comp(i, 3), css('--comp3'));       // 3:1
+    curve(i => comp(i, 2), css('--comp2'));       // 2:1
+    curve(i => i <= THRESH ? i : THRESH, css('--agc'), [], 2.8); // ∞:1
+  })();
+
+  // Panel 2 — time domain
+  (function () {
+    const f = frame(document.getElementById('timeCanvas'));
+    const { ctx, x0, x1, y0, y1 } = f;
+    const N = 240, target = -20, ceiling = -10, maxGain = 22, a = 0.97;
+
+    const input = new Array(N);
+    for (let i = 0; i < N; i++) {
+      const t = i / N;
+      input[i] = t < 0.25 ? -35 : t < 0.55 ? -12 : -28;
+    }
+    for (let k = 0; k < 4; k++) input[172 + k] = -2;   // one fast transient
+
+    const agc = new Array(N); let g = 0, sm = input[0];
+    for (let i = 0; i < N; i++) {
+      sm = a * sm + (1 - a) * input[i];
+      g = a * g + (1 - a) * (target - sm);
+      g = Math.max(-maxGain, Math.min(maxGain, g));
+      agc[i] = input[i] + g;
+    }
+    const lim = input.map(v => Math.min(v, ceiling));
+
+    // axes (output only on y; x is time)
+    ctx.clearRect(0, 0, f.W, f.H);
+    ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted');
+    ctx.lineWidth = 1; ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'right';
+    const syt = v => { v = Math.max(OUT_MIN, Math.min(0, v)); return y0 + (v - OUT_MIN) / (0 - OUT_MIN) * (y1 - y0); };
+    for (let v = OUT_MIN; v <= 0; v += 10) {
+      ctx.beginPath(); ctx.moveTo(x0, syt(v)); ctx.lineTo(x1, syt(v)); ctx.stroke();
+      ctx.fillText(v, x0 - 6, syt(v) + 3);
+    }
+    ctx.textAlign = 'center'; ctx.fillText('time →', (x0 + x1) / 2, y0 + 30);
+    ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('level dBFS', 0, 0); ctx.restore();
+
+    const sxt = i => x0 + i / (N - 1) * (x1 - x0);
+    const line = (arr, color, dash, w) => {
+      ctx.strokeStyle = color; ctx.lineWidth = w || 2; ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) { const X = sxt(i), Y = syt(arr[i]); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+      ctx.stroke(); ctx.setLineDash([]);
+    };
+    ctx.strokeStyle = css('--target'); ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, syt(target)); ctx.lineTo(x1, syt(target)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    line(input, css('--input'), [4, 3], 1.6);
+    line(lim, css('--limiter'), [], 2);
+    line(agc, css('--agc'), [], 2.8);
+  })();
+})();
+</script>
+</body>
+</html>
