@@ -140,6 +140,13 @@ what the math says.
     **don't**: the offset is a magic constant that hides the crest factor. The cost is that our
     RMS numbers sit ~3 dB below what a typical DAW meter shows — if you compare to one, that's why.
 
+!!! warning "Peak-to-peak is not a level"
+    In our range the signal *spans* up to 2 (from −1 to +1), but level is never measured
+    peak-to-peak. A detector that uses `max − min` reads 6 dB hot next to a true peak detector
+    (20·log₁₀ 2 ≈ 6.02 dB); one of the open-source compressors we surveyed makes exactly this
+    mistake. Measure the magnitude `|x|` (peak) or the RMS, never the span. A useful sanity
+    check for any reading: **RMS ≤ peak ≤ 1.0**, so nothing in this system can exceed 0 dBFS.
+
 ### Level vs. loudness vs. volume
 
 These everyday words hop between the *objective* and the *perceptual*, which is where rigor

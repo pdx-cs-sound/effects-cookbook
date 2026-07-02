@@ -44,6 +44,8 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [ ] Build the "Planned" gallery figures (static transfer curve, crest factor/LUFS, envelope follower)
 
 ## Open design decisions (DESIGN §4)
+- [ ] Prose style: `STYLE.md` drafted (plain expository register, 8 rules, tics-to-cut list,
+      sample rewrite, open questions) — waiting for feedback
 - [ ] Conventions chapter scope: how much foundational material in Ch1 vs per effect
 - [ ] Pseudocode conventions (format, closeness to Python)
 - [ ] Authoring workflow (branch / PR / review)
