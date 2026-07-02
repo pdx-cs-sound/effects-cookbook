@@ -116,6 +116,32 @@ implementations toggleable as distinct colored paths (parallel-nudged where they
 choice). Next: hover-for-ramification per option; then generalize the flow to limiter / AGC /
 expander.
 
+## Naming and related formalisms (2026-07-02)
+
+POSA supplied the pedagogical move (design as a walk through pattern decisions), but the
+visual form of the decision flow has older, named lineages. Three formalisms apply; cite
+whichever one we lean on:
+
+1. **Railroad diagrams** (a.k.a. **syntax diagrams**) — the graphical form of a context-free
+   grammar: one entry, one exit, boxes in sequence, branches for alternatives; every path is a
+   valid sentence. Popularized by Wirth's *The Programming Language Pascal (Revised Report)*
+   (1973) and Jensen & Wirth's *Pascal User Manual and Report* (1974); used today on json.org.
+   Our flow is structurally one of these: the "grammar" is the space of compressor designs,
+   and a complete design is a valid sentence.
+2. **Morphological box / chart** (Fritz Zwicky, general morphological analysis, 1960s) — the
+   design-methodology version: parameters as rows, options as columns, a design concept = one
+   pick per row, often drawn as a path threading the matrix. Our chip-rows-with-paths figure
+   *is* a morphological chart. Zwicky's WWII jet-propulsion analysis (576 configurations from
+   a handful of rows) is the classic worked example — same move as our "864 nominal paths."
+3. **Feature models** (FODA — Kang et al., CMU/SEI-90-TR-21, 1990; software product lines) —
+   the software-engineering formalism for a space of designs: features in XOR/OR groups plus
+   **cross-tree constraints**. Our "feedback excludes lookahead" rule is exactly a cross-tree
+   constraint. *(Citation from memory — verify against the SEI report before publishing.)*
+
+Suggested naming for the cookbook: call the figure a **design decision map** in prose, note
+the railroad-diagram resemblance (CS416/516 readers know them from grammar docs), and cite
+Zwicky if we present the rows-×-options framing explicitly.
+
 ## Open questions
 
 - Does this live in the Compression page itself, or as a chapter-level "how to design one of

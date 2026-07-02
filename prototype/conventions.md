@@ -134,6 +134,23 @@ For one full-scale sine those give **0 dBFS (peak)** but **−3.01 dBFS (RMS)** 
 *is* the signal's **crest factor**. Keeping a single honest reference means RMS reads exactly
 what the math says.
 
+!!! example "Worked example: the −3.01 dB of a full-scale sine"
+    Take a sine with peak amplitude 1.0. There are two correct routes to its RMS level, and
+    one common wrong turn.
+
+    - **Amplitude route.** The RMS amplitude is 1/√2 ≈ 0.707. Amplitude takes the 20
+      multiplier: `20 · log10(0.707)` = **−3.01 dBFS (RMS)**.
+    - **Power route.** The mean power is the square of the RMS amplitude: 0.707² = 0.5.
+      Power takes the 10 multiplier: `10 · log10(0.5)` = **−3.01 dB**. The two routes agree,
+      as they must — the 10/20 convention exists so that they do.
+    - **The wrong turn.** Pair the amplitude value with the power multiplier,
+      `10 · log10(0.707)`, and you get −1.5 dB. A result at exactly half (or double) the
+      expected value is the fingerprint of a 10/20 mix-up.
+
+    The phrase "RMS power" usually sets this trap. RMS is an amplitude; its square is the
+    power. Say "RMS amplitude" (0.707) or "mean power" (0.5) and the multiplier chooses
+    itself.
+
 !!! note "We do not use the AES17 RMS offset"
     Broadcast meters (AES17) *re-reference* RMS so that a full-scale **sine** reads 0 dBFS RMS —
     a fixed **+3.01 dB** offset (a full-scale square then reads +3 dBFS RMS). We deliberately
