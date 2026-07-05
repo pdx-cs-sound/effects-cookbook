@@ -23,11 +23,6 @@ Where it sits among its cousins: a limiter holds the output roughly constant abo
 just like [AGC](agc.md) — but with a **fast** release of milliseconds, where AGC is seconds. And
 it's a [compressor](compression.md) with the ratio taken to ∞:1.
 
-## Hear it
-
-!!! note "Audio demo"
-    *Placeholder — before/after on a peaky signal slots in here.*
-
 ## Key parameters
 
 | Parameter | What it controls |
@@ -48,13 +43,6 @@ function set so that **any** level above the ceiling maps straight back down to 
    the overshoot, so the output lands on the ceiling (an ∞:1 ratio).
 3. **Smooth** with a very fast attack and a chosen release.
 4. **Apply** the gain.
-
-## Visualization
-
-!!! note "Static curve + time domain"
-    *Placeholder.* On a static transfer curve the limiter is the flat ∞:1 line (see the
-    [AGC](agc.md) figure — "AGC or limiter"); in the time domain it shaves fast peaks while
-    leaving the slow envelope alone.
 
 ## Pseudocode
 
@@ -121,5 +109,3 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
 - **ITU-R BS.1770** — true-peak (dBTP) measurement, the reason real limiters oversample.
 - Reference implementations in `thirdparty/compare/`: **audacity** (a true look-ahead limiter),
   **sox** `compand` (limiting via a steep transfer curve).
-
-> *Citations are starting points; verify before publication (DESIGN.md §7).*

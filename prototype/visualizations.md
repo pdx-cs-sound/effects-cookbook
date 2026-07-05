@@ -1,8 +1,9 @@
 # Visualizations
 
-A gallery of the interactive figures built for the cookbook. Each is a self-contained,
-client-side demo — embedded below and also openable on its own page. They're prototypes:
-expect them to change, and eventually to be embedded directly into the relevant effect pages.
+An appendix collecting the interactive figures built for the cookbook. This is a testing
+and feedback area, not part of the book proper: figures are tried out here first, and the
+ones that earn their place get embedded into the relevant chapters. Each is a
+self-contained, client-side demo — embedded below and also openable on its own page.
 
 ---
 

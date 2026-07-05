@@ -36,7 +36,7 @@ Every effect follows the same template: a plain-language **intuition**, the **ke
 a **how it works** walk-through, **pseudocode**, a **reference implementation** in Python, the
 **pitfalls**, related effects, and citations to learn more.
 
-!!! note "Scope & conventions"
-    Reference code is **basic, dependency-free Python** (standard library only) meant to teach,
-    not to ship. Levels are measured in **dBFS**. We stay in the digital domain — no analog
-    circuit theory. This is an early prototype; pages and figures are still evolving.
+!!! note "Scope"
+    Reference code is dependency-free Python meant to teach, not to ship; levels are in dBFS;
+    the book stays in the digital domain. The full list of scope decisions and deferred
+    topics is in [Status & scope](status.md).

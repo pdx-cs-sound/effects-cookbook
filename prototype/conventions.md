@@ -183,13 +183,10 @@ slips. Keep them separate:
 | ×2 **power** | +3 dB | ×1.41 | ×2 |
 | ×2 **perceived loudness** | ≈ +10 dB | ×3.16 | ×10 |
 
-!!! note "Loudness, LUFS, and psychoacoustics — deferred (TBD)"
-    Perceived loudness has its own units (**phon**, **sone**) and a practical engineering proxy
-    (**LUFS** / ITU-R BS.1770), and **A-weighting / dBA** is a perceptual frequency curve in the
-    same family. Quantifying any of these needs actual sound-pressure levels plus models of
-    hearing (**psychoacoustics**) — outside the sample domain, and **out of scope for now
-    (TBD / later)**. This book stays in objective **level (dBFS)**: we may *name* loudness, but
-    we don't measure it.
+!!! note "Loudness is deferred"
+    Perceived loudness has its own units (phon, sone) and an engineering proxy (LUFS), all of
+    which need sound-pressure levels and models of hearing. This book stays in objective level,
+    in dBFS — see [Status & scope](status.md).
 
 ## Gain: linear and in dB
 
@@ -272,12 +269,6 @@ This `follow` pattern — measure, then smooth toward the measurement — is the
 [AGC](agc.md) and every effect in the [Companding](compression.md) chapter. Each one differs
 mainly in *what* it does with the smoothed level once it has it.
 
-## Visualization
-
-!!! note "Interactive visual"
-    *Placeholder — a browser-based plot of amplitude, dBFS, and an envelope follower slots in
-    here.* Static now; client-side interactive later (see the [Visualizations](visualizations.md) page).
-
 ## Pitfalls
 
 !!! warning "Common mistakes"
@@ -294,6 +285,3 @@ mainly in *what* it does with the smoothed level once it has it.
 - [Root mean square](https://en.wikipedia.org/wiki/Root_mean_square) — Wikipedia.
 - Udo Zölzer (ed.), **DAFX: Digital Audio Effects**, 2nd ed., Wiley, 2011 — the standard reference for this whole cookbook.
 - Julius O. Smith III, **Introduction to Digital Filters**, CCRMA (free online) — for one-pole smoothers / exponential followers.
-
-> *Citations above are starting points and should be verified before publication, per the
-> project's attribution policy (DESIGN.md §7).*

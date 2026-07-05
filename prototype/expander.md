@@ -23,11 +23,6 @@ except when the drum is actually hit).
 The word **companding** = **com**pressing + ex**pand**ing. Compression and expansion are the
 two halves of this chapter's machinery, working in opposite directions around a threshold.
 
-## Hear it
-
-!!! note "Audio demo"
-    *Placeholder — a noisy signal before/after expansion (and a gate setting) slots in here.*
-
 ## Key parameters
 
 | Parameter | What it controls |
@@ -51,12 +46,6 @@ way from a compressor:
 
 A **gate** is just an expander with a high ratio and a deep range — below threshold it slams the
 signal toward silence instead of gently lowering it.
-
-## Visualization
-
-!!! note "Static curve + time domain"
-    *Placeholder.* On a static transfer curve the expander's line bends *down* below the
-    threshold (the opposite of a compressor's bend above it).
 
 ## Pseudocode
 
@@ -125,5 +114,3 @@ def expand(x, sr, threshold_db=-40.0, ratio=2.0, range_db=-40.0,
   compression *and* expansion in one expression.
 - Reference implementations in `thirdparty/compare/`: **dafx** `compexp.m` (combined
   compressor/expander), **sox** `compand` (expansion via transfer-curve breakpoints).
-
-> *Citations are starting points; verify before publication (DESIGN.md §7).*

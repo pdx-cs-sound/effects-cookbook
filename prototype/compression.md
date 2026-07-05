@@ -3,7 +3,8 @@
 > **Dynamic range compression** automatically turns down the *loud* parts of a signal so
 > the gap between loud and quiet shrinks — making a track sit more evenly and feel louder.
 
-*Part of the **Volume / Level effects** pair → see also [Automatic Gain Control](agc.md).*
+*Chapter 2 — Companding. See also [Limiting](limiter.md), [Expanding](expander.md), and the
+slower, target-seeking [AGC](agc.md).*
 
 ---
 
@@ -16,13 +17,6 @@ automated. You set *how loud is "too loud"* (threshold) and *how hard to pull it
 
 **Why you'd use it:** even out an erratic performance, tame peaks so you can raise overall
 loudness, glue a mix together, add punch or sustain.
-
-## Hear it
-
-!!! note "Audio demo"
-    *Placeholder — before/after clips slot in here.* Static now; pre-rendered A/B audio
-    next; live slider-driven processing later. Template reserves the spot so adding it is
-    drop-in, no restructuring.
 
 ## Key parameters
 
@@ -78,8 +72,7 @@ def compress(x, sr, threshold_db=-20.0, ratio=4.0,
     y = []
     env_db = -120.0      # smoothed gain-reduction state, in dB
     for sample in x:
-        # NOTE: raw dBFS detection for now; dBA weighting is a separate (planned) topic.
-        level_db = 20.0 * math.log10(abs(sample) + eps)
+        level_db = 20.0 * math.log10(abs(sample) + eps)   # dBFS (peak), per sample
         over = level_db - threshold_db
         target = -over * (1.0 - 1.0 / ratio) if over > 0 else 0.0
         # attack when clamping harder, release when easing off
@@ -104,4 +97,4 @@ def compress(x, sr, threshold_db=-20.0, ratio=4.0,
 
 ## Learn more
 
-- *(placeholder)* Zölzer & Holters, **Digital Audio Effects**.
+- Zölzer & Holters, **Digital Audio Effects**.

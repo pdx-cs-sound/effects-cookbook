@@ -66,14 +66,9 @@ The crisp dividing line: done right, **AGC doesn't change the subjective quality
 program — it's corrective. Compression and limiting deliberately *do* — they're creative.
 See [Compression](compression.md) for the fast, dynamics-reshaping cousin.
 
-## Visualization
-
-!!! note "Static curve vs. time domain"
-    See the [Visualizations](visualizations.md) page (a mock for review). A *steady-state* transfer
-    curve **cannot tell AGC from a limiter** — they share the same flattened characteristic.
-    What separates them — AGC's slow release — only shows up in the **time domain**. That's why
-    every effect page pairs a static transfer curve with a time-domain view. *(Embedding into
-    the page is a TODO once the viz stack is settled.)*
+One consequence worth remembering: on a steady-state transfer curve, AGC and a limiter draw
+the *same* flattened line. What separates them — release time — only shows in the time domain.
+(The [Visualizations](visualizations.md) appendix has an interactive figure of exactly this.)
 
 ## Pseudocode
 
@@ -146,6 +141,3 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
 - **WebRTC AGC2** — a modern, digital, open-source AGC that runs in the browser audio pipeline. (Check its license before reusing code.)
 - Udo Zölzer (ed.), **DAFX: Digital Audio Effects**, 2nd ed., Wiley — frames AGC/compression/expansion as one family.
 - [Automatic gain control — Wikipedia](https://en.wikipedia.org/wiki/Automatic_gain_control) — for the closed-loop definition (note: heavily analog/radio; we use the *digital* realization).
-
-> *Citations above are starting points and must be verified before publication, per the
-> project's attribution policy (DESIGN.md §7).*

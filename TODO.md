@@ -3,12 +3,16 @@
 Working task list for the Digital Audio Effects Cookbook. Design rationale lives in
 [DESIGN.md](DESIGN.md); this is the actionable view.
 
-## Now
-- [x] Chapter 1 — Conventions page drafted (`prototype/conventions.md`)
-- [x] AGC research pass → Woodgate/IEC taxonomy (DESIGN §5)
-- [x] Chapter 1 — AGC page drafted (`prototype/agc.md`)
-- [x] Two-panel static-transfer + time-domain visualization mock (`prototype/visualization/agc_static_vs_time.html`)
-- [ ] Monday meeting with Massey — gather high- and low-level feedback
+## Now — ordered plan (2026-07-02)
+- [x] Skeleton pass: reader-facing scope/deferral notes consolidated into a published
+      **Status & scope** appendix (`prototype/status.md`); author metadata stays in
+      DESIGN/research; **Visualizations moved under Appendix**; Hear-it / Visualization
+      placeholders and verify-citations footers removed from all chapters
+- [ ] Voice samples: add lcamtuf touchstone + "no typographical quirks carry information"
+      rule to STYLE.md, then rewrite **Limiting** in ~3 voices → send to Massey with STYLE.md
+- [ ] While waiting on voice feedback: embed visualizations into chapters as needed
+- [ ] Audio-demo discussion note for the meeting (formats, hosting; proposal: self-generate
+      demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
 ## Content
 - [x] Configurable reference compressor exercising every decision-map choice
@@ -16,8 +20,10 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       (`code/test_compressor.py`, 23 tests) — run `python3 -m unittest discover -s code`
 - [ ] Cookbook page walking the configurable reference compressor ("the decision map as code")
 - [ ] Consider running the code tests in the publish GitHub Action (one extra step before deploy)
-- [ ] Chapter 2 — Compression: refine existing prototype; answer the "Further complexity"
-      knee questions (parabolic knee, smoothing before/after the transfer fn)
+- [x] "Further complexity" knee questions (parabolic knee? smoothing before/after?) answered
+      by the decision-map work — see `research/compressor-design-decisions.md` (knee schemes,
+      smoothing placement); section since removed from the page
+- [ ] Chapter 2 — Compression: refine existing prototype page
 - [x] Chapter 2 — Limiting page drafted (`prototype/limiter.md`)
 - [x] Chapter 2 — Expanding page drafted (`prototype/expander.md`)
 - [ ] Add "Hear it" / Visualization content to limiter + expander once stack is settled
