@@ -36,3 +36,6 @@ nav:
       - Limiting: limiter.md
       - Expanding: expander.md
   - Visualizations: visualizations.md
+
+plugins:
+  - print-site
