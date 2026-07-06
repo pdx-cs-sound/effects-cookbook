@@ -6,10 +6,14 @@
 
 ## The target register
 
-Plain expository prose. The models are Asimov's non-fiction and Simon Prince's
-*Understanding Deep Learning*: short declarative sentences, the concrete case before the
-general rule, and no rhetorical performance. Orwell's summary is the shortest version:
-"good prose is like a windowpane."
+Plain expository prose. The models are Asimov's non-fiction, Simon Prince's
+*Understanding Deep Learning*, and Michał Zalewski's lcamtuf essays
+(e.g. [lcamtuf.substack.com](https://lcamtuf.substack.com/)): short declarative sentences,
+the concrete case before the general rule, and no rhetorical performance. Orwell's summary
+is the shortest version: "good prose is like a windowpane."
+
+Voice samples for comparison live in `research/voices/` — the Limiting chapter rewritten
+three ways. Pick a voice (or a blend) there before any full rewrite pass.
 
 The current pages do not yet follow this guide. They were drafted quickly and some of the
 prose reads machine-generated. A rewrite pass is planned once this guide is settled.
@@ -29,11 +33,18 @@ Each rule is checkable during review.
    sentences building an argument, write a paragraph.
 5. **One analogy per section, and it must teach.** An analogy that only decorates gets cut.
 6. **State claims without selling them.** Cut "beautiful," "powerful," "elegant,"
-   "crucially," "the key insight." If a fact matters, its placement shows that.
+   "crucially," "the key insight." If a fact matters, its placement shows that. The same
+   goes for verdict adjectives on technical nouns — "an honest reference," "a clean
+   separation," "sane defaults." An adjective must specify a property the reader could
+   check ("single," "fixed," "one-pole"); if it delivers a judgment instead, delete it and
+   let the stated consequence make the case. A sentence should argue or conclude, not both.
 7. **Hedge only with information.** "About 3 dB" is a hedge that informs; "arguably" and
    "somewhat" are hedges that stall.
 8. **Cite or qualify empirical claims.** A perceptual or historical claim gets a citation,
    a number, or an explicit "rule of thumb" label (per DESIGN.md §7).
+9. **Typography never carries information.** Strip the bold and italics from a sentence and
+   it must lose nothing. Emphasis comes from sentence structure and word order; a definition
+   is marked by phrasing ("called the threshold"), not by styling.
 
 ## Tics to cut
 
@@ -47,6 +58,9 @@ These patterns are the main reason the current prose reads machine-generated:
 - Rhetorical questions as transitions. (A question the text genuinely poses and answers,
   like "is AGC an effect, a technique, or a goal?", is fine.)
 - Dramatic colons introducing a reveal.
+- Bold or italics doing work that word order should do (see rule 9).
+- Verdict adjectives standing in for the reason: honest, clean, sane, proper, principled,
+  natural, elegant — and their adverbs (genuinely, simply, actually).
 
 ## Sample rewrite
 

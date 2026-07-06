@@ -131,8 +131,8 @@ We fix **one reference (full scale = 1.0)** and always **label the detector**:
   1.0 reference.
 
 For one full-scale sine those give **0 dBFS (peak)** but **−3.01 dBFS (RMS)** — and that 3 dB gap
-*is* the signal's **crest factor**. Keeping a single honest reference means RMS reads exactly
-what the math says.
+*is* the signal's **crest factor**. Both readings use the same reference, so the RMS figure
+is whatever the formula produces, with no meter convention added.
 
 !!! example "Worked example: the −3.01 dB of a full-scale sine"
     Take a sine with peak amplitude 1.0. There are two correct routes to its RMS level, and

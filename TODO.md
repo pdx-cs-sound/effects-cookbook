@@ -8,8 +8,10 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       **Status & scope** appendix (`prototype/status.md`); author metadata stays in
       DESIGN/research; **Visualizations moved under Appendix**; Hear-it / Visualization
       placeholders and verify-citations footers removed from all chapters
-- [ ] Voice samples: add lcamtuf touchstone + "no typographical quirks carry information"
-      rule to STYLE.md, then rewrite **Limiting** in ~3 voices → send to Massey with STYLE.md
+- [x] Voice samples drafted: STYLE.md updated (lcamtuf touchstone, rule 9 "typography never
+      carries information"); Limiting rewritten 3 ways in `research/voices/` (warm/Asimov,
+      textbook/Prince, essay/lcamtuf) with a README of review questions
+- [ ] Send STYLE.md + `research/voices/` to Massey; hold the full rewrite until he reacts
 - [ ] While waiting on voice feedback: embed visualizations into chapters as needed
 - [ ] Audio-demo discussion note for the meeting (formats, hosting; proposal: self-generate
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
