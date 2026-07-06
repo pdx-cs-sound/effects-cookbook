@@ -38,6 +38,3 @@ nav:
   - Appendix:
       - "Status & scope": status.md
       - Visualizations: visualizations.md
-
-plugins:
-  - print-site
