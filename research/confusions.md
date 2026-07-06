@@ -53,3 +53,9 @@ anything.
 ## Open
 
 *(Add new ones here as one-liners, before resolving them.)*
+
+16. "I'm unclear if the limiter graph is supposed to be showing how the limiter doesn't
+    care about undershooting." (limiter_lookahead.svg — is the quiet-section behavior a
+    message or an accident? Suggests the figure isn't declaring its subject, or the
+    faint/bold grammar isn't self-evident yet.)
+17. Legend placement quibbles on the generated figures (details TBD after feedback round).

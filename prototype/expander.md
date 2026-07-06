@@ -47,6 +47,17 @@ way from a compressor:
 A **gate** is just an expander with a high ratio and a deep range — below threshold it slams the
 signal toward silence instead of gently lowering it.
 
+![Transfer curves: unity, 2:1 expansion, and a steep 4:1 curve. Above the −35 dBFS threshold everything is unity; below it the curves bend down, the mirror of a compressor's bend above.](img/expander_transfer.svg)
+
+*The expander's transfer curve bends down below the threshold — compare the Compression
+page's figure, where the bend is above. The steep red curve is most of the way to a gate.*
+
+![Two loud bursts over a −45 dBFS bleed floor. Between bursts the expander pushes the bleed down; it opens fast when a burst arrives and closes slowly after it ends.](img/expander_gate.svg)
+
+*The expander in time (`code/make_figures.py`, using this page's implementation): bold where
+it is attenuating — which, note, is the quiet stretches. It acts on exactly the sections a
+compressor ignores.*
+
 ## Pseudocode
 
 ```text

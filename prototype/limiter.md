@@ -44,6 +44,19 @@ function set so that **any** level above the ceiling maps straight back down to 
 3. **Smooth** with a very fast attack and a chosen release.
 4. **Apply** the gain.
 
+![Transfer curves: unity, a 4:1 compressor, and the limiter's flat wall at a −10 dBFS ceiling.](img/limiter_transfer.svg)
+
+*The limiter's transfer curve next to a 4:1 compressor at the same corner: the compressor
+leans, the limiter walls. Same figure grammar as the Compression page — the red ∞:1 curve
+there is this page's subject.*
+
+![A quiet–loud–quiet tone through the limiter, with and without lookahead. Without lookahead the output overshoots the ceiling while the attack catches up; with 6 ms of true lookahead it never crosses, at the cost of a 6 ms delay.](img/limiter_lookahead.svg)
+
+*Both traces come from running this book's configurable compressor (`code/make_figures.py`)
+at ∞:1. Without lookahead, the burst's leading edge pokes past the ceiling while the 2 ms
+attack catches up. With true lookahead the gain is pre-armed and nothing crosses — and the
+output arrives 6 ms late, which is the price.*
+
 ## Pseudocode
 
 ```text

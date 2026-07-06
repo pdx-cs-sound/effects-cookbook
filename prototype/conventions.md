@@ -269,6 +269,12 @@ This `follow` pattern — measure, then smooth toward the measurement — is the
 [AGC](agc.md) and every effect in the [Companding](compression.md) chapter. Each one differs
 mainly in *what* it does with the smoothed level once it has it.
 
+![Rectified samples of a quiet–loud–quiet tone, with the one-pole envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
+
+*The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
+envelope climbs quickly when the burst starts (attack) and lets go slowly when it ends
+(release). Note the linear amplitude axis — this is the one figure in the book not in dB.*
+
 ## Pitfalls
 
 !!! warning "Common mistakes"

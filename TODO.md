@@ -13,6 +13,12 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       textbook/Prince, essay/lcamtuf) with a README of review questions
 - [ ] Send STYLE.md + `research/voices/` to Massey; hold the full rewrite until he reacts
 - [ ] While waiting on voice feedback: embed visualizations into chapters as needed
+  - [x] Static-figure pipeline: `code/make_figures.py` (stdlib SVG, data from the book's own
+        `compressor.py`) → `prototype/img/`; 7 figures embedded: Compression (transfer +
+        gain-reduction), Limiting (transfer + lookahead-vs-overshoot), Expanding (transfer +
+        gate trace), Conventions (envelope follower)
+  - [ ] Embed the fixed AGC static-vs-time figure into the AGC page (iframe or rebuild as SVG)
+  - [ ] Eyeball all 7 figures in both themes (dark-mode check) and at mobile width
 - [ ] Audio-demo discussion note for the meeting (formats, hosting; proposal: self-generate
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
