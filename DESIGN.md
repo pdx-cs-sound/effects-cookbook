@@ -88,12 +88,25 @@ Proposed sections for every effect entry:
   - **Visualization & display = runs in the browser** (JavaScript / Web Audio / Canvas — exact
     stack TBD). Whatever powers the visuals must run client-side in the rendered docs.
 
+**Settled (2026-07-02) — visualization taxonomy, by interface:**
+
+| Type | Examples | Produced by |
+|---|---|---|
+| Static graph (the minimum; includes sequence/flow diagrams) | transfer curves, envelope traces | us; artifacts + generator scripts committed to this repo |
+| Interactive graph | adjustable compressor response; the design decision flow | us, in-browser |
+| Static sound | before/after clips | this repo's code (e.g. `code/compressor.py` + stdlib `wave`), Ed, or other `pdx-cs-sound` open audio |
+| Interactive sound | adjustable generators (not relevant yet) | us, Web Audio |
+| Animation / video | concepts hard to show otherwise (slow to make) | Ed (e.g. manim-style) |
+
+Ordering: get visuals onto pages and gather feedback first; make the stack/architecture
+decisions after. Generator scripts are repo infrastructure (like tests), not teaching code.
+
 **Still TBD:**
 - **Conventions chapter scope:** how much foundational material (samples, dB/dBFS math, peak
   vs RMS, gain, time constants) lives in Chapter 1 vs. is restated per effect.
   *(The earlier dBA-only / A-weighting question is closed — dBFS is the unit. See Decision Log.)*
-- **Visualization stack:** which browser tech produces the visuals (plain Canvas? a charting
-  lib? Web Audio-driven?). Display language is settled (browser); the specific stack isn't.
+- **Visualization stack:** which browser tech for the *interactive* tiers (plain Canvas? a
+  charting lib?). Deliberately deferred until the first embedded visuals get feedback.
 - **Pseudocode style/conventions** (format, how close to the chosen language).
 - **Authoring workflow** (who writes, how reviewed, branch/PR process).
 - **Per-effect companion notebook?** (yes/no — pairs with MkDocs page).
@@ -215,3 +228,4 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-07-01 | **Configurable reference compressor**: `code/compressor.py` — one engine whose kwargs are the decision-map rows; five reference impls as `PRESETS`; program-dependent ballistics sketched in prose only; sox Bézier knee documented as collapsing to the quad spline for a single knee. (Not called "capstone" — that names the PSU CS undergrad final project.) | The decision map made executable; ~230 lines plays every valid path |
 | 2026-07-01 | **Tests via stdlib `unittest`** (`code/test_compressor.py`); "no harness" non-goal clarified: it bans harness/deps in *teaching snippets*, not repo test infrastructure | Signal-level assertions (unity, ratio math, ceilings, preset pairwise-difference) caught a real lookahead alignment bug on first run |
 | 2026-07-02 | **Skeleton restructure**: reader-facing scope/deferral notes → published "Status & scope" appendix (`prototype/status.md`); author-facing rationale stays in DESIGN/research; Visualizations demoted to an Appendix (testing & feedback area); Hear-it/Visualization placeholders and verify-citations footers removed from chapters | Chapters stay about audio; clean pages before the voice-sample pass (split metadata by audience) |
+| 2026-07-02 | **Visualization taxonomy by interface** (static graph / interactive graph / static sound / interactive sound / animation) with provenance rules per type; visuals-then-feedback-then-architecture ordering | Ed's framing; build cost rises down the list, so the minimum (static graphs) lands on pages first |
