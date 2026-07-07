@@ -4,7 +4,7 @@ Every keyword argument of `compress()` is one row of the compressor design
 decision map (see research/compressor-design-decisions.md and the interactive
 figure on the Visualizations page). Choosing one option per decision traces a
 path from "no design" to a complete compressor; this one engine plays all the
-valid paths. The five open-source reference implementations analysed in
+valid paths. The five open-source reference implementations analyzed in
 `thirdparty/compare/analysis.md` are included as PRESETS.
 
 Pure standard library, offline, mono, teaching code — not production DSP.
@@ -41,7 +41,7 @@ from collections import deque
 # --------------------------------------------------------------------------
 
 def db_from_amplitude(a):
-    """Linear amplitude -> dBFS. Silence maps to -inf."""
+    """Linear amplitude -> dBFS. Zero amplitude maps to -inf."""
     a = abs(a)
     return 20.0 * math.log10(a) if a > 0.0 else float("-inf")
 
@@ -262,7 +262,7 @@ def _run_feedforward(x, knee_fn, threshold_db, ratio, knee_db,
     # True lookahead: the gain at output step n is applied to the *delayed*
     # sample x[n-delay], so it must be pre-armed with the deepest reduction
     # over that sample's window [n-delay .. n] -- the emitted sample through
-    # the newest analysed input. (Anchoring the window to the input clock
+    # the newest analyzed input. (Anchoring the window to the input clock
     # instead lets the tail of a burst escape as the detector sees quiet
     # future samples -- a bug the tests catch.)
     if lookahead == "true" and delay > 0:

@@ -1,61 +1,64 @@
 # Limiting
 
-> A **limiter** is a compressor turned up to the extreme: an effectively *infinite* ratio plus a
-> fast reaction, so the signal is never allowed to exceed a set **ceiling**. Its job is a
-> guarantee — "nothing gets past this level."
+> A limiter holds its output at or below a fixed level, called the ceiling. Input below
+> the ceiling passes through unchanged; input above it is reduced to the ceiling.
 
 *Chapter 5 — time-domain level effects. The fast, output-flattening end of
 [Compression](compression.md); contrast with the slow, transparent [AGC](agc.md).*
 
 ---
 
-## Intuition — what & why
+## Intuition
 
-A compressor *leans* on signals above the threshold; a limiter puts up a **brick wall**. Push
-as hard as you like — the output simply will not cross the ceiling. Because it has to catch
-fast transients, it reacts almost instantly.
+A limiter is a compressor with an infinite ratio. A 4:1 compressor reduces 4 dB of
+overshoot to 1 dB; as the ratio grows, the output above the threshold approaches a
+constant. At an infinite ratio the overshoot is removed completely. The knee is hard and
+the time constants are fast. The configuration is sometimes called brick-wall limiting.
 
-**Why you'd use it:** stop a signal from clipping; set a safe maximum before a recording or
-broadcast stage; or (the loudness-war use) clamp the peaks so you can raise everything else and
-make a track feel louder.
+Limiting has two uses. The first is protection. Digital audio clips at 0 dBFS, and
+converters, transmitters, and storage formats each have a maximum level; a limiter placed
+before such a stage keeps the signal below the maximum. The second is loudness. When the
+peaks are held down, the overall level can be raised without clipping. This trades dynamic
+range for loudness.
 
-Where it sits among its cousins: a limiter holds the output roughly constant above a threshold —
-just like [AGC](agc.md) — but with a **fast** release of milliseconds, where AGC is seconds. And
-it's a [compressor](compression.md) with the ratio taken to ∞:1.
+[AGC](agc.md) also holds its output approximately constant. The two are identical on a
+steady-state transfer curve. They differ in release time: AGC releases over one second or
+more and aims to be inaudible; a limiter releases in milliseconds and is audible on
+transients.
 
 ## Key parameters
 
 | Parameter | What it controls |
 |---|---|
-| **Ceiling** | The level (dBFS) the output must never exceed. |
-| **Release** | How fast it lets go once the signal drops back below the ceiling (ms). |
-| **Attack / lookahead** | How it catches a peak — near-instant attack, or a short lookahead delay so the reduction is already in place when the peak lands. |
-| **Knee** | Usually **hard** — the whole point is a firm ceiling. |
+| Ceiling | The level (dBFS) the output must not exceed. |
+| Release | How fast the gain recovers once the signal drops back below the ceiling (ms). |
+| Attack / lookahead | How a peak is caught: a near-instant attack, or a short delay so the reduction is in place when the peak arrives. |
+| Knee | Hard, almost always; the point of a limiter is a firm ceiling. |
 
 ## How it works
 
-A limiter is the same detect → map → smooth → apply pipeline as a compressor, with the transfer
-function set so that **any** level above the ceiling maps straight back down to it:
+The pipeline is the same four stages as the other effects in this chapter.
 
-1. **Detect** the peak level (limiters are almost always peak, not RMS — they protect against
-   peaks).
-2. **Compare to the ceiling.** Below it → leave alone. Above it → the gain reduction is exactly
-   the overshoot, so the output lands on the ceiling (an ∞:1 ratio).
-3. **Smooth** with a very fast attack and a chosen release.
-4. **Apply** the gain.
+1. Detect the peak level, per sample. Peak detection is used because the quantity being
+   constrained is the instantaneous maximum, not the average.
+2. Compare with the ceiling. At or below the ceiling, the gain is 0 dB. Above it, the gain
+   reduction equals the overshoot, so the output equals the ceiling.
+3. Smooth the gain with a fast attack and a chosen release.
+4. Apply the gain to the signal.
 
 ![Transfer curves: unity, a 4:1 compressor, and the limiter's flat wall at a −10 dBFS ceiling.](img/limiter_transfer.svg)
 
-*The limiter's transfer curve next to a 4:1 compressor at the same corner: the compressor
-leans, the limiter walls. Same figure grammar as the Compression page — the red ∞:1 curve
-there is this page's subject.*
+*The limiter's transfer curve beside a 4:1 compressor at the same threshold. The
+compressor reduces the slope; the limiter holds the output flat. The red ∞:1 curve on the
+Compression page's figure is this same curve.*
 
-![A quiet–loud–quiet tone through the limiter, with and without lookahead. Without lookahead the output overshoots the ceiling while the attack catches up; with 6 ms of true lookahead it never crosses, at the cost of a 6 ms delay.](img/limiter_lookahead.svg)
+![A quiet–loud–quiet tone through the limiter, with and without lookahead. Without lookahead the output overshoots the ceiling while the attack catches up; with 6 ms of true lookahead it never crosses, and arrives 6 ms late.](img/limiter_lookahead.svg)
 
-*Both traces come from running this book's configurable compressor (`code/make_figures.py`)
-at ∞:1. Without lookahead, the burst's leading edge pokes past the ceiling while the 2 ms
-attack catches up. With true lookahead the gain is pre-armed and nothing crosses — and the
-output arrives 6 ms late, which is the price.*
+*Both traces come from running this book's configurable compressor
+(`code/make_figures.py`) at ∞:1. Without lookahead, the leading edge of the burst passes
+the ceiling while the 2 ms attack catches up. With true lookahead the gain is pre-armed
+and the output never crosses the ceiling; it also arrives 6 ms late, the cost of the
+guarantee.*
 
 ## Pseudocode
 
@@ -100,25 +103,31 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
 ```
 
 !!! warning "Pitfalls"
-    - **Overshoot without lookahead.** A pure feed-forward limiter reacts *after* a peak begins,
-      so a fast transient can briefly poke through. True "brick-wall" limiters add a short
-      **lookahead** so full reduction is in place the instant the peak arrives.
-    - **Inter-sample (true) peaks.** A signal limited to −1 dBFS *in samples* can still exceed
-      that between samples after reconstruction. Real limiters oversample and limit to
-      **true-peak (dBTP)** — see ITU-R BS.1770.
-    - **Distortion vs. pumping.** Too fast a release distorts low frequencies; too slow audibly
-      pumps. The ceiling is firm, but the *release* is still a taste decision.
-    - **Loudness-war overuse.** Heavy limiting flattens all the life out of a track.
+    - Overshoot without lookahead. A feed-forward limiter reacts after a peak begins, so
+      the leading edge passes above the ceiling during the attack time. Lookahead limiters
+      delay the audio and compute the gain from the undelayed signal; the cost is latency
+      equal to the lookahead time.
+    - Inter-sample (true) peaks. Holding every sample at the ceiling does not hold the
+      reconstructed waveform there; the continuous signal between samples can exceed the
+      samples. Production limiters oversample and enforce a true-peak (dBTP) ceiling;
+      ITU-R BS.1770 defines the measurement.
+    - Release artifacts. A release comparable to the period of low-frequency content
+      tracks individual cycles and distorts them; a long release lowers the level audibly
+      after each peak (pumping). The ceiling is a specification; the release is chosen by
+      listening.
+    - Overuse. Heavy limiting removes the dynamics from the material.
 
 ## Related effects
 
-- **[Compression](compression.md)** — the finite-ratio version; a limiter is the ∞:1 extreme.
-- **[Automatic Gain Control](agc.md)** — also holds the output flat, but slowly and transparently.
-- **Clipping** — the crude alternative: just chop the peaks (cheap, but adds harsh distortion).
+- [Compression](compression.md): the finite-ratio version; a limiter is the ∞:1 extreme.
+- [Automatic Gain Control](agc.md): also holds the output flat, but slowly and
+  transparently.
+- Clipping: the crude alternative; the peaks are cut off where they stand, which adds
+  harsh distortion.
 
 ## Learn more
 
-- Udo Zölzer (ed.), **DAFX: Digital Audio Effects**, 2nd ed., Wiley.
-- **ITU-R BS.1770** — true-peak (dBTP) measurement, the reason real limiters oversample.
-- Reference implementations in `thirdparty/compare/`: **audacity** (a true look-ahead limiter),
-  **sox** `compand` (limiting via a steep transfer curve).
+- Udo Zölzer (ed.), *DAFX: Digital Audio Effects*, 2nd ed., Wiley.
+- ITU-R BS.1770 — true-peak (dBTP) measurement, the reason production limiters oversample.
+- Reference implementations in `thirdparty/compare/`: audacity (a true look-ahead
+  limiter), sox `compand` (limiting via a steep transfer curve).

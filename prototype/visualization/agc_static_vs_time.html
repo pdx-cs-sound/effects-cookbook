@@ -218,7 +218,7 @@
     ctx.globalAlpha = 1.0; ctx.setLineDash([]);
 
     // Limiter: faint where it is unity (output = input), bold only where it limits,
-    // so inactivity does not read as behaviour.
+    // so inactivity does not read as behavior.
     ctx.globalAlpha = 0.3;
     line(lim, css('--limiter'), [], 1.5);
     ctx.globalAlpha = 1.0;

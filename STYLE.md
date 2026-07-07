@@ -82,9 +82,10 @@ Same content, four short sentences, no italics doing the emphasis work.
 ## Open questions
 
 Warmth and person are settled by the flat decision: no reader address, no authorial "we,"
-no contractions, no humor. Remaining:
+no contractions, no humor. Analogies are settled too (2026-07-03): load-bearing analogies
+stay, per rule 5 — flat applies to delivery, not to pedagogy.
 
-1. **Analogies.** The flat sample uses none. Rule 5 permits one load-bearing analogy per
-   section (e.g. AGC's slow hand on a fader). Does flat mean zero analogies, or does a
-   working analogy survive because it is pedagogy rather than personality?
-2. **House mechanics.** US spelling? Oxford comma?
+Mechanics (settled 2026-07-03): **US spelling** (labeled, behavior, analyzed) and the
+**Oxford comma**, everywhere including code comments and docstrings.
+
+No open questions at present.

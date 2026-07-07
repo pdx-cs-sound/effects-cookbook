@@ -17,7 +17,7 @@ deeper.
 - **Digital only.** No analog circuits and no analog explanations.
 - **Teaching code, not production code.** Reference implementations favor clarity:
   standard library only, no numpy, no threading, no plugin scaffolding.
-- **Levels are dBFS**, peak or RMS, always labelled. See [Conventions](conventions.md).
+- **Levels are dBFS**, peak or RMS, always labeled. See [Conventions](conventions.md).
 - **No AI-based effects**, and no coverage of AI-assisted use of these effects.
 
 ## Chapter status

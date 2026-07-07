@@ -59,3 +59,7 @@ anything.
     message or an accident? Suggests the figure isn't declaring its subject, or the
     faint/bold grammar isn't self-evident yet.)
 17. Legend placement quibbles on the generated figures (details TBD after feedback round).
+18. "But zero isn't silence — zero doesn't actually mean anything. A string of values that
+    contains a zero might be silent but might not be." (Measuring sound's `[-1, 1]` bullets
+    conflated a sample value with a signal property. Fix: 0.0 is the resting value; silence
+    and loudness are properties of a stretch of samples, not of one value.)

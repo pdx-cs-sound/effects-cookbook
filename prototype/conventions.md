@@ -1,8 +1,8 @@
-# Conventions
+# Measuring sound
 
-> The shared vocabulary the rest of this cookbook leans on: how we represent audio, how we
-> measure level in **dBFS**, and how we convert between linear and decibel gain. Every
-> later chapter assumes these.
+> The shared vocabulary the rest of this cookbook leans on: how audio is represented, how
+> level is measured in dBFS, and how linear gain and decibel gain convert. Every later
+> chapter assumes these.
 
 *Chapter 2 — how this book measures and talks about sound.*
 
@@ -10,16 +10,21 @@
 
 ## Audio as samples
 
-Digital audio is just a list of numbers. We measure the signal's amplitude many thousands of
-times per second (the **sample rate**, `sr`, e.g. 44 100 or 48 000 Hz) and store each
-measurement as one **sample**.
+Digital audio is a list of numbers. The signal's amplitude is measured many thousands of
+times per second and each measurement is stored as one sample. The measurement rate is
+called the sample rate, written `sr`; 44 100 Hz and 48 000 Hz are common.
 
 Throughout this cookbook a mono signal is a plain Python list of floats in the range
-**`[-1.0, 1.0]`**:
+[-1.0, 1.0]:
 
-- `0.0` is silence,
-- `+1.0` and `-1.0` are the largest values the format can represent — **full scale**,
-- anything beyond `±1.0` would **clip** (distort) on playback.
+- `0.0` is the resting value, the center of the range,
+- `+1.0` and `-1.0` are the largest values the format can represent, called full scale,
+- values beyond ±1.0 clip (distort) on playback.
+
+A single sample has no loudness. Sound is variation over time, so silence and loudness are
+properties of a stretch of samples, not of one value: a signal that stays at 0.0 is silent,
+and a full-scale sine passes through 0.0 twice per cycle while being as loud as the format
+allows.
 
 ```python
 # One second of a 440 Hz sine at half amplitude, 48 kHz.
@@ -29,71 +34,72 @@ sr = 48_000
 signal = [0.5 * math.sin(2 * math.pi * 440 * n / sr) for n in range(sr)]
 ```
 
-!!! note "Why `[-1, 1]`?"
-    It is the natural, format-independent range for floating-point audio: the math stays the
-    same whether the file is later rendered to 16-bit, 24-bit, or anything else. We never
-    work in raw integer sample values here.
+!!! note "Why [-1, 1]?"
+    The range is format-independent: the math is the same whether the file is later
+    rendered to 16-bit, 24-bit, or anything else. This book never works in raw integer
+    sample values.
 
 ## Measuring level: decibels and dBFS
 
-Signal levels span a huge range, so we measure them **logarithmically**, in **decibels (dB)**.
-But getting this rigorous means being careful about three things that everyday usage blurs: a dB
-always implies a *reference*, it depends on whether you're measuring *power or amplitude*, and
-"dBFS" itself is only fully specified once you say *peak or RMS*.
+Signal levels span a large range, so they are measured logarithmically, in decibels (dB).
+Three details matter, and everyday usage blurs all of them. A dB is always relative to a
+reference. The formula differs for power and for amplitude. A dBFS figure means nothing
+until peak or RMS is specified.
 
-### A decibel is a ratio — so it always needs a reference
+### A decibel is a ratio and needs a reference
 
-A decibel is **dimensionless**: it's a ratio, so on its own it means nothing. It always compares
-a measured value against a fixed **reference**:
+A decibel is dimensionless. It compares a measured value against a fixed reference:
 
 ```
 dB = 10 · log10( measured / reference )      # (for power quantities — see below)
 ```
 
-- The **numerator** is what you're measuring; the **denominator** is a fixed, agreed reference.
-- With **no fixed reference**, a dB is only a *relative change* — this is how we talk about
-  **gain** ("+6 dB" = ×2 amplitude). With a **standard reference**, it names an *absolute level*,
-  and the reference is exactly what the suffix means: dB**FS**, dB **SPL**, ….
+- The numerator is the quantity being measured; the denominator is a fixed, agreed
+  reference.
+- Without a fixed reference, a dB is a relative change; gain is stated this way (+6 dB is
+  ×2 in amplitude). With a standard reference, a dB names an absolute level, and the
+  suffix names the reference: dBFS, dB SPL.
 
-So **never write a bare "dB" for a level.** Write the referenced unit — it pins down both the
-reference *and* the power-vs-amplitude question below.
+A bare "dB" is never a level. The referenced unit pins down both the reference and the
+power-versus-amplitude question below.
 
-### Power vs. amplitude — the 10 vs. the 20
+### Power vs. amplitude: 10·log and 20·log
 
-The reference must match the *kind* of quantity, and that sets the multiplier:
+The reference must match the kind of quantity, and that sets the multiplier:
 
-- **Power** quantities (intensity, electrical power): `dB = 10 · log10(P / P₀)`.
-- **Amplitude / field** quantities (sound pressure, voltage, **our sample values**):
-  `dB = 20 · log10(A / A₀)` — the 20 appears because power ∝ amplitude².
+- Power quantities (intensity, electrical power): `dB = 10 · log10(P / P₀)`.
+- Amplitude, or field, quantities (sound pressure, voltage, sample values):
+  `dB = 20 · log10(A / A₀)`. The 20 appears because power is proportional to amplitude
+  squared.
 
-The two are built to *agree* for the same physical change (doubling amplitude and quadrupling
-power are both **+6 dB**), so the dB number itself **never tells you which you measured** — the
-**unit** does:
+The two forms agree on the same physical change: doubling the amplitude and quadrupling
+the power are both +6 dB. The dB value therefore never tells which quantity was measured;
+the unit does:
 
 | Unit | Measures | Reference | Quantity → factor | Domain |
 |---|---|---|---|---|
-| **dBFS** | sample amplitude | full scale (1.0) | amplitude → 20·log | digital, absolute |
-| **dB SPL** | sound pressure | 20 µPa | amplitude → 20·log | acoustic, absolute |
-| **dBV / dBu** | voltage | 1 V / 0.775 V RMS | amplitude → 20·log | electrical, absolute |
-| **dBm** | electrical power | 1 mW | power → 10·log | electrical, absolute |
-| **dB SIL / SWL** | sound intensity / power | 10⁻¹² W/m² · W | power → 10·log | acoustic, absolute |
-| **dB** (gain) | a *change* | the other signal | match the quantity | relative |
+| dBFS | sample amplitude | full scale (1.0) | amplitude → 20·log | digital, absolute |
+| dB SPL | sound pressure | 20 µPa | amplitude → 20·log | acoustic, absolute |
+| dBV / dBu | voltage | 1 V / 0.775 V RMS | amplitude → 20·log | electrical, absolute |
+| dBm | electrical power | 1 mW | power → 10·log | electrical, absolute |
+| dB SIL / SWL | sound intensity / power | 10⁻¹² W/m² · W | power → 10·log | acoustic, absolute |
+| dB (gain) | a change | the other signal | match the quantity | relative |
 
-The units audio work touches most (dBFS, dB SPL, dBV/dBu) are all **amplitude** quantities, so
-**20·log** is our default throughout — but the discipline is to *know* that, not assume it.
+The units audio work touches most often (dBFS, dB SPL, dBV, dBu) are amplitude quantities,
+so the 20·log form is this book's default.
 
-### dBFS — our unit
+### dBFS
 
-We work on samples, so our reference is **full scale** (amplitude `1.0`) and our unit is **dBFS**
-(decibels relative to full scale). Samples are amplitudes, so it's the 20·log form:
+This book works on samples, so the reference is full scale (amplitude 1.0) and the unit is
+dBFS: decibels relative to full scale. Samples are amplitudes, so the 20·log form applies:
 
 ```
 dBFS = 20 · log10( |sample| / 1.0 )
 ```
 
-- amplitude `1.0` → **0 dBFS** (the loudest representable level),
-- everything quieter is **negative** (e.g. `0.5` → −6 dBFS),
-- `0.0` → −∞ dBFS (silence).
+- amplitude 1.0 → 0 dBFS, the loudest representable level,
+- everything quieter is negative (0.5 → −6 dBFS),
+- amplitude 0.0 → −∞ dBFS; the logarithm of zero is undefined, so the code below returns −∞.
 
 | Linear amplitude | dBFS |
 |---|---|
@@ -104,14 +110,14 @@ dBFS = 20 · log10( |sample| / 1.0 )
 | 0.01 | −40.0 |
 | 0.001 | −60.0 |
 
-Two rules of thumb fall out of the math: **halving** the amplitude is about **−6 dB**, and
-dividing by **ten** is exactly **−20 dB**.
+Two rules of thumb fall out of the math: halving the amplitude is about −6 dB, and
+dividing it by ten is exactly −20 dB.
 
 ```python
 import math
 
 def db_from_amplitude(a):
-    """Linear amplitude -> dBFS. Silence maps to -inf."""
+    """Linear amplitude -> dBFS. Zero amplitude maps to -inf."""
     a = abs(a)
     return 20.0 * math.log10(a) if a > 0.0 else float("-inf")
 
@@ -120,82 +126,85 @@ def amplitude_from_db(db):
     return 10.0 ** (db / 20.0)
 ```
 
-### Peak vs. RMS dBFS — always say which
+### Peak vs. RMS dBFS
 
-Even "dBFS" is under-specified: the number depends on *how* you reduce the signal to one value.
-We fix **one reference (full scale = 1.0)** and always **label the detector**:
+A dBFS figure is under-specified until the detector is named: the number depends on how
+the signal is reduced to one value. The reference is always full scale (1.0); the detector
+is always labeled:
 
-- **dBFS (peak)** — the instantaneous sample magnitude, `20·log10(|x|)`. Sample-peak can't
-  exceed 0 dBFS. **This is our primary unit** — the per-sample detectors report it.
-- **dBFS (RMS)** — the energy average over a window, `20·log10(rms)`, against the **same**
-  1.0 reference.
+- dBFS (peak): the instantaneous sample magnitude, `20·log10(|x|)`. Sample peak cannot
+  exceed 0 dBFS. This is the book's primary unit; the per-sample detectors report it.
+- dBFS (RMS): the energy average over a window, `20·log10(rms)`, against the same 1.0
+  reference.
 
-For one full-scale sine those give **0 dBFS (peak)** but **−3.01 dBFS (RMS)** — and that 3 dB gap
-*is* the signal's **crest factor**. Both readings use the same reference, so the RMS figure
-is whatever the formula produces, with no meter convention added.
+A full-scale sine reads 0 dBFS (peak) and −3.01 dBFS (RMS). The 3 dB gap is the signal's
+crest factor. Both readings use the same reference, so the RMS figure is whatever the
+formula produces, with no meter convention added.
 
 !!! example "Worked example: the −3.01 dB of a full-scale sine"
-    Take a sine with peak amplitude 1.0. There are two correct routes to its RMS level, and
-    one common wrong turn.
+    Take a sine with peak amplitude 1.0. There are two correct routes to its RMS level,
+    and one common wrong turn.
 
-    - **Amplitude route.** The RMS amplitude is 1/√2 ≈ 0.707. Amplitude takes the 20
-      multiplier: `20 · log10(0.707)` = **−3.01 dBFS (RMS)**.
-    - **Power route.** The mean power is the square of the RMS amplitude: 0.707² = 0.5.
-      Power takes the 10 multiplier: `10 · log10(0.5)` = **−3.01 dB**. The two routes agree,
-      as they must — the 10/20 convention exists so that they do.
-    - **The wrong turn.** Pair the amplitude value with the power multiplier,
-      `10 · log10(0.707)`, and you get −1.5 dB. A result at exactly half (or double) the
+    - Amplitude route. The RMS amplitude is 1/√2 ≈ 0.707. Amplitude takes the 20
+      multiplier: `20 · log10(0.707)` = −3.01 dBFS (RMS).
+    - Power route. The mean power is the square of the RMS amplitude: 0.707² = 0.5.
+      Power takes the 10 multiplier: `10 · log10(0.5)` = −3.01 dB. The two routes agree;
+      the 10/20 convention exists so that they do.
+    - The wrong turn. Pairing the amplitude value with the power multiplier,
+      `10 · log10(0.707)`, gives −1.5 dB. A result at exactly half (or double) the
       expected value is the fingerprint of a 10/20 mix-up.
 
     The phrase "RMS power" usually sets this trap. RMS is an amplitude; its square is the
-    power. Say "RMS amplitude" (0.707) or "mean power" (0.5) and the multiplier chooses
-    itself.
+    power. Saying "RMS amplitude" (0.707) or "mean power" (0.5) chooses the multiplier
+    automatically.
 
-!!! note "We do not use the AES17 RMS offset"
-    Broadcast meters (AES17) *re-reference* RMS so that a full-scale **sine** reads 0 dBFS RMS —
-    a fixed **+3.01 dB** offset (a full-scale square then reads +3 dBFS RMS). We deliberately
-    **don't**: the offset is a magic constant that hides the crest factor. The cost is that our
-    RMS numbers sit ~3 dB below what a typical DAW meter shows — if you compare to one, that's why.
+!!! note "This book does not use the AES17 RMS offset"
+    Broadcast meters (AES17) re-reference RMS so that a full-scale sine reads 0 dBFS RMS,
+    a fixed +3.01 dB offset; a full-scale square then reads +3 dBFS RMS. This book does
+    not use the offset: it is a constant that hides the crest factor. The cost is that the
+    book's RMS numbers sit about 3 dB below what a typical DAW meter shows.
 
 !!! warning "Peak-to-peak is not a level"
-    In our range the signal *spans* up to 2 (from −1 to +1), but level is never measured
-    peak-to-peak. A detector that uses `max − min` reads 6 dB hot next to a true peak detector
-    (20·log₁₀ 2 ≈ 6.02 dB); one of the open-source compressors we surveyed makes exactly this
-    mistake. Measure the magnitude `|x|` (peak) or the RMS, never the span. A useful sanity
-    check for any reading: **RMS ≤ peak ≤ 1.0**, so nothing in this system can exceed 0 dBFS.
+    The signal spans up to 2 (from −1 to +1), but level is never measured peak-to-peak. A
+    detector that uses `max − min` reads 6 dB hot next to a true peak detector
+    (20·log10 2 ≈ 6.02 dB); one of the open-source compressors surveyed for this book
+    makes exactly this mistake. Level is the magnitude `|x|` (peak) or the RMS, never the
+    span. A sanity check for any reading: RMS ≤ peak ≤ 1.0, so no reading in this system
+    can exceed 0 dBFS.
 
 ### Level vs. loudness vs. volume
 
-These everyday words hop between the *objective* and the *perceptual*, which is where rigor
-slips. Keep them separate:
+These three words are often used interchangeably. They name different things:
 
-- **Level** — an *objective* signal measure, in dB (what we compute). When this book says
-  "louder," it means **higher level, in dB**.
-- **Loudness** — how loud a sound *seems*: a *perceptual* quantity, nonlinearly related to level.
-  Crucially, **"+6 dB" is not "twice as loud."**
-- **Volume** — not a measurement at all; a *control* (a gain setting).
+- Level: an objective signal measure, in dB. When this book says "louder," it means higher
+  level in dB.
+- Loudness: how loud a sound seems. A perceptual quantity, nonlinearly related to level.
+  +6 dB is not "twice as loud."
+- Volume: not a measurement. A control; a gain setting.
 
-"Double it" is really three different requests:
+"Double it" is three different requests:
 
 | "Double it" means… | dB change | amplitude | power |
 |---|---|---|---|
-| ×2 **amplitude** | +6 dB | ×2 | ×4 |
-| ×2 **power** | +3 dB | ×1.41 | ×2 |
-| ×2 **perceived loudness** | ≈ +10 dB | ×3.16 | ×10 |
+| ×2 amplitude | +6 dB | ×2 | ×4 |
+| ×2 power | +3 dB | ×1.41 | ×2 |
+| ×2 perceived loudness | ≈ +10 dB | ×3.16 | ×10 |
+
+The loudness row is a psychoacoustic rule of thumb (Stevens' sone scale), not an exact
+law.
 
 !!! note "Loudness is deferred"
-    Perceived loudness has its own units (phon, sone) and an engineering proxy (LUFS), all of
-    which need sound-pressure levels and models of hearing. This book stays in objective level,
-    in dBFS — see [Status & scope](status.md).
+    Perceived loudness has its own units (phon, sone) and an engineering proxy (LUFS), all
+    of which need sound-pressure levels and models of hearing. This book stays in
+    objective level, in dBFS; see [Status & scope](status.md).
 
 ## Gain: linear and in dB
 
-**Gain** is just multiplication: to make a signal louder or quieter you multiply every sample
-by a constant. A gain of `1.0` changes nothing; `0.5` is half amplitude (−6 dB); `2.0` is
-double (+6 dB).
+Gain is multiplication. To change a signal's level, every sample is multiplied by a
+constant. A gain of 1.0 changes nothing; 0.5 halves the amplitude (−6 dB); 2.0 doubles it
+(+6 dB).
 
-We *talk* about gain in dB but *apply* it linearly, so converting between the two is constant
-work in every effect:
+Gain is discussed in dB and applied linearly, so every effect converts between the two:
 
 ```python
 def apply_gain_db(signal, gain_db):
@@ -205,18 +214,18 @@ def apply_gain_db(signal, gain_db):
 ```
 
 !!! warning "Keep dB and linear straight"
-    Decibels **add**; linear gains **multiply**. Two stages of +6 dB give +12 dB, which is
-    ×4 in linear terms — not ×2 + ×2. Mixing the two domains is the most common beginner bug.
+    Decibels add; linear gains multiply. Two stages of +6 dB give +12 dB, which is ×4 in
+    linear terms. Mixing the two domains is the most common beginner bug.
 
 ## Detecting level: peak vs. RMS
 
-An effect that reacts to "how loud is it right now" first needs a number for the current
-level. Two common detectors:
+An effect that reacts to the current level first needs a number for it. Two detectors are
+common:
 
-- **Peak** — the largest magnitude in a window. Fast, catches transients, good for catching
-  clipping.
-- **RMS** (root-mean-square) — the energy average over a window. Smoother, and closer to
-  perceived loudness.
+- Peak: the largest magnitude in a window. It reacts to transients and is the right
+  detector for preventing clipping.
+- RMS: the square root of the mean of the squared samples over a window. Smoother, and by
+  rule of thumb closer to perceived loudness than peak.
 
 ```python
 def peak(block):
@@ -230,25 +239,25 @@ def rms(block):
     return math.sqrt(sum(s * s for s in block) / len(block))
 ```
 
-For a sine wave, RMS sits about **3 dB below** the peak (that gap is its **crest factor**) — so
-the choice of detector shifts your measured level. Most level effects in this book detect on one
-of these and report the result as **dBFS (peak)** or **dBFS (RMS)** — always labelled, per the
-convention above.
+For a sine wave, RMS sits about 3 dB below peak; the gap is the crest factor. The choice
+of detector shifts the measured level, so readings are always labeled dBFS (peak) or
+dBFS (RMS).
 
-Following a level over *time* — attack and release, the one-pole envelope follower — is
-covered with the other envelopes in [Chapter 4](waveforms.md).
+Following a level over time — attack, release, the one-pole envelope follower — is covered
+with the other envelopes in [Chapter 4](waveforms.md).
 
 ## Pitfalls
 
 !!! warning "Common mistakes"
-    - **`log10(0)` is undefined.** Guard silence before taking a logarithm (we return −∞).
-    - **dB ≠ linear.** Convert deliberately; never add a dB value to a sample.
-    - **Detector choice matters.** Peak and RMS of the same signal differ by several dB —
+    - `log10(0)` is undefined. Guard zero amplitude before taking a logarithm; the code above
+      returns −∞.
+    - dB is not linear. Convert deliberately; never add a dB value to a sample.
+    - Detector choice matters. Peak and RMS of the same signal differ by several dB;
       state which one a measurement uses.
 
 ## Learn more
 
 - [dBFS](https://en.wikipedia.org/wiki/DBFS) and [Decibel](https://en.wikipedia.org/wiki/Decibel) — Wikipedia, for the measurement basics.
 - [Root mean square](https://en.wikipedia.org/wiki/Root_mean_square) — Wikipedia.
-- Udo Zölzer (ed.), **DAFX: Digital Audio Effects**, 2nd ed., Wiley, 2011 — the standard reference for this whole cookbook.
-- Julius O. Smith III, **Introduction to Digital Filters**, CCRMA (free online) — for one-pole smoothers / exponential followers.
+- Udo Zölzer (ed.), *DAFX: Digital Audio Effects*, 2nd ed., Wiley, 2011 — the standard reference for this cookbook.
+- Julius O. Smith III, *Introduction to Digital Filters*, CCRMA (free online) — for one-pole smoothers.
