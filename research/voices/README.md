@@ -14,6 +14,11 @@ reference lists are voice-neutral and identical across versions, so they are omi
 | `limiting-warm.md` | Warm teacher | Asimov non-fiction | Talks to the reader; "you," contractions, unhurried; builds each idea as a small story |
 | `limiting-textbook.md` | Textbook | Prince, *Understanding Deep Learning* | Impersonal "we"; definitional precision; numbered mechanism; no contractions |
 | `limiting-essay.md` | Essayist-engineer | lcamtuf (Zalewski) | Plain and concrete; dry asides in parentheses; assumes intelligence, not background |
+| `limiting-flat.md` | Flat | K&R; specification prose | No analogies, no humor, no reader address; every sentence carries information |
+
+The flat sample was added on the working hypothesis that any personality in the voice
+eventually gets in the way of teaching. It is the floor of the dial: if it reads as
+sufficient, the question becomes what (if anything) the other voices buy.
 
 ## Questions for review
 

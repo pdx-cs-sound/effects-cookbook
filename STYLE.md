@@ -13,7 +13,7 @@ the concrete case before the general rule, and no rhetorical performance. Orwell
 is the shortest version: "good prose is like a windowpane."
 
 Voice samples for comparison live in `research/voices/` — the Limiting chapter rewritten
-three ways. Pick a voice (or a blend) there before any full rewrite pass.
+four ways, from warm to flat. Pick a voice (or a blend) there before any full rewrite pass.
 
 The current pages do not yet follow this guide. They were drafted quickly and some of the
 prose reads machine-generated. A rewrite pass is planned once this guide is settled.
