@@ -28,12 +28,25 @@ Cookbook ethos: consistent template per effect, copy-pasteable, learn-by-doing.
   2 = everyday worker in the space, 3 = dissertation-grade. We aim at **1, occasionally 2**.
   Explicitly **not** state-of-the-art; we are not pushing the envelope.
 - **Prerequisites assumed:** TBD (basic programming; comfort with samples and dB).
-- **Scope of v1:** **two chapters** —
-  - **Chapter 1 — Conventions & AGC:** shared vocabulary (samples & the [-1,1] range, dB and
-    **dBFS**, peak vs RMS level detection, linear↔dB gain, attack/release time constants),
-    then Automatic Gain Control.
-  - **Chapter 2 — Companding:** compression, limiting, and expanding (the threshold-and-ratio family).
-- **Future effects (backlog):** TBD (EQ, reverb, delay, distortion, etc.)
+- **Structure: ten chapters** (2026-07-03, from the meeting; supersedes the two-chapter plan).
+  Ordered by machinery — each chapter's effects need everything before them and nothing after:
+  1. Introduction / preface (the current Home page).
+  2. Measuring sound (dB, dBFS, gain, detectors — existing Conventions material).
+  3. Single-sample effects (stateless: volume, distortion, mu-law, bit crush).
+  4. Waveforms & envelopes (sines, other waveforms, oscillators/LFOs; the envelope follower
+     moved here from Conventions).
+  5. Time domain — level: **tremolo, then CLEA** (compression, limiter, expander, AGC).
+     Tremolo is the parametric (LFO-driven) volume knob; the rest replace the LFO with a
+     level detector.
+  6. Time domain — delay & modulation (reverb, chorus, vibrato; consume the LFOs of ch. 4;
+     ring buffers).
+  7. The frequency domain (audio as a collection of frequencies).
+  8. Filters (FIR / IIR).
+  9. DFT / FFT / STFT (benefits, disadvantages).
+  10. Frequency-domain effects (resampling, vocoding).
+  Chapters 1–6 are specified in more detail than 7–10; the complexity trend is the point.
+- **Naming note:** mu-law (ch. 3) is "companding" in the codec sense; the former "Companding"
+  chapter title is retired (ch. 5 is "time domain: level") to keep the two senses apart.
 
 ### Explicit non-goals (scoping)
 - **No analog effects or analog explanations** — digital-domain only (the math, plus scoping).
@@ -230,3 +243,5 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-07-02 | **Skeleton restructure**: reader-facing scope/deferral notes → published "Status & scope" appendix (`prototype/status.md`); author-facing rationale stays in DESIGN/research; Visualizations demoted to an Appendix (testing & feedback area); Hear-it/Visualization placeholders and verify-citations footers removed from chapters | Chapters stay about audio; clean pages before the voice-sample pass (split metadata by audience) |
 | 2026-07-02 | **Visualization taxonomy by interface** (static graph / interactive graph / static sound / interactive sound / animation) with provenance rules per type; visuals-then-feedback-then-architecture ordering | Ed's framing; build cost rises down the list, so the minimum (static graphs) lands on pages first |
 | 2026-07-02 | **Static-figure pipeline**: `code/make_figures.py` writes SVG with the stdlib and generates time-domain data by running the book's own `compressor.py`; artifacts committed to `prototype/img/`. Encodes the three figure conventions from the feedback log (legend swatches mirror line styles; inactive output drawn faint; reference levels drawn, named, dashed purple) | Figures made by the code the book teaches: no plotting dependency, self-attributing, reproducible |
+| 2026-07-03 | **Prose register decided: flat** (specification prose; reference sample `research/voices/limiting-flat.md`). No reader address, no "we," no humor, no contractions; analogy policy still open (STYLE.md) | Working hypothesis: any personality in the voice eventually gets in the way of teaching |
+| 2026-07-03 | **Ten-chapter structure adopted** (§2); skeleton reshuffle done before the flat rewrite (structure before surface). Conventions split (envelopes → ch. 4); AGC joins ch. 5 in **tremolo-then-CLEA** order; unwritten chapters are one-paragraph stubs in the nav | Reshuffle crosses page boundaries, so rewriting first would have meant rewriting seams twice |

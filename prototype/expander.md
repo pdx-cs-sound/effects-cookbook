@@ -4,8 +4,8 @@
 > *down* what's **quiet**, pushing the soft parts further down and so *increasing* the dynamic
 > range. Taken to the extreme it becomes a **noise gate**.
 
-*Chapter 2 — Companding. The inverse of [Compression](compression.md); a gate is its extreme
-setting.*
+*Chapter 5 — time-domain level effects. The inverse of [Compression](compression.md); a gate
+is its extreme setting.*
 
 ---
 
@@ -117,7 +117,8 @@ def expand(x, sr, threshold_db=-40.0, ratio=2.0, range_db=-40.0,
 
 - **[Compression](compression.md)** — the inverse: tames loud parts above a threshold.
 - **Noise gate** — an expander with a high ratio and deep range (silence below threshold).
-- **[Conventions](conventions.md)** — the level detector and one-pole follower this is built from.
+- **[Measuring sound](conventions.md)** and **[Waveforms & envelopes](waveforms.md)** — the
+  level detector and one-pole follower this is built from.
 
 ## Learn more
 

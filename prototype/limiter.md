@@ -4,8 +4,8 @@
 > fast reaction, so the signal is never allowed to exceed a set **ceiling**. Its job is a
 > guarantee — "nothing gets past this level."
 
-*Chapter 2 — Companding. The fast, output-flattening end of [Compression](compression.md);
-contrast with the slow, transparent [AGC](agc.md).*
+*Chapter 5 — time-domain level effects. The fast, output-flattening end of
+[Compression](compression.md); contrast with the slow, transparent [AGC](agc.md).*
 
 ---
 

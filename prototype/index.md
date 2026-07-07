@@ -15,20 +15,25 @@ New to this? Begin with the **[Conventions](conventions.md)** page — it sets u
 vocabulary (samples, dBFS, level detection, gain, attack/release) that every effect page builds
 on. Then read the effects in either chapter.
 
-## Chapter 1 — Conventions & AGC
+## The chapters
 
-- **[Conventions](conventions.md)** — how we represent audio, measure level in dBFS, and follow
-  a signal over time. The foundation.
-- **[Automatic Gain Control](agc.md)** — holding a level near a target, automatically and
-  transparently.
+Ordered by machinery: each chapter's effects need everything before them and nothing after.
 
-## Chapter 2 — Companding
-
-The threshold-and-ratio family — **com**pressing and ex**pand**ing:
-
-- **[Compression](compression.md)** — taming the loud parts to even out dynamics.
-- **[Limiting](limiter.md)** — a brick wall: the signal never crosses a ceiling.
-- **[Expanding](expander.md)** — the inverse: pushing the quiet parts down (a gate at the extreme).
+1. **Introduction** — this page.
+2. **[Measuring sound](conventions.md)** — samples, decibels, dBFS, gain, level detection.
+3. **[Single-sample effects](single-sample.md)** — stateless: volume, distortion, mu-law,
+   bit crush. *(planned)*
+4. **[Waveforms & envelopes](waveforms.md)** — sines and other waveforms, oscillators,
+   envelopes. *(partial)*
+5. **Time domain: level** — [Tremolo](tremolo.md) *(planned)*,
+   [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md),
+   [AGC](agc.md).
+6. **[Delay & modulation](delay-modulation.md)** — reverb, chorus, vibrato; ring buffers.
+   *(planned)*
+7. **[The frequency domain](frequency-domain.md)** — audio as frequencies. *(planned)*
+8. **[Filters](filters.md)** — FIR and IIR. *(planned)*
+9. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
+10. **[Frequency-domain effects](frequency-effects.md)** — resampling, vocoding. *(planned)*
 
 ## How each effect page is laid out
 

@@ -4,8 +4,9 @@
 > correcting slow drift in loudness — *transparently*, without reshaping the moment-to-moment
 > dynamics.
 
-*Chapter 1 — Conventions & AGC. Builds on [Conventions](conventions.md); contrast with its
-faster cousins in [Compression](compression.md).*
+*Chapter 5 — time-domain level effects. The slow, transparent member of the family; builds
+on [Measuring sound](conventions.md) and the envelope follower of
+[Chapter 4](waveforms.md).*
 
 ---
 
@@ -24,9 +25,9 @@ stream where every participant should arrive at the listener at the same level.
     Mostly a **goal**, realized as a **control technique** — and only loosely "an effect."
     Unlike a compressor, there is no single canonical "AGC algorithm"; the name describes an
     *objective* ("hold the output near a target") rather than one specific transfer function.
-    In practice it's built as a **slow feedback loop** from the same primitives as the
-    [Conventions](conventions.md) chapter — a level detector plus a one-pole follower — wired to
-    seek a target instead of applying a fixed curve.
+    In practice it's built as a **slow feedback loop** from familiar primitives — a level
+    detector ([Chapter 2](conventions.md)) plus a one-pole follower
+    ([Chapter 4](waveforms.md)) — wired to seek a target instead of applying a fixed curve.
 
 ## Key parameters
 
@@ -131,7 +132,8 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
 
 ## Related effects
 
-- **[Conventions](conventions.md)** — the level detector and one-pole follower AGC is built from.
+- **[Measuring sound](conventions.md)** and **[Waveforms & envelopes](waveforms.md)** — the
+  level detector and one-pole follower AGC is built from.
 - **[Compression](compression.md)** — faster, feed-forward, reshapes short-term dynamics.
 - **[Limiting](limiter.md)** — AGC's flattening with a compressor's speed; the bridge between the chapters.
 

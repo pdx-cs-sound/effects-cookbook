@@ -3,8 +3,9 @@
 > **Dynamic range compression** automatically turns down the *loud* parts of a signal so
 > the gap between loud and quiet shrinks — making a track sit more evenly and feel louder.
 
-*Chapter 2 — Companding. See also [Limiting](limiter.md), [Expanding](expander.md), and the
-slower, target-seeking [AGC](agc.md).*
+*Chapter 5 — time-domain level effects. See also [Tremolo](tremolo.md),
+[Limiting](limiter.md), [Expanding](expander.md), and the slower, target-seeking
+[AGC](agc.md).*
 
 ---
 

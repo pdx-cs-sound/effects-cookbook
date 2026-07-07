@@ -3,7 +3,15 @@
 Working task list for the Digital Audio Effects Cookbook. Design rationale lives in
 [DESIGN.md](DESIGN.md); this is the actionable view.
 
-## Now — ordered plan (2026-07-02)
+## Now — ordered plan (updated 2026-07-03)
+- [x] Ten-chapter skeleton in place (stubs for ch. 3, 6–10 + tremolo; envelopes moved to
+      ch. 4; AGC into ch. 5, tremolo-then-CLEA order; index/status/cross-links updated)
+- [ ] **Flat rewrite pass** over all drafted pages, in their final homes (register decided:
+      `research/voices/limiting-flat.md`; analogy policy question open in STYLE.md)
+- [ ] Then: new-chapter content, roughly in chapter order (ch. 3 single-sample first —
+      cheapest, feeds the existing distortion/waveshaper visualizations)
+
+### Earlier plan (2026-07-02)
 - [x] Skeleton pass: reader-facing scope/deferral notes consolidated into a published
       **Status & scope** appendix (`prototype/status.md`); author metadata stays in
       DESIGN/research; **Visualizations moved under Appendix**; Hear-it / Visualization

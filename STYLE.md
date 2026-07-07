@@ -1,8 +1,9 @@
 # Prose Style Guide
 
-> Status: **PROPOSAL** — drafted for Massey's review before any rewrite pass.
-> Scope: the cookbook pages in `prototype/`. Code comments and docstrings follow the
-> spirit but favor precision over style.
+> Status: **register decided (2026-07-03): flat** — see `research/voices/limiting-flat.md`
+> for the reference sample. The rules below stand; the open questions at the end are
+> narrowed accordingly. Scope: the cookbook pages in `prototype/`. Code comments and
+> docstrings follow the spirit but favor precision over style.
 
 ## The target register
 
@@ -80,10 +81,10 @@ Same content, four short sentences, no italics doing the emphasis work.
 
 ## Open questions
 
-1. **Warmth.** Asimov talks to the reader ("you," contractions, first person); Prince is
-   textbook-neutral. Where on that dial should this cookbook sit? The current draft pages
-   lean Asimov.
-2. **"We."** Acceptable for authorial decisions ("we measure in dBFS"), or prefer
-   impersonal constructions?
-3. **House spelling and mechanics.** US spelling? Oxford comma? Contractions?
-4. **Anything you'd add or veto** in the rules above.
+Warmth and person are settled by the flat decision: no reader address, no authorial "we,"
+no contractions, no humor. Remaining:
+
+1. **Analogies.** The flat sample uses none. Rule 5 permits one load-bearing analogy per
+   section (e.g. AGC's slow hand on a fader). Does flat mean zero analogies, or does a
+   working analogy survive because it is pedagogy rather than personality?
+2. **House mechanics.** US spelling? Oxford comma?
