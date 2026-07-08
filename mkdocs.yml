@@ -22,6 +22,8 @@ markdown_extensions:
   - admonition
   - pymdownx.superfences
   - pymdownx.highlight
+  - pymdownx.snippets:
+      check_paths: true
   - tables
   - toc:
       permalink: true
@@ -34,6 +36,7 @@ nav:
   - "5 — Time domain: level":
       - Tremolo: tremolo.md
       - Compression: compression.md
+      - "Designing a compressor": compressor-design.md
       - Limiting: limiter.md
       - Expanding: expander.md
       - Automatic Gain Control: agc.md
@@ -44,4 +47,5 @@ nav:
   - "10 — Frequency-domain effects": frequency-effects.md
   - Appendix:
       - "Status & scope": status.md
+      - References: references.md
       - Visualizations: visualizations.md

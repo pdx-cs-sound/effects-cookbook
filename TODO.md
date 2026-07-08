@@ -3,17 +3,17 @@
 Working task list for the Digital Audio Effects Cookbook. Design rationale lives in
 [DESIGN.md](DESIGN.md); this is the actionable view.
 
-## Now — ordered plan (updated 2026-07-03)
+## Now — ordered plan (updated 2026-07-08)
 - [x] Ten-chapter skeleton in place (stubs for ch. 3, 6–10 + tremolo; envelopes moved to
       ch. 4; AGC into ch. 5, tremolo-then-CLEA order; index/status/cross-links updated)
-- [x] **Flat rewrite pass** done (2026-07-03): index, conventions (now titled "Measuring
+- [x] **Flat rewrite pass** done (2026-07-07): index, conventions (now titled "Measuring
       sound"), waveforms' moved section, compression, limiter, expander, agc. Load-bearing
       analogies kept per rule 5 (both fader analogies survive). Zero contractions / reader
       address / authorial "we" in prose; code comments exempt.
 - [ ] Then: new-chapter content, roughly in chapter order (ch. 3 single-sample first —
       cheapest, feeds the existing distortion/waveshaper visualizations)
 
-### Earlier plan (2026-07-02)
+### Earlier plan (2026-07-05)
 - [x] Skeleton pass: reader-facing scope/deferral notes consolidated into a published
       **Status & scope** appendix (`prototype/status.md`); author metadata stays in
       DESIGN/research; **Visualizations moved under Appendix**; Hear-it / Visualization
@@ -77,11 +77,29 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [ ] Project license — content vs code (§7)
 
 ## Attribution & verification (§7)
+- [x] References appendix (`prototype/references.md`): five compressor sources with context,
+      standards, texts; chapter one-liners link into it
+- [x] Pending References links resolved and fetch-verified (2026-07-08): DAFX chapter-4 +
+      MATLAB pages on dafx.de (compexp.m is inside `M_files_chap04.zip`); pcs =
+      github.com/pdx-cs-sound/effects `compressor.py`
 - [ ] Verify Woodgate / ISCVE Note 27.1 + IEC 60268-8 citation details
 - [ ] Check WebRTC AGC2 license before quoting any code
 - [ ] Replace placeholder references in `compression.md` with real, cited sources
 - [ ] Redraw any borrowed figures (e.g. Woodgate Fig. 1) as our own before publishing
 
+## Handoff (end of term)
+- [ ] Document the expected build-and-validate process, local and CI, as a handoff
+      deliverable. Much of it exists piecemeal — README (venv recreation, serve/build/test/
+      check commands, .python-version), the publish workflow (tests + build + embed check
+      gate deploy), `code/make_figures.py` for regenerating figures, the snippets include
+      that ties `compressor.py` to the design page. The handoff doc should tie these
+      together for whoever inherits the repo: what runs where, what failure looks like,
+      and what to do about it.
+
 ## Housekeeping
+- [x] `code/check_embeds.py` (2026-07-08, written by a Sonnet subagent, reviewed here):
+      fails the build on dangling raw-HTML embeds (iframe/img/a/script/audio/source), which
+      MkDocs link validation cannot see. Wired into the publish workflow before deploy,
+      along with the unit tests.
 - [ ] CI auto-deploy via GitHub Action (currently `gh-pages` via `mkdocs gh-deploy`) — DESIGN §4
 - [ ] Confirm `requirements.txt` is pinned

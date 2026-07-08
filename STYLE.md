@@ -1,6 +1,6 @@
 # Prose Style Guide
 
-> Status: **register decided (2026-07-03): flat** — see `research/voices/limiting-flat.md`
+> Status: **register decided (2026-07-06): flat** — see `research/voices/limiting-flat.md`
 > for the reference sample. The rules below stand; the open questions at the end are
 > narrowed accordingly. Scope: the cookbook pages in `prototype/`. Code comments and
 > docstrings follow the spirit but favor precision over style.
@@ -82,10 +82,10 @@ Same content, four short sentences, no italics doing the emphasis work.
 ## Open questions
 
 Warmth and person are settled by the flat decision: no reader address, no authorial "we,"
-no contractions, no humor. Analogies are settled too (2026-07-03): load-bearing analogies
+no contractions, no humor. Analogies are settled too (2026-07-07): load-bearing analogies
 stay, per rule 5 — flat applies to delivery, not to pedagogy.
 
-Mechanics (settled 2026-07-03): **US spelling** (labeled, behavior, analyzed) and the
+Mechanics (settled 2026-07-07): **US spelling** (labeled, behavior, analyzed) and the
 **Oxford comma**, everywhere including code comments and docstrings.
 
 No open questions at present.

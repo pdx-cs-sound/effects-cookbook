@@ -38,6 +38,9 @@ rm -rf env
 ```sh
 ./env/bin/mkdocs serve                      # live-preview the site at localhost:8000
 python3 -m unittest discover -s code        # run the code tests (stdlib only)
+./env/bin/mkdocs build                      # build the static site into site/
+python3 code/check_embeds.py                # verify raw-HTML embeds in site/ resolve
 ```
 
-Pushing to `main` publishes the site via GitHub Actions.
+Pushing to `main` publishes the site via GitHub Actions. The workflow runs the tests and
+the embed check first; a failure in either blocks the deploy.

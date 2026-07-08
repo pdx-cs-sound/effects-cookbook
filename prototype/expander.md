@@ -125,5 +125,6 @@ def expand(x, sr, threshold_db=-40.0, ratio=2.0, range_db=-40.0,
 
 - Udo Zölzer (ed.), *DAFX: Digital Audio Effects*, 2nd ed., Wiley — its `compexp.m` does
   compression and expansion in one expression.
-- Reference implementations in `thirdparty/compare/`: dafx `compexp.m` (combined
-  compressor/expander), sox `compand` (expansion via transfer-curve breakpoints).
+- Reference implementations: [dafx](references.md#dafx), a combined compressor/expander,
+  and [sox](references.md#sox), expansion via transfer-curve breakpoints. Context in the
+  [References](references.md) appendix.

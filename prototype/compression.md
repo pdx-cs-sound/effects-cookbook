@@ -66,36 +66,14 @@ for each sample x:
     y = x * dB_to_linear(gain) * dB_to_linear(makeup)
 ```
 
-## Reference implementation (Python)
+## Reference implementation
 
-```python
-import math
-
-def compress(x, sr, threshold_db=-20.0, ratio=4.0,
-             attack_ms=5.0, release_ms=50.0, makeup_db=0.0):
-    """Simple feed-forward peak compressor — pure standard library, no dependencies.
-
-    x:  list of mono samples (floats in [-1, 1])
-    sr: sample rate in Hz
-    Returns a new list of processed samples.
-    """
-    atk = math.exp(-1.0 / (sr * attack_ms  / 1000.0))
-    rel = math.exp(-1.0 / (sr * release_ms / 1000.0))
-    eps = 1e-9
-
-    y = []
-    env_db = -120.0      # smoothed gain-reduction state, in dB
-    for sample in x:
-        level_db = 20.0 * math.log10(abs(sample) + eps)   # dBFS (peak), per sample
-        over = level_db - threshold_db
-        target = -over * (1.0 - 1.0 / ratio) if over > 0 else 0.0
-        # attack when clamping harder, release when easing off
-        coeff = atk if target < env_db else rel
-        env_db = coeff * env_db + (1.0 - coeff) * target
-        gain = 10.0 ** ((env_db + makeup_db) / 20.0)
-        y.append(sample * gain)
-    return y
-```
+The implementation lives on its own page: [Designing a compressor](compressor-design.md).
+Building a compressor involves more decisions than the pseudocode above shows — detector,
+topology, knee shape, where to smooth, lookahead, makeup — and that page maps the decision
+space and includes a configurable implementation (`code/compressor.py`) whose keyword
+arguments are those decisions. Five open-source compressors are included as presets, each a
+different path through the same choices.
 
 !!! warning "Pitfalls"
     - Pumping and breathing: a release that is too fast makes the level surge audibly

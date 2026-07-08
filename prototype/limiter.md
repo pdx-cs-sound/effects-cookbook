@@ -129,5 +129,6 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
 
 - Udo Zölzer (ed.), *DAFX: Digital Audio Effects*, 2nd ed., Wiley.
 - ITU-R BS.1770 — true-peak (dBTP) measurement, the reason production limiters oversample.
-- Reference implementations in `thirdparty/compare/`: audacity (a true look-ahead
-  limiter), sox `compand` (limiting via a steep transfer curve).
+- Reference implementations: [audacity](references.md#audacity), a true look-ahead limiter,
+  and [sox](references.md#sox), limiting via a steep transfer curve. Context in the
+  [References](references.md) appendix.

@@ -11,7 +11,7 @@ Pure standard library, offline, mono, teaching code — not production DSP.
 Signals are plain Python lists of floats in [-1.0, 1.0]; levels are dBFS
 (peak detection per sample unless detector="rms"). See the Conventions page.
 
-Where the code narrows the map (documented honesty):
+Where the code narrows the map:
 
 * knee="soft_curve" (sox's Bezier joint) is not a separate function: for a
   single knee, a quadratic Bezier whose control point sits at the hard-knee
