@@ -23,7 +23,7 @@ Ordered by machinery: each chapter's effects need everything before them and not
    crush, mu-law.
 4. **[Waveforms & envelopes](waveforms.md)** — sines and other waveforms, oscillators,
    LFOs, envelopes.
-5. **Time domain: level** — [Tremolo](tremolo.md) *(planned)*,
+5. **Time domain: level** — [Tremolo](tremolo.md),
    [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md),
    [AGC](agc.md).
 6. **[Delay & modulation](delay-modulation.md)** — reverb, chorus, vibrato; ring buffers.

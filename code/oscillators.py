@@ -77,6 +77,22 @@ def follow(signal, attack_ms, release_ms, sr):
 # --8<-- [end:follow]
 
 
+# --8<-- [start:tremolo]
+def tremolo(x, sr, rate_hz=5.0, depth=0.5):
+    """Multiply the signal by an LFO-driven gain between 1 - depth and 1."""
+    out = []
+    phase = 0.0
+    step = rate_hz / sr
+    for s in x:
+        m = 0.5 + 0.5 * math.sin(2.0 * math.pi * phase)   # LFO in [0, 1]
+        out.append(s * (1.0 - depth * m))
+        phase += step
+        if phase >= 1.0:
+            phase -= 1.0
+    return out
+# --8<-- [end:tremolo]
+
+
 def burst_tone(sr, freq, sections):
     """Sine tone whose amplitude steps through (duration_s, amplitude) sections.
 

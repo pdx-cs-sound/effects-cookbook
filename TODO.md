@@ -19,7 +19,10 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       float-wrap pitfall found by the test suite) → LFOs → envelopes (ADSR acknowledged,
       follower retained). Page code snippet-included from `code/oscillators.py` (tested;
       also feeds figures and demos).
-- [ ] Then: tremolo (ch. 5) — now unblocked by ch. 4's LFO
+- [x] Tremolo drafted (2026-07-13): Chapter 5 complete. `tremolo()` in oscillators.py
+      (snippet-included, tested), figure, and the book's first before/after effect demo
+      (plain tone vs. tremolo). Tremolo-vs-vibrato naming trap in pitfalls.
+- [ ] Then: ch. 6 (delay & modulation — ring buffers, vibrato, chorus, reverb)
 - [ ] First per-effect before/after audio demos (compressor on the burst tone?) using the
       make_demos pipeline
 

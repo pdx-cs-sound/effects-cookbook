@@ -14,7 +14,7 @@ import os
 import wave
 
 from oscillators import (oscillator, sawtooth_shape, sine_shape, square_shape,
-                         triangle_shape)
+                         tremolo, triangle_shape)
 
 OUT_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..",
                                         "prototype", "audio"))
@@ -59,6 +59,13 @@ def main():
     # One file with all four in sequence, for uninterrupted comparison.
     path = os.path.join(OUT_DIR, "all_waveforms_220hz.wav")
     write_wav(path, combined[:-len(gap)], SR)
+    print(f"wrote {path}")
+
+    # Tremolo on a sine: the first effect demo.
+    plain = oscillator(sine_shape, 220.0, 3.0, SR, amp=0.5)
+    wobble = fade_ends(tremolo(plain, SR, rate_hz=5.0, depth=0.8), SR)
+    path = os.path.join(OUT_DIR, "tremolo_220hz.wav")
+    write_wav(path, wobble, SR)
     print(f"wrote {path}")
 
 

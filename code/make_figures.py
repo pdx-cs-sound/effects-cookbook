@@ -27,7 +27,8 @@ from xml.sax.saxutils import escape
 
 from compressor import compress, db_from_amplitude
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
-                         sine_shape, square_shape, triangle_shape)
+                         sine_shape, sine_wave, square_shape, tremolo,
+                         triangle_shape)
 
 OUT_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..",
                                          "prototype", "img"))
@@ -643,6 +644,38 @@ def fig_phase_accumulator():
     plot.save("phase_accumulator.svg")
 
 
+# --------------------------------------------------------------------------
+# Figure 14: tremolo (Chapter 5)
+# --------------------------------------------------------------------------
+
+def fig_tremolo():
+    sr = 8000
+    rate, depth, amp = 4.0, 0.6, 0.5
+    x = sine_wave(220.0, 1.0, sr, amp=amp)
+    y = tremolo(x, sr, rate_hz=rate, depth=depth)
+    t = [n / sr for n in range(len(x))]
+    gain = [1.0 - depth * (0.5 + 0.5 * math.sin(2.0 * math.pi * rate * n / sr))
+            for n in range(len(x))]
+
+    plot = Plot(520, 360, (0, 1), (0, 1.05),
+                "Tremolo: an LFO on a volume knob",
+                "A steady tone through tremolo at 4 Hz with depth 0.6. The "
+                "gain swings between 1 and 1 minus the depth, and the output "
+                "magnitude swells and dips under the flat input level.")
+    plot.grid(0.25, 0.25, "time (s)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.2f}", y_tick_fmt=lambda v: f"{v:.2f}")
+
+    plot.line([0, 1], [amp, amp], GRAY, 2.0, dash="4 3")   # input level
+    plot.area(t, [abs(s) for s in y], BLUE)                # output magnitude
+    plot.line(t, gain, AMBER, 2.2, opacity=0.85)           # the LFO-driven gain
+    plot.legend([
+        ("input level (constant)", GRAY, "4 3", 2.0),
+        ("output magnitude", BLUE, "area", 0),
+        ("gain: 1 − depth·LFO", AMBER, None, 2.2),
+    ], x=plot.x0 + 300, y=plot.y1 + 16)
+    plot.save("tremolo.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -657,3 +690,4 @@ if __name__ == "__main__":
     fig_mulaw_transfer()
     fig_waveforms()
     fig_phase_accumulator()
+    fig_tremolo()

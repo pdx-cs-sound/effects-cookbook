@@ -10,7 +10,8 @@ import wave
 
 from make_demos import fade_ends, write_wav
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
-                         sine_shape, sine_wave, square_shape, triangle_shape)
+                         sine_shape, sine_wave, square_shape, tremolo,
+                         triangle_shape)
 
 SR = 8000
 ALL_SHAPES = (sine_shape, square_shape, sawtooth_shape, triangle_shape)
@@ -73,6 +74,22 @@ class TestGenerators(unittest.TestCase):
         burst_end = int(0.15 * SR)
         self.assertGreater(env[burst_end - 1], 0.25)      # charged during burst
         self.assertLess(env[-1], env[burst_end - 1] / 2)  # decayed well after it
+
+
+class TestTremolo(unittest.TestCase):
+    def test_depth_zero_is_identity(self):
+        x = sine_wave(220.0, 0.1, SR, amp=0.5)
+        y = tremolo(x, SR, rate_hz=5.0, depth=0.0)
+        self.assertLess(max(abs(a - b) for a, b in zip(x, y)), 1e-12)
+
+    def test_gain_swings_between_one_minus_depth_and_one(self):
+        x = sine_wave(220.0, 1.0, SR, amp=0.5)
+        y = tremolo(x, SR, rate_hz=4.0, depth=0.6)
+        block = SR // 100
+        peaks = [max(abs(s) for s in y[i:i + block])
+                 for i in range(0, len(y) - block, block)]
+        self.assertAlmostEqual(max(peaks), 0.5, delta=0.02)          # gain 1
+        self.assertAlmostEqual(min(peaks), 0.5 * 0.4, delta=0.02)    # 1 - depth
 
 
 class TestWavWriter(unittest.TestCase):
