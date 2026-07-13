@@ -45,7 +45,8 @@ smoothed level.
 
 *The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
 envelope rises quickly when the burst starts (attack) and decays slowly after it ends
-(release). The amplitude axis is linear; this is the one figure in the book not in dB.*
+(release). The amplitude axis is linear, like the transfer curves of
+[Chapter 3](single-sample.md); level-over-time figures elsewhere are in dB.*
 
 !!! warning "Pitfall"
     Sample rate is part of every time constant. The same `attack_ms` gives a different

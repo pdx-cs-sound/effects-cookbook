@@ -19,8 +19,8 @@ Ordered by machinery: each chapter's effects need everything before them and not
 
 1. **Introduction** — this page.
 2. **[Measuring sound](conventions.md)** — samples, decibels, dBFS, gain, level detection.
-3. **[Single-sample effects](single-sample.md)** — stateless: volume, distortion, mu-law,
-   bit crush. *(planned)*
+3. **[Single-sample effects](single-sample.md)** — stateless: volume, distortion, bit
+   crush, mu-law.
 4. **[Waveforms & envelopes](waveforms.md)** — sines and other waveforms, oscillators,
    envelopes. *(partial)*
 5. **Time domain: level** — [Tremolo](tremolo.md) *(planned)*,

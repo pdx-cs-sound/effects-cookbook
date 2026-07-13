@@ -22,10 +22,10 @@ deeper.
 
 ## Chapter status
 
-The book follows a ten-chapter plan (see the [Introduction](index.md)). Chapters 1, 2, and
-the level effects of chapter 5 have drafted content; chapter 4 is partial (the envelope
-follower). Chapters 3, 6, 7, 8, 9, 10, and tremolo in chapter 5 are stubs. A single prose
-pass to the book's flat register is planned across all drafted pages.
+The book follows a ten-chapter plan (see the [Introduction](index.md)). Chapters 1, 2, 3,
+and the level effects of chapter 5 have drafted content; chapter 4 is partial (the
+envelope follower). Chapters 6, 7, 8, 9, 10, and tremolo in chapter 5 are stubs. Drafted
+pages follow the book's flat register.
 
 ## Deferred topics
 

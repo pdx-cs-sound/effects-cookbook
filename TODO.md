@@ -10,8 +10,12 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       sound"), waveforms' moved section, compression, limiter, expander, agc. Load-bearing
       analogies kept per rule 5 (both fader analogies survive). Zero contractions / reader
       address / authorial "we" in prose; code comments exempt.
-- [ ] Then: new-chapter content, roughly in chapter order (ch. 3 single-sample first —
-      cheapest, feeds the existing distortion/waveshaper visualizations)
+- [x] Chapter 3 drafted (2026-07-13): one page, four effects in causal order (volume →
+      distortion → bit crush → mu-law), four linear transfer-curve figures added to
+      `make_figures.py`, mu-law round-trip verified, appendix demos linked from the
+      distortion section
+- [ ] Then: remaining new-chapter content in chapter order (ch. 4 waveforms/oscillators
+      next — tremolo and ch. 6 both consume it)
 
 ### Earlier plan (2026-07-05)
 - [x] Skeleton pass: reader-facing scope/deferral notes consolidated into a published

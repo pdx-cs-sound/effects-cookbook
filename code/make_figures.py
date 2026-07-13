@@ -460,6 +460,96 @@ def fig_envelope_follower():
     plot.save("envelope_follower.svg")
 
 
+# --------------------------------------------------------------------------
+# Figures 8-11: single-sample transfer curves (Chapter 3)
+#
+# These are linear-amplitude plots (input sample vs. output sample, both in
+# [-1, 1]), not dB: a single sample has no level. Unity keeps the same dashed
+# gray as everywhere else in the book.
+# --------------------------------------------------------------------------
+
+def _linear_plot(title, desc):
+    plot = Plot(520, 360, (-1.0, 1.0), (-1.0, 1.0), title, desc)
+    plot.grid(0.5, 0.5, "input sample", "output sample",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    xs = [i / 200.0 for i in range(-200, 201)]
+    plot.line(xs, xs, GRAY, 1.6, dash="5 4")          # unity
+    return plot, xs
+
+
+def fig_volume_transfer():
+    plot, xs = _linear_plot(
+        "Volume transfer curves",
+        "Input sample versus output sample. A gain of 0.5 is a shallower "
+        "line through the origin; a gain of 2 is steeper and runs into the "
+        "±1.0 limits, where it clips.")
+    plot.line(xs, [0.5 * x for x in xs], GREEN)
+    plot.line(xs, [max(-1.0, min(1.0, 2.0 * x)) for x in xs], RED, 2.6)
+    plot.legend([
+        ("unity (gain 1)", GRAY, "5 4", 1.6),
+        ("gain 0.5 (−6 dB)", GREEN, None, 2.2),
+        ("gain 2 (+6 dB) — clips at full scale", RED, None, 2.6),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("volume_transfer.svg")
+
+
+def fig_distortion_transfer():
+    plot, xs = _linear_plot(
+        "Distortion transfer curves",
+        "Hard clipping flattens everything past the limit into a plateau "
+        "with sharp corners; tanh soft clipping bends toward the same "
+        "limits gradually. Both drawn at a drive of 3.")
+    plot.line(xs, [max(-1.0, min(1.0, 3.0 * x)) for x in xs], RED, 2.6)
+    plot.line(xs, [math.tanh(3.0 * x) for x in xs], BLUE, 2.6)
+    plot.legend([
+        ("unity (no distortion)", GRAY, "5 4", 1.6),
+        ("hard clip, drive 3", RED, None, 2.6),
+        ("soft clip (tanh), drive 3", BLUE, None, 2.6),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("distortion_transfer.svg")
+
+
+def fig_bitcrush_transfer():
+    levels = 4                                        # 3 bits: 4 steps per side
+    plot, xs = _linear_plot(
+        "Bit crush transfer curve",
+        "Three-bit quantization: every input sample is rounded to the "
+        "nearest of a few output levels, turning the unity line into a "
+        "staircase. The gap between staircase and unity is the "
+        "quantization error.")
+    plot.line(xs, [round(x * levels) / levels for x in xs], BLUE, 2.6)
+    plot.legend([
+        ("unity (full precision)", GRAY, "5 4", 1.6),
+        ("3-bit quantization", BLUE, None, 2.6),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("bitcrush_transfer.svg")
+
+
+def fig_mulaw_transfer():
+    mu = 255.0
+    ln1mu = math.log(1.0 + mu)
+
+    def comp(x):
+        return math.copysign(math.log(1.0 + mu * abs(x)) / ln1mu, x)
+
+    def expand(y):
+        return math.copysign(((1.0 + mu) ** abs(y) - 1.0) / mu, y)
+
+    plot, xs = _linear_plot(
+        "Mu-law transfer curves",
+        "The mu-law compression curve is steep near zero, spending most of "
+        "its output range on quiet samples; the expansion curve is its "
+        "exact inverse. Mu is 255, the G.711 telephony value.")
+    plot.line(xs, [comp(x) for x in xs], BLUE, 2.6)
+    plot.line(xs, [expand(x) for x in xs], GREEN, 2.6)
+    plot.legend([
+        ("unity", GRAY, "5 4", 1.6),
+        ("compress (before quantizing)", BLUE, None, 2.6),
+        ("expand (after: the inverse)", GREEN, None, 2.6),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("mulaw_transfer.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -468,3 +558,7 @@ if __name__ == "__main__":
     fig_expander_transfer()
     fig_expander_gate()
     fig_envelope_follower()
+    fig_volume_transfer()
+    fig_distortion_transfer()
+    fig_bitcrush_transfer()
+    fig_mulaw_transfer()
