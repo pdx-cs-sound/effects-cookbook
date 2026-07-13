@@ -63,3 +63,16 @@ anything.
     contains a zero might be silent but might not be." (Measuring sound's `[-1, 1]` bullets
     conflated a sample value with a signal property. Fix: 0.0 is the resting value; silence
     and loudness are properties of a stretch of samples, not of one value.)
+19. Envelope-follower figure: "the gray values are input and the blue values are… input?"
+    (Both traces derive from the input, so the legend's "rectified samples" / "envelope"
+    named the math, not the roles. Fix: gray = what the follower chases, blue = what it
+    reports.)
+20. Same figure: "why flat at the top for the quiet parts and wavy elsewhere? why does the
+    magnitude vary more at the bottom of the loud part?" (Display moiré: ~3 px per
+    rectified hump, and |sin| is flat at its peaks but steepest at its zero crossings, so
+    display-sampling misses show at the bottom and scale with amplitude. Fix: filled-area
+    rendering. The figure was accidentally demonstrating aliasing.)
+21. Same figure: "why does the blue value not equalize to the gray value?" (Not a bug: a
+    one-pole follower charges partway up each instant-long crest and settles where attack
+    charging balances release decay — it reports a smoothed magnitude, not the true peak.
+    Promoted from mystery to prose on the Chapter 4 page.)

@@ -44,9 +44,18 @@ smoothed level.
 ![Rectified samples of a quiet–loud–quiet tone, with the one-pole envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
 
 *The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
-envelope rises quickly when the burst starts (attack) and decays slowly after it ends
-(release). The amplitude axis is linear, like the transfer curves of
+gray region is the input's magnitude, the value the follower chases; the blue line is the
+follower's output. It rises quickly when the burst starts (attack) and decays slowly after
+it ends (release). The amplitude axis is linear, like the transfer curves of
 [Chapter 3](single-sample.md); level-over-time figures elsewhere are in dB.*
+
+The envelope does not reach the crests, and the gap is not an error. Each crest of the
+magnitude lasts an instant, while the follower's 5 ms attack spans several 2 ms humps of
+the rectified tone: the follower charges partway up during each hump, decays slightly
+between humps, and settles where the two balance. A one-pole follower reports a smoothed
+magnitude, not the true peak. Lengthening the attack widens that gap but shrinks the
+residual ripple; shortening it does the reverse. Every effect in
+[Chapter 5](compression.md) inherits this trade.
 
 !!! warning "Pitfall"
     Sample rate is part of every time constant. The same `attack_ms` gives a different

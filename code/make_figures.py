@@ -104,6 +104,15 @@ class Plot:
         self.parts.append(f'<polyline points="{self._pts(xs, ys)}" fill="none" '
                           f'stroke="{color}" stroke-width="{width}"{d}{o}/>')
 
+    def area(self, xs, ys, color, opacity=0.35):
+        """Filled region between the curve and the y = 0 baseline."""
+        base = self.sy(0.0)
+        pts = self._pts(xs, ys)
+        first, last = self.sx(xs[0]), self.sx(xs[-1])
+        self.parts.append(
+            f'<polygon points="{first:.1f},{base:.1f} {pts} {last:.1f},{base:.1f}" '
+            f'fill="{color}" fill-opacity="{opacity}" stroke="none"/>')
+
     def segments(self, xs, ys, active, color, width=2.6):
         """Polyline drawn only where active[i] is true (convention 2: bold = acting)."""
         run_x, run_y = [], []
@@ -132,14 +141,18 @@ class Plot:
                           f'fill="{PURPLE}" font-size="10" {FONT}>{label}</text>')
 
     def legend(self, entries, x, y):
-        """entries: (label, color, dash, width). Swatches mirror the lines
-        exactly (convention 1)."""
+        """entries: (label, color, dash, width). Swatches mirror the marks
+        exactly (convention 1); dash="area" draws a filled-region swatch."""
         p = self.parts
         for i, (label, color, dash, width) in enumerate(entries):
             yy = y + i * 15
-            d = f' stroke-dasharray="{dash}"' if dash else ""
-            p.append(f'<line x1="{x}" y1="{yy}" x2="{x + 20}" y2="{yy}" '
-                     f'stroke="{color}" stroke-width="{width}"{d}/>')
+            if dash == "area":
+                p.append(f'<rect x="{x}" y="{yy - 4}" width="20" height="9" '
+                         f'fill="{color}" fill-opacity="0.35"/>')
+            else:
+                d = f' stroke-dasharray="{dash}"' if dash else ""
+                p.append(f'<line x1="{x}" y1="{yy}" x2="{x + 20}" y2="{yy}" '
+                         f'stroke="{color}" stroke-width="{width}"{d}/>')
             p.append(f'<text x="{x + 26}" y="{yy + 3.5}" fill="{GRAY}" '
                      f'font-size="11" {FONT}>{label}</text>')
 
@@ -437,26 +450,26 @@ def fig_envelope_follower():
         env = coeff * env + (1.0 - coeff) * target
         envs.append(env)
 
-    step = 2                                       # plot every 2nd sample
-    t = [i / sr for i in range(0, len(x), step)]
-    rect = [abs(x[i]) for i in range(0, len(x), step)]
-    env_pts = [envs[i] for i in range(0, len(x), step)]
+    t = [i / sr for i in range(len(x))]
+    rect = [abs(s) for s in x]
 
     plot = Plot(520, 360, (0, 0.35), (0, 0.6),
                 "An envelope follower tracing a burst",
-                "The rectified samples of a quiet-loud-quiet tone, and the "
-                "one-pole envelope that follows them: it rises with the burst "
-                "in about 5 ms (attack) and decays after it in about 50 ms "
-                "(release). Linear amplitude, not dB.")
+                "The magnitude of a quiet-loud-quiet tone, drawn as a filled "
+                "region, and the one-pole envelope that follows it: the "
+                "envelope rises with the burst in about 5 ms (attack) and "
+                "decays after it in about 50 ms (release). It rides below "
+                "the crests, because each crest lasts an instant while the "
+                "attack spans several. Linear amplitude, not dB.")
     plot.grid(0.1, 0.1, "time (s)", "amplitude (linear)",
               x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
 
-    plot.line(t, rect, GRAY, 1.0, opacity=0.5)
-    plot.line(t, env_pts, BLUE, 2.4)
+    plot.area(t, rect, GRAY)                       # what the follower chases
+    plot.line(t, envs, BLUE, 2.4)                  # what the follower reports
     plot.legend([
-        ("|x| — rectified samples", GRAY, None, 1.0),
-        ("envelope — 5 ms attack, 50 ms release", BLUE, None, 2.4),
-    ], x=plot.x0 + 190, y=plot.y1 + 16)
+        ("input magnitude |x| — what the follower chases", GRAY, "area", 0),
+        ("envelope — what the follower reports", BLUE, None, 2.4),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
     plot.save("envelope_follower.svg")
 
 
