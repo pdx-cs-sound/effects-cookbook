@@ -7,11 +7,14 @@ shown is the output of code the reader can run.
 Run from the repo root:  python3 code/make_figures.py
 Output:                  prototype/img/*.svg  (served by MkDocs, committed to git)
 
-Figure conventions (from the feedback log, research/confusions.md #12-14):
+Figure conventions (from the feedback log, research/confusions.md #12-14, #22):
   1. Legend swatches carry the same stroke and dash as their lines.
   2. An effect's inactive stretches (output = input) are drawn faint, not bold.
   3. Every reference level an effect owns is drawn and named. Reference levels
      are dashed purple across all figures.
+  4. A discontinuity is drawn as a gap, not a vertical line, and lines that
+     share a figure get slight transparency, so coincident strokes do not
+     occlude one another.
 
 Colors are mid-tone so the transparent-background SVGs read on both the light
 and dark site themes.
@@ -19,8 +22,12 @@ and dark site themes.
 
 import math
 import os
+import xml.etree.ElementTree as ET
+from xml.sax.saxutils import escape
 
 from compressor import compress, db_from_amplitude
+from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
+                         sine_shape, square_shape, triangle_shape)
 
 OUT_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..",
                                          "prototype", "img"))
@@ -35,6 +42,17 @@ AMBER = "#d98a00"      # gain reduction
 PURPLE = "#7f77dd"     # reference levels (threshold, target)
 
 FONT = 'font-family="system-ui, sans-serif"'
+
+
+def _esc(s):
+    """Escape text for an XML text node (SVG is strict XML: a raw < in a
+    label breaks the whole image)."""
+    return escape(str(s))
+
+
+def _esc_attr(s):
+    """Escape text for an XML attribute value."""
+    return escape(str(s), {'"': "&quot;"})
 
 
 # --------------------------------------------------------------------------
@@ -52,9 +70,9 @@ class Plot:
         self.y0, self.y1 = height - 34, 14
         self.parts = [
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
-            f'role="img" aria-label="{title}">',
-            f'<title>{title}</title>',
-            f'<desc>{desc}</desc>',
+            f'role="img" aria-label="{_esc_attr(title)}">',
+            f'<title>{_esc(title)}</title>',
+            f'<desc>{_esc(desc)}</desc>',
         ]
 
     def sx(self, v):
@@ -90,9 +108,9 @@ class Plot:
                      f'text-anchor="end">{y_tick_fmt(v)}</text>')
             v += y_step
         p.append(f'<text x="{(self.x0 + self.x1) / 2:.1f}" y="{self.y0 + 30}" '
-                 f'text-anchor="middle">{x_label}</text>')
+                 f'text-anchor="middle">{_esc(x_label)}</text>')
         p.append(f'<text x="13" y="{(self.y0 + self.y1) / 2:.1f}" text-anchor="middle" '
-                 f'transform="rotate(-90 13 {(self.y0 + self.y1) / 2:.1f})">{y_label}</text>')
+                 f'transform="rotate(-90 13 {(self.y0 + self.y1) / 2:.1f})">{_esc(y_label)}</text>')
         p.append('</g>')
 
     def _pts(self, xs, ys):
@@ -131,14 +149,14 @@ class Plot:
         self.parts.append(f'<line x1="{self.x0}" y1="{y:.1f}" x2="{self.x1}" y2="{y:.1f}" '
                           f'stroke="{PURPLE}" stroke-width="1.5" stroke-dasharray="5 4"/>')
         self.parts.append(f'<text x="{self.x1 - 4}" y="{y - 5:.1f}" text-anchor="end" '
-                          f'fill="{PURPLE}" font-size="10" {FONT}>{label}</text>')
+                          f'fill="{PURPLE}" font-size="10" {FONT}>{_esc(label)}</text>')
 
     def ref_vertical(self, x_value, label):
         x = self.sx(x_value)
         self.parts.append(f'<line x1="{x:.1f}" y1="{self.y0}" x2="{x:.1f}" y2="{self.y1}" '
                           f'stroke="{PURPLE}" stroke-width="1.5" stroke-dasharray="5 4"/>')
         self.parts.append(f'<text x="{x + 5:.1f}" y="{self.y1 + 10}" text-anchor="start" '
-                          f'fill="{PURPLE}" font-size="10" {FONT}>{label}</text>')
+                          f'fill="{PURPLE}" font-size="10" {FONT}>{_esc(label)}</text>')
 
     def legend(self, entries, x, y):
         """entries: (label, color, dash, width). Swatches mirror the marks
@@ -154,31 +172,26 @@ class Plot:
                 p.append(f'<line x1="{x}" y1="{yy}" x2="{x + 20}" y2="{yy}" '
                          f'stroke="{color}" stroke-width="{width}"{d}/>')
             p.append(f'<text x="{x + 26}" y="{yy + 3.5}" fill="{GRAY}" '
-                     f'font-size="11" {FONT}>{label}</text>')
+                     f'font-size="11" {FONT}>{_esc(label)}</text>')
 
     def save(self, name):
         self.parts.append('</svg>')
+        content = "\n".join(self.parts) + "\n"
+        try:
+            ET.fromstring(content)
+        except ET.ParseError as err:
+            raise RuntimeError(f"{name}: generated SVG is not well-formed "
+                               f"XML ({err})") from err
         os.makedirs(OUT_DIR, exist_ok=True)
         path = os.path.join(OUT_DIR, name)
         with open(path, "w", encoding="utf-8") as f:
-            f.write("\n".join(self.parts) + "\n")
+            f.write(content)
         print(f"wrote {path}")
 
 
 # --------------------------------------------------------------------------
 # Signal helpers
 # --------------------------------------------------------------------------
-
-def burst_tone(sr, freq, sections):
-    """Sine tone whose amplitude steps through (duration_s, amplitude) sections."""
-    out = []
-    n = 0
-    for dur, amp in sections:
-        for _ in range(int(dur * sr)):
-            out.append(amp * math.sin(2 * math.pi * freq * n / sr))
-            n += 1
-    return out
-
 
 def block_peak_db(x, block):
     """Per-block peak envelope in dBFS (peak), one point per block."""
@@ -440,15 +453,7 @@ def fig_envelope_follower():
     sr = 8000
     x = burst_tone(sr, 220.0, [(0.08, 0.1), (0.1, 0.5), (0.17, 0.1)])
 
-    # Mirrors follow() on the Conventions page.
-    atk = math.exp(-1.0 / (sr * 5.0 / 1000.0))     # 5 ms attack
-    rel = math.exp(-1.0 / (sr * 50.0 / 1000.0))    # 50 ms release
-    env, envs = 0.0, []
-    for s in x:
-        target = abs(s)
-        coeff = atk if target > env else rel
-        env = coeff * env + (1.0 - coeff) * target
-        envs.append(env)
+    envs = follow(x, 5.0, 50.0, sr)      # the Chapter 4 follower itself
 
     t = [i / sr for i in range(len(x))]
     rect = [abs(s) for s in x]
@@ -563,6 +568,81 @@ def fig_mulaw_transfer():
     plot.save("mulaw_transfer.svg")
 
 
+# --------------------------------------------------------------------------
+# Figures 12-13: waveforms and the phase accumulator (Chapter 4)
+# --------------------------------------------------------------------------
+
+def fig_waveforms():
+    """Small multiples: two cycles of each standard waveform, one panel each."""
+    plot = Plot(520, 300, (0, 1), (0, 1),
+                "The four standard waveforms",
+                "Two cycles each of the four standard waveforms at the same "
+                "amplitude: sine, square, sawtooth, and triangle. The square "
+                "and sawtooth have jumps, and the triangle has corners; only "
+                "the sine is smooth everywhere.")
+    shapes = [("sine", sine_shape), ("square", square_shape),
+              ("sawtooth", sawtooth_shape), ("triangle", triangle_shape)]
+    panel_w, panel_h = 236, 110
+    for i, (name, shape) in enumerate(shapes):
+        x0 = 14 + (i % 2) * (panel_w + 20)
+        y0 = 30 + (i // 2) * (panel_h + 30)
+        cy = y0 + panel_h / 2.0
+        plot.parts.append(f'<text x="{x0}" y="{y0 - 8}" fill="{GRAY}" '
+                          f'font-size="11" {FONT}>{_esc(name)}</text>')
+        plot.parts.append(f'<line x1="{x0}" y1="{cy:.1f}" x2="{x0 + panel_w}" '
+                          f'y2="{cy:.1f}" stroke="{GRAY}" stroke-opacity="0.4" '
+                          f'stroke-width="1" stroke-dasharray="5 4"/>')
+        pts = []
+        for j in range(2 * panel_w + 1):           # one point per half pixel
+            phase = (2.0 * j / (2.0 * panel_w)) % 1.0
+            px = x0 + j / 2.0
+            py = cy - shape(phase) * (panel_h / 2.0) * 0.85
+            pts.append(f"{px:.1f},{py:.1f}")
+        plot.parts.append(f'<polyline points="{" ".join(pts)}" fill="none" '
+                          f'stroke="{BLUE}" stroke-width="2"/>')
+    plot.save("waveforms.svg")
+
+
+def fig_phase_accumulator():
+    """The phase ramp, and two waveforms read off it.
+
+    Per convention 4, each period is a separate segment: the wrap and the
+    square's flip are gaps, not vertical lines, so the three signals' jumps
+    cannot stack into one opaque stroke at the period boundary.
+    """
+    n_per = 200
+
+    plot = Plot(520, 360, (0, 2), (-1, 1),
+                "The phase accumulator",
+                "A phase value climbs from 0 to 1 and wraps, twice; the wrap "
+                "is drawn as a gap. The sawtooth is the same ramp rescaled to "
+                "plus or minus 1, and the square is plus 1 while the phase is "
+                "below one half. A dashed reference line marks phase equals "
+                "one half.")
+    plot.grid(0.5, 0.5, "time (periods)", "value",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    plot.ref_level(0.5, "phase = 0.5")
+
+    for k in (0, 1):                                   # one segment per period
+        xs = [k + j / n_per for j in range(n_per + 1)]
+        ph = [j / n_per for j in range(n_per + 1)]
+        plot.line(xs, ph, AMBER, 2.0, opacity=0.85)
+        plot.line(xs, [sawtooth_shape(p) for p in ph], BLUE, 2.4,
+                  opacity=0.85)
+        half = n_per // 2
+        plot.line(xs[:half], [1.0] * half, RED, 2.0, opacity=0.85)
+        plot.line(xs[half:], [-1.0] * (n_per + 1 - half), RED, 2.0,
+                  opacity=0.85)
+
+    plot.legend([
+        ("phase (0 to 1, wraps)", AMBER, None, 2.0),
+        ("sawtooth = 2·phase − 1", BLUE, None, 2.4),
+        ("square = +1 while phase < 0.5", RED, None, 2.0),
+        ("phase = 0.5", PURPLE, "5 4", 1.5),
+    ], x=plot.x0 + 14, y=plot.sy(-0.52))
+    plot.save("phase_accumulator.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -575,3 +655,5 @@ if __name__ == "__main__":
     fig_distortion_transfer()
     fig_bitcrush_transfer()
     fig_mulaw_transfer()
+    fig_waveforms()
+    fig_phase_accumulator()

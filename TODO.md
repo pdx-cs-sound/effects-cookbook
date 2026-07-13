@@ -14,8 +14,14 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       distortion → bit crush → mu-law), four linear transfer-curve figures added to
       `make_figures.py`, mu-law round-trip verified, appendix demos linked from the
       distortion section
-- [ ] Then: remaining new-chapter content in chapter order (ch. 4 waveforms/oscillators
-      next — tremolo and ch. 6 both consume it)
+- [x] Chapter 4 drafted (2026-07-13): sine → standard waveforms (figure + the book's first
+      audio demos, 4 tones from `code/make_demos.py`) → phase-accumulator pattern (figure +
+      float-wrap pitfall found by the test suite) → LFOs → envelopes (ADSR acknowledged,
+      follower retained). Page code snippet-included from `code/oscillators.py` (tested;
+      also feeds figures and demos).
+- [ ] Then: tremolo (ch. 5) — now unblocked by ch. 4's LFO
+- [ ] First per-effect before/after audio demos (compressor on the burst tone?) using the
+      make_demos pipeline
 
 ### Earlier plan (2026-07-05)
 - [x] Skeleton pass: reader-facing scope/deferral notes consolidated into a published
@@ -54,6 +60,12 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       dBFS peak-primary + always label peak/RMS; decline AES17 offset; level vs loudness vs volume)
       — addresses the "be rigorous about units" feedback
 - [ ] Later / TBD: loudness units (phon, sone), LUFS (BS.1770), psychoacoustics, A-weighting/dBA
+  - [ ] If/when a psychoacoustics section exists: an interactive loudness-matching tool
+        (Ed's idea, 2026-07-13) — volume sliders on the ch. 4 waveform tones, adjusted by
+        ear until they sound equally loud, then reveal the chosen offsets in dB. The reader
+        generates their own equal-loudness data (the method behind ISO 226); ties to
+        level-vs-loudness (ch. 2) and the subjective-testing discussion in
+        `research/audio-quality-metrics.md`. Interactive-sound tier, appendix-first.
 - [x] Gather citable audio-evaluation-metric sources (`research/audio-quality-metrics.md`)
 - [ ] Consider a per-effect "How do we measure it?" section — crest factor + LUFS (BS.1770/R128)
       for the dynamics effects; reproducible counterpoint to subjective listening tests

@@ -40,6 +40,8 @@ rm -rf env
 python3 -m unittest discover -s code        # run the code tests (stdlib only)
 ./env/bin/mkdocs build                      # build the static site into site/
 python3 code/check_embeds.py                # verify raw-HTML embeds in site/ resolve
+python3 code/make_figures.py                # regenerate the SVG figures
+python3 code/make_demos.py                  # regenerate the audio demos
 ```
 
 Pushing to `main` publishes the site via GitHub Actions. The workflow runs the tests and

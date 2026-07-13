@@ -22,7 +22,7 @@ Ordered by machinery: each chapter's effects need everything before them and not
 3. **[Single-sample effects](single-sample.md)** — stateless: volume, distortion, bit
    crush, mu-law.
 4. **[Waveforms & envelopes](waveforms.md)** — sines and other waveforms, oscillators,
-   envelopes. *(partial)*
+   LFOs, envelopes.
 5. **Time domain: level** — [Tremolo](tremolo.md) *(planned)*,
    [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md),
    [AGC](agc.md).

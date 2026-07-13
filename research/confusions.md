@@ -76,3 +76,7 @@ anything.
     one-pole follower charges partway up each instant-long crest and settles where attack
     charging balances release decay — it reports a smoothed magnitude, not the true peak.
     Promoted from mystery to prose on the Chapter 4 page.)
+22. "The lack of transparency in phase_accumulator.svg makes it a little hard to read."
+    (At every period boundary three opaque vertical strokes coincided — phase drop, saw
+    drop, square flip — and the last-drawn hid the rest. New figure convention: jumps are
+    drawn as gaps, not verticals, and co-plotted signal lines get slight transparency.)

@@ -22,17 +22,17 @@ deeper.
 
 ## Chapter status
 
-The book follows a ten-chapter plan (see the [Introduction](index.md)). Chapters 1, 2, 3,
-and the level effects of chapter 5 have drafted content; chapter 4 is partial (the
-envelope follower). Chapters 6, 7, 8, 9, 10, and tremolo in chapter 5 are stubs. Drafted
-pages follow the book's flat register.
+The book follows a ten-chapter plan (see the [Introduction](index.md)). Chapters 1
+through 4 and the level effects of chapter 5 have drafted content. Chapters 6, 7, 8, 9,
+10, and tremolo in chapter 5 are stubs. Drafted pages follow the book's flat register.
 
 ## Deferred topics
 
 - **Perceived loudness.** Phon, sone, LUFS (ITU-R BS.1770), A-weighting/dBA, and
   psychoacoustics generally. The book stays in objective signal level (dBFS).
-- **Audio demos.** A before/after clip per effect is planned; format and pipeline are
-  under discussion.
+- **Per-effect audio demos.** Before/after clips per effect are planned. The first
+  generated demos — the waveform tones of [Chapter 4](waveforms.md) — set the pipeline:
+  samples from the book's own code, rendered by `code/make_demos.py`.
 - **Per-page visualizations.** Interactive figures are being tested in the
   [Visualizations](visualizations.md) appendix before being embedded in chapters.
 - **Program-dependent ballistics.** Sketched in prose in the reference compressor's
