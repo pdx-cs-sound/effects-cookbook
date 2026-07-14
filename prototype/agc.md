@@ -23,7 +23,7 @@ listener at the same level.
 !!! note "Is AGC an effect, a technique, or a goal?"
     Mostly a goal, realized as a control technique, and only loosely an effect. Unlike a
     compressor, there is no single canonical AGC algorithm; the name describes an
-    objective — hold the output near a target — rather than one transfer function. In
+    objective, holding the output near a target, rather than one transfer function. In
     practice it is built as a slow feedback loop from familiar primitives, a level
     detector ([Chapter 2](conventions.md)) and a one-pole follower
     ([Chapter 5](envelopes.md)), wired to seek a target instead of applying a fixed curve.
@@ -44,7 +44,8 @@ AGC is a closed feedback loop. Each sample:
 
 1. Apply the current gain to the input, producing the output sample.
 2. Measure the output level: smooth the output's magnitude into an envelope and convert to
-   dBFS. This is the feedback: the loop watches its own output, not the input.
+   dBFS. This is the feedback, because the loop watches its own output rather than the
+   input.
 3. Compare with the target: `error = target − measured_level`.
 4. Nudge the gain toward closing the error: fast when the gain must come down (attack),
    slowly when it may come back up (release). Clamp to the max gain, and pause while the
@@ -66,11 +67,11 @@ on two axes: how hard they hold the output flat, and how fast they react.
 | Slow release (≈1 s+) | AGC — transparent | — |
 | Fast release (~ms) | Limiting — audible | Compression — audible |
 
-The dividing line: correctly implemented AGC does not change the subjective quality of the
-program, while compression and limiting deliberately do. The distinction is corrective
-versus creative.
+The dividing line is subjective quality. Correctly implemented AGC does not change it,
+while compression and limiting deliberately do. The distinction is corrective versus
+creative.
 
-On a steady-state transfer curve, AGC and a limiter draw the same flattened line; the
+On a steady-state transfer curve, AGC and a limiter draw the same flattened line. The
 separator, release time, only shows in the time domain. The
 [Visualizations](visualizations.md) appendix has an interactive figure of this.
 
@@ -133,9 +134,9 @@ def agc(x, sr, target_db=-20.0, attack_ms=50.0, release_ms=2000.0,
 
 !!! warning "Pitfalls"
     - Pumping and breathing. Without the noise-floor guard, the gain rises during pauses
-      and amplifies hiss; when sound returns it lurches back down. Slow time constants and
+      and amplifies hiss. When sound returns it lurches back down. Slow time constants and
       a noise floor prevent this.
-    - Too fast a release is not AGC. Shorten it and the loop stops being transparent; it
+    - Too fast a release is not AGC. Shorten it and the loop stops being transparent. It
       becomes a leveler or limiter and changes the subjective sound.
     - No peak protection. AGC boost can push transients into clipping; a downstream
       [limiter](limiter.md) is the standard guard.

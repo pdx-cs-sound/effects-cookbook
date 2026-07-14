@@ -10,15 +10,15 @@
 
 Envelopes come in two kinds. Generated envelopes are prescribed: a synthesizer shapes each
 note's loudness with attack, decay, sustain, and release segments (ADSR). That belongs to
-synthesis, and this book leaves it there; the term is noted because the word "envelope"
+synthesis, and this book leaves it there. The term is noted because the word "envelope"
 covers both kinds. Measured envelopes are extracted from a signal that already exists, and
 they are what the effect chapters need. [Tremolo](tremolo.md), this chapter's other page,
-uses a generated control curve; the follower below produces the measured one that
+uses a generated control curve. The follower below produces the measured one that
 [Chapter 6](compression.md) is built on.
 
 ## Following level over time: attack & release
 
-Effects rarely react instantly; an instantaneous gain change distorts. The response is
+Effects rarely react instantly, because an instantaneous gain change distorts. The response is
 smoothed with two time constants:
 
 - Attack: how quickly the effect responds when the level rises.
@@ -43,7 +43,7 @@ smoothed level.
 ![Rectified samples of a quiet–loud–quiet tone, with the one-pole envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
 
 *The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
-gray region is the input's magnitude, the value the follower chases; the blue line is the
+gray region is the input's magnitude, the value the follower chases. The blue line is the
 follower's output. It rises quickly when the burst starts (attack) and decays slowly after
 it ends (release). The amplitude axis is linear, like the transfer curves of
 [Chapter 3](single-sample.md); level-over-time figures elsewhere are in dB.*
@@ -53,7 +53,7 @@ magnitude lasts an instant, while the follower's 5 ms attack spans several 2 ms 
 the rectified tone: the follower charges partway up during each hump, decays slightly
 between humps, and settles where the two balance. A one-pole follower reports a smoothed
 magnitude, not the true peak. Lengthening the attack widens that gap but shrinks the
-residual ripple; shortening it does the reverse. Every effect in
+residual ripple. Shortening it does the reverse. Every effect in
 [Chapter 6](compression.md) inherits this trade.
 
 !!! warning "Pitfall"

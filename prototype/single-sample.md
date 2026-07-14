@@ -11,15 +11,15 @@
 ## One curve is the whole effect
 
 Because $f$ sees a single sample and remembers nothing, an effect in this class can be
-drawn completely: plot input sample against output sample, both in [-1, 1], and the curve
-is the effect. The diagonal is unity — the effect that does nothing. Everything in this
-chapter is a choice of curve.
+drawn completely. Plot input sample against output sample, both in [-1, 1], and the
+curve is the effect. The diagonal is unity, the effect that does nothing. Everything in
+this chapter is a choice of curve.
 
 The three effects below form a chain. Volume is the simplest possible curve, and turning
 it up raises the first hard question: what happens at full scale. Distortion is that
 answer made deliberate, and bit crush trades precision away on purpose.
 
-These are linear-amplitude plots, not dB: a single sample has no level (see
+These are linear-amplitude plots rather than dB plots. A single sample has no level (see
 [Measuring sound](conventions.md)), so this chapter works directly on sample values.
 
 ## Volume
@@ -39,26 +39,27 @@ def volume(x, gain_db):
 ```
 
 Gain is stated in dB and applied linearly, per [Measuring sound](conventions.md). A gain
-below 1 makes the line shallower; a gain above 1 makes it steeper — and a steep enough
+below 1 makes the line shallower, and a gain above 1 makes it steeper. A steep enough
 line runs into the edge of the range.
 
 ![Volume transfer curves: a shallow line for gain 0.5, and a steeper line for gain 2 that flattens at the ±1.0 limits.](img/volume_transfer.svg)
 
 *Two volume settings (`code/make_figures.py`). The gain-2 line reaches ±1.0 at input
-±0.5; whatever plays this signal flattens everything beyond that point. There is no volume
-knob without a clipping question.*
+±0.5, and whatever plays this signal flattens everything beyond that point. A volume
+control always raises the question of where clipping happens.*
 
 !!! warning "Pitfall"
-    A gain above 1 does not clip by itself — multiplication happily produces 1.7 — but the
-    converter, file format, or next effect will. Decide where the clipping happens instead
-    of letting it happen somewhere surprising.
+    A gain above 1 does not clip by itself, since multiplication alone produces 1.7
+    without complaint. The converter, file format, or next effect will clip it. Decide
+    where that happens instead of letting it happen somewhere surprising.
 
 ## Distortion
 
 Distortion is clipping done on purpose. The input is driven into a curve that flattens
 toward the limits, and the flattening reshapes the waveform. Two standard curves:
 
-- Hard clipping cuts everything past a limit to the limit: a plateau with sharp corners.
+- Hard clipping cuts everything past a limit to the limit, leaving a plateau with sharp
+  corners.
 - Soft clipping bends toward the limits gradually; the usual choice is
   $y = \tanh(d \cdot x)$ for a drive $d$. The corners are rounded, and the sound is
   smoother.
@@ -79,7 +80,7 @@ The [Visualizations](visualizations.md) appendix has two interactive demos of ex
 a waveform explorer with an adjustable soft-clip depth, and a Web Audio tone generator
 whose clipping stage can be heard as well as seen.
 
-Both curves above are symmetric, $f(-x) = -f(x)$: the negative half-wave mirrors the
+Both curves above are symmetric, $f(-x) = -f(x)$. The negative half-wave mirrors the
 positive. A symmetric curve driven by a sine adds only odd harmonics. Clipping the two
 half-waves at different limits breaks the symmetry and adds even harmonics as well:
 
@@ -89,9 +90,10 @@ def asymmetric_clip(x, drive=3.0, ceiling=1.0, floor=-0.5):
     return [max(floor, min(ceiling, drive * s)) for s in x]
 ```
 
-Even harmonics sit at octave-related intervals above the fundamental, and distortion that
-includes them is often described as warmer or fuller than the odd-only kind; the
-asymmetric response of tube amplifier stages is the usual reference for that description.
+Even harmonics sit at octave-related intervals above the fundamental, and distortion
+that includes them is often described as warmer or fuller than the odd-only kind. The
+asymmetric response of tube amplifier stages is the usual reference for that
+description.
 [Chapter 8](frequency-domain.md) gives harmonics a precise meaning.
 
 ![Distortion transfer curves: hard clipping's sharp-cornered plateau, tanh's gradual bend, and an asymmetric curve that clips the negative half-wave at −0.5, all at drive 3.](img/distortion_transfer.svg)
@@ -102,14 +104,14 @@ The asymmetric curve shares the hard clip's ceiling, so the two coincide on the 
 half; it is drawn dashed so both stay visible.*
 
 !!! warning "Pitfalls"
-    - Clipping raises loudness without raising the peak: a clipped signal has a lower
-      crest factor, so it reads louder at the same 0 dBFS ceiling. This is a use and a
-      trap.
+    - Clipping raises loudness without raising the peak. A clipped signal has a lower
+      crest factor, so it reads louder at the same 0 dBFS ceiling. This is both a use of
+      the effect and a trap.
     - A nonlinear curve manufactures new frequencies that were not in the input, and some
       of them land above what the sample rate can represent. The result is aliasing.
-      Chapters [7](frequency-domain.md) and [9](transforms.md) explain the mechanism; until
-      then, know that digital distortion at high drive can add a harsh, non-harmonic edge
-      that analog circuits do not.
+      Chapters [8](frequency-domain.md) and [10](transforms.md) explain the mechanism.
+      The practical note, until then, is that digital distortion at high drive can add a
+      harsh edge that analog circuits do not.
 
 ## Bit crush
 
@@ -152,9 +154,10 @@ stored with too few bits.
 ## Where this leads
 
 The transfer curve returns in [Chapter 6](compression.md), drawn in dB, and the
-resemblance is worth a careful look: a compressor's curve is applied to a measured level
-with memory (attack, release), while this chapter's curves are applied to raw samples with
-none. Same picture, different domain. The waveforms these effects chew on come next, in [Chapter 4](waveforms.md).
+resemblance needs care. A compressor's curve is applied to a measured level with memory
+(attack, release), while this chapter's curves are applied to raw samples with none. The
+picture is the same, but the domain is different. The waveforms these effects process
+come next, in [Chapter 4](waveforms.md).
 
 ## Learn more
 

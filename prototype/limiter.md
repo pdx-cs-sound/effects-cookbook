@@ -11,7 +11,7 @@
 ## Intuition
 
 A limiter is a compressor with an infinite ratio. A 4:1 compressor reduces 4 dB of
-overshoot to 1 dB; as the ratio grows, the output above the threshold approaches a
+overshoot to 1 dB, and as the ratio grows, the output above the threshold approaches a
 constant. At an infinite ratio the overshoot is removed completely. The knee is hard and
 the time constants are fast. The configuration is sometimes called brick-wall limiting.
 
@@ -22,8 +22,8 @@ peaks are held down, the overall level can be raised without clipping. This trad
 range for loudness.
 
 [AGC](agc.md) also holds its output approximately constant. The two are identical on a
-steady-state transfer curve. They differ in release time: AGC releases over one second or
-more and aims to be inaudible; a limiter releases in milliseconds and is audible on
+steady-state transfer curve. They differ in release time. AGC releases over one second or
+more and aims to be inaudible. A limiter releases in milliseconds and is audible on
 transients.
 
 ## Key parameters
@@ -33,7 +33,7 @@ transients.
 | Ceiling | The level (dBFS) the output must not exceed. |
 | Release | How fast the gain recovers once the signal drops back below the ceiling (ms). |
 | Attack / lookahead | How a peak is caught: a near-instant attack, or a short delay so the reduction is in place when the peak arrives. |
-| Knee | Hard, almost always; the point of a limiter is a firm ceiling. |
+| Knee | Hard, almost always. The point of a limiter is a firm ceiling. |
 
 ## How it works
 
@@ -49,7 +49,7 @@ The pipeline is the same four stages as the other effects in this chapter.
 ![Transfer curves: unity, a 4:1 compressor, and the limiter's flat wall at a −10 dBFS ceiling.](img/limiter_transfer.svg)
 
 *The limiter's transfer curve beside a 4:1 compressor at the same threshold. The
-compressor reduces the slope; the limiter holds the output flat. The red ∞:1 curve on the
+compressor reduces the slope, and the limiter holds the output flat. The red ∞:1 curve on the
 Compression page's figure is this same curve.*
 
 ![A quiet–loud–quiet tone through the limiter, with and without lookahead. Without lookahead the output overshoots the ceiling while the attack catches up; with 6 ms of true lookahead it never crosses, and arrives 6 ms late.](img/limiter_lookahead.svg)
@@ -57,8 +57,8 @@ Compression page's figure is this same curve.*
 *Both traces come from running this book's configurable compressor
 (`code/make_figures.py`) at ∞:1. Without lookahead, the leading edge of the burst passes
 the ceiling while the 2 ms attack catches up. With true lookahead the gain is pre-armed
-and the output never crosses the ceiling; it also arrives 6 ms late, the cost of the
-guarantee.*
+and the output never crosses the ceiling. It also arrives 6 ms late, which is the cost
+of the guarantee.*
 
 ## Pseudocode
 
@@ -109,16 +109,16 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
 !!! warning "Pitfalls"
     - Overshoot without lookahead. A feed-forward limiter reacts after a peak begins, so
       the leading edge passes above the ceiling during the attack time. Lookahead limiters
-      delay the audio and compute the gain from the undelayed signal; the cost is latency
+      delay the audio and compute the gain from the undelayed signal. The cost is latency
       equal to the lookahead time.
     - Inter-sample (true) peaks. Holding every sample at the ceiling does not hold the
-      reconstructed waveform there; the continuous signal between samples can exceed the
-      samples. Production limiters oversample and enforce a true-peak (dBTP) ceiling;
+      reconstructed waveform there. The continuous signal between samples can exceed the
+      samples. Production limiters oversample and enforce a true-peak (dBTP) ceiling.
       ITU-R BS.1770 defines the measurement.
     - Release artifacts. A release comparable to the period of low-frequency content
-      tracks individual cycles and distorts them; a long release lowers the level audibly
-      after each peak (pumping). The ceiling is a specification; the release is chosen by
-      listening.
+      tracks individual cycles and distorts them. A long release lowers the level audibly
+      after each peak (pumping). The ceiling is a specification, and the release is
+      chosen by listening.
     - Overuse. Heavy limiting removes the dynamics from the material.
 
 ## Related effects
@@ -126,7 +126,7 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
 - [Compression](compression.md): the finite-ratio version; a limiter is the ∞:1 extreme.
 - [Automatic Gain Control](agc.md): also holds the output flat, but slowly and
   transparently.
-- Clipping: the crude alternative; the peaks are cut off where they stand, which adds
+- Clipping: the crude alternative. The peaks are cut off where they stand, which adds
   harsh distortion.
 
 ## Learn more

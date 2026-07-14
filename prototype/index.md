@@ -1,11 +1,11 @@
 # Digital Audio Effects Cookbook
 
 > An educational cookbook for digital audio effects. Each effect is explained at several
-> levels — plain language, pseudocode, runnable code, and references — so a reader can
-> work at the depth that suits them.
+> levels: plain language, pseudocode, runnable code, and references. A reader can work at
+> the depth that suits them.
 
-Written under PSU CS506 for CS416/516 students and self-educators. The goal is
-understanding: what each effect does, why, and how to build one.
+Written under PSU CS506 for CS416/516 students and self-educators. The goal is to
+understand what each effect does, why it is used, and how to build one.
 
 ## Start here
 
@@ -15,7 +15,8 @@ can be read in order or by topic.
 
 ## The chapters
 
-Ordered by machinery: each chapter's effects need everything before them and nothing after.
+The order follows the machinery. Each chapter's effects need everything before them and
+nothing after.
 
 1. **Introduction** — this page.
 2. **[Measuring sound](conventions.md)** — samples, decibels, dBFS, gain, level detection.
@@ -40,6 +41,6 @@ a mechanism walk-through, figures, pseudocode, a reference implementation in Pyt
 pitfalls, related effects, and references.
 
 !!! note "Scope"
-    Reference code is dependency-free Python meant to teach, not to ship; levels are in
-    dBFS; the book stays in the digital domain. The full list of scope decisions and
+    Reference code is dependency-free Python meant to teach rather than to ship. Levels
+    are in dBFS, and the book stays in the digital domain. The full list of scope decisions and
     deferred topics is in [Status & scope](status.md).

@@ -46,12 +46,20 @@ Each rule is checkable during review.
 9. **Typography never carries information.** Strip the bold and italics from a sentence and
    it must lose nothing. Emphasis comes from sentence structure and word order; a definition
    is marked by phrasing ("called the threshold"), not by styling.
+10. **Complete sentences, plain punctuation** (2026-07-13). No sentence fragments. Colons,
+    semicolons, and dashes are rare; prefer separate sentences. A colon may introduce a
+    list, an equation, or a code block. Structural uses are exempt: page subtitles,
+    chapter-list separators, table cells, and bibliography entries.
+11. **No idioms or figures of speech** (2026-07-13). "In the wild," "earns its keep,"
+    "chew on": say the literal thing. A load-bearing analogy (rule 5) is not an idiom; the
+    difference is that an analogy is introduced, developed, and used to teach.
 
 ## Tics to cut
 
 These patterns are the main reason the current prose reads machine-generated:
 
-- Em-dash chains ("X — Y — Z"). Ration em-dashes to one pair per paragraph.
+- Em-dashes almost anywhere in prose (rule 10). Parenthetical asides become parentheses
+  or their own sentence.
 - Reversal constructions ("it's not X, it's Y"; "X isn't just Y — it's Z").
 - Kicker sentences that end every paragraph on a beat.
 - Balanced triples used as rhythm rather than because the list has three members.

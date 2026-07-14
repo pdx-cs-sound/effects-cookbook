@@ -1,7 +1,7 @@
 # Status & scope
 
 This cookbook is an early prototype. Chapters, figures, and prose are still moving. This
-page records what the book tries to be, what it leaves out, and what is deferred — so the
+page records what the book tries to be, what it leaves out, and what is deferred, so the
 chapters themselves can stay about audio.
 
 ## What this book is
@@ -31,8 +31,8 @@ book's flat register.
 - **Perceived loudness.** Phon, sone, LUFS (ITU-R BS.1770), A-weighting/dBA, and
   psychoacoustics generally. The book stays in objective signal level (dBFS).
 - **Per-effect audio demos.** Before/after clips per effect are planned. The first
-  generated demos — the waveform tones of [Chapter 4](waveforms.md) — set the pipeline:
-  samples from the book's own code, rendered by `code/make_demos.py`.
+  generated demos (the waveform tones of [Chapter 4](waveforms.md)) set the pipeline.
+  Samples come from the book's own code, rendered by `code/make_demos.py`.
 - **Per-page visualizations.** Interactive figures are being tested in the
   [Visualizations](visualizations.md) appendix before being embedded in chapters.
 - **Program-dependent ballistics.** Sketched in prose in the reference compressor's

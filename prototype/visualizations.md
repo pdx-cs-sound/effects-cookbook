@@ -1,19 +1,19 @@
 # Visualizations
 
 An appendix collecting the interactive figures built for the cookbook. This is a testing
-and feedback area, not part of the book proper: figures are tried out here first, and the
-ones that earn their place get embedded into the relevant chapters. Each is a
-self-contained, client-side demo — embedded below and also openable on its own page.
+and feedback area rather than part of the book. Figures are tried here first, and the
+ones that work get embedded into the relevant chapters. Each is a self-contained,
+client-side demo, embedded below and also openable on its own page.
 
 ---
 
 ## Compressor design decision flow
 
-A [POSA](https://en.wikipedia.org/wiki/Pattern-Oriented_Software_Architecture)-style map of the
-choices you make when building a compressor: start with no design, pick one option per decision,
-and end with a complete compressor. Toggle the buttons to overlay five real open-source
-implementations — each is a different *path* through the same decisions, showing that "a
-compressor" is a region of choices, not one algorithm.
+A [POSA](https://en.wikipedia.org/wiki/Pattern-Oriented_Software_Architecture)-style map
+of the decisions behind a compressor. A design starts from nothing, picks one option per
+decision, and ends complete. The buttons overlay five open-source implementations, each a
+different path through the same decisions, which shows that "a compressor" is a region of
+choices rather than one algorithm.
 
 <iframe src="../visualization/compressor_decision_map.html" title="Compressor design decision flow" loading="lazy" style="width:100%; height:820px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
 
@@ -21,9 +21,9 @@ compressor" is a region of choices, not one algorithm.
 
 ## AGC vs. limiter — static curve vs. time domain
 
-Why a steady-state transfer curve **cannot** tell AGC from a limiter (they share one line),
-while the time domain can: the slow AGC loop rides the whole envelope to a target, while the
-fast limiter only shaves peaks. Companion to the [AGC](agc.md) page.
+A steady-state transfer curve cannot tell AGC from a limiter, since they share one line,
+while the time domain can. The slow AGC loop rides the whole envelope to a target, and
+the fast limiter only shaves peaks. Companion to the [AGC](agc.md) page.
 
 <iframe src="../visualization/agc_static_vs_time.html" title="AGC vs limiter, static transfer vs time domain" loading="lazy" style="width:100%; height:560px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
 
@@ -50,8 +50,6 @@ A Web Audio demo of basic waveforms and what clipping does to them — press pla
 
 ## Planned
 
-*(Stubs for figures we've discussed but haven't built — to be filled in.)*
-
-- A static **compressor transfer curve** (threshold / ratio / knee variants).
-- A **crest factor / LUFS** "how do we measure it?" demo for the dynamics effects.
-- An **envelope follower** (attack/release) demo for the [Conventions](conventions.md) page.
+One figure remains from the original list: a crest factor and LUFS measurement demo for
+the companding effects. The other planned figures, the static transfer curves and the
+envelope follower, shipped into their chapters.

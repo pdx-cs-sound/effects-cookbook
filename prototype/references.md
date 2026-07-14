@@ -9,15 +9,15 @@ The level-effects chapter was written against five open-source dynamic-range
 implementations, spanning textbook code to shipping products. The
 [design map](compression.md) plots each one as a path through the same decisions, and
 the book's configurable compressor includes each as a preset. License terms are per
-upstream project; check before reusing code.
+upstream project. Check before reusing code.
 
 ### dafx
 
 `compexp.m`, about 34 lines of MATLAB, from the companion code to Zölzer's *DAFX* (see
 [Texts](#texts)). A compressor and expander in a single expression: the gain curve is the
 minimum of three slopes (unity, the compressor line, the expander line). RMS detection,
-branched attack/release, a small alignment delay. Teaching code — the clearest statement of
-the algorithm in the set, and not real-time. The book's
+branched attack/release, a small alignment delay. It is teaching code, the clearest
+statement of the algorithm in the set, and it is not real-time. The book's
 [dynamic range control chapter page](https://www.dafx.de/DAFX_Book_Page_2nd_edition/chapter4.html)
 and its [MATLAB downloads page](https://www.dafx.de/DAFX_Book_Page_2nd_edition/matlab.html)
 both link the chapter's zipfile (`M_files_chap04.zip`), which contains `compexp.m` among
@@ -55,8 +55,8 @@ delay-based lookahead with end-of-stream drain handling.
 
 Audacity's compressor is an integration layer around Daniel Rudrich's SimpleCompressor
 library: a quadratic soft knee whose slope is continuous through the knee, ballistics run
-in the dB domain, and the one true look-ahead limiter in the set — the gain reduction ramps
-in early so it is fully in place when the transient arrives.
+in the dB domain, and the one true look-ahead limiter in the set, where the gain
+reduction ramps in early so it is fully in place when the transient arrives.
 [github.com/audacity/audacity](https://github.com/audacity/audacity) · core:
 [github.com/DanielRudrich/SimpleCompressor](https://github.com/DanielRudrich/SimpleCompressor)
 (GPLv3)

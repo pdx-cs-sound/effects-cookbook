@@ -26,10 +26,10 @@ rate in samples per second (`sr` in the code), and $\phi$ the phase.
 --8<-- "code/oscillators.py:sine"
 ```
 
-The book has been using this generator since [Measuring sound](conventions.md). The sine's
-standing grows later — [Chapter 7](frequency-domain.md) describes any signal as a sum of
-sines — but here it is simply the first waveform, and the plainest-sounding one: a sine
-has no edges and contains nothing but its one frequency.
+The book has been using this generator since [Measuring sound](conventions.md). The sine
+matters more later, when [Chapter 8](frequency-domain.md) describes any signal as a sum
+of sines. Here it is the first waveform and the plainest-sounding one. A sine has no
+edges and contains nothing but its one frequency.
 
 ## The standard waveforms
 
@@ -54,31 +54,31 @@ oscillators on this page:
 | all four in sequence | <audio controls src="../audio/all_waveforms_220hz.wav" aria-label="all four waveforms in sequence, 220 hertz"></audio> |
 
 All four tones have the same peak amplitude, and they sound neither equally bright nor
-equally loud. Ranked by brightness they run sine, triangle, square, sawtooth: the sine is
-a pure tone, the triangle adds faint upper harmonics, and the square and sawtooth are rich
-and buzzy. The ranking follows the edges — corners add weak harmonics, jumps add strong
-ones. Jumps and corners are what harmonics look like in the time domain, and
-[Chapter 7](frequency-domain.md) makes that correspondence exact.
+equally loud. Ranked by brightness they run sine, triangle, square,
+sawtooth. The sine is a pure tone, the triangle adds faint upper harmonics, and the
+square and sawtooth are rich and buzzy. The ranking follows the edges. Corners add weak
+harmonics, and jumps add strong ones. Jumps and corners are what harmonics look like in
+the time domain, and [Chapter 8](frequency-domain.md) makes that correspondence exact.
 
-The square and sawtooth also sound louder. At the same peak, a squarer shape carries more
-energy — a higher RMS, so a lower crest factor — and much of that energy sits at high
-frequencies, where hearing is sensitive. All five clips read the same on a peak meter:
-same dBFS (peak), different loudness, the distinction
+The square and sawtooth also sound louder. At the same peak, a squarer shape carries
+more energy (a higher RMS, so a lower crest factor), and much of that energy sits at
+high frequencies, where hearing is sensitive. All five clips read the same on a peak
+meter. The peak level matches while the loudness differs, which is the distinction
 [Measuring sound](conventions.md) draws.
 
 The sawtooth drawn here rises and drops; its mirror image falls and jumps. As tones the
-two are indistinguishable: the harmonic magnitudes are identical, and the ear is largely
+two are indistinguishable. The harmonic magnitudes are identical, and the ear is largely
 deaf to the phase difference between them. Direction starts to matter when the waveform
-is a control signal. A rising ramp swells gradually and cuts off; a falling ramp starts
+is a control signal. A rising ramp swells gradually and cuts off. A falling ramp starts
 hard and fades. At LFO rates ([below](#low-frequency-oscillators)) the difference is
 plainly audible in whatever the ramp drives.
 
 The versions here are the naive versions, and the caveat from
 [Chapter 3](single-sample.md) applies to them too: shapes with jumps and corners contain
 frequencies without limit, and everything above what the sample rate can represent folds
-back down as aliasing. At 220 Hz it is mild; generate a naive sawtooth a few octaves up
-and the fold-back becomes plainly audible. Bandlimited oscillator designs exist for
-exactly this reason, and this book leaves them as a lead (see below).
+back down as aliasing. At 220 Hz the aliasing is mild. A naive sawtooth a few octaves
+up makes the fold-back plainly audible. Bandlimited oscillator designs exist for exactly
+this reason, and this book lists one under Learn more.
 
 ## The oscillator pattern
 
@@ -95,30 +95,30 @@ sample.
 ```
 
 `sine_wave` at the top of this page is `oscillator(sine_shape, ...)` with the phase
-multiplied out. The other shapes are where the pattern becomes useful:
+multiplied out. The other shapes are where the pattern becomes useful.
 
 ![The phase ramp climbing from 0 to 1 twice, with the sawtooth and square waveforms read off it.](img/phase_accumulator.svg)
 
 *The phase accumulator (`code/make_figures.py`). The sawtooth is the phase ramp made
-audible — the shape function only rescales it to ±1 — and the square is a single
-comparison: +1 while the phase is below one half. The dashed line marks that comparison's
-threshold. Wraps and flips are drawn as gaps rather than vertical lines.*
+audible, since the shape function only rescales it to ±1. The square is a single
+comparison, +1 while the phase is below one half, and the dashed line marks that
+comparison's threshold. Wraps and flips are drawn as gaps rather than vertical lines.*
 
 !!! warning "Pitfall"
     The phase step is a float, and rounding error accumulates: after many cycles, the
     exact sample on which the wrap lands can shift by one. Code that expects sample-exact
-    periodicity from a float phase accumulator — a test comparing waveforms across a
-    period boundary, for example — will fail at the discontinuities. This book's own test
-    suite hit this; the periodicity test now uses the sine, which is smooth across the
+    periodicity from a float phase accumulator (a test comparing waveforms across a
+    period boundary, for example) will fail at the discontinuities. This book's own test
+    suite hit this. The periodicity test now uses the sine, which is smooth across the
     wrap.
 
 ## Low-frequency oscillators
 
-An oscillator run below roughly 20 Hz is no longer heard as a tone; it is felt as change.
-Used that way it is called a low-frequency oscillator, or LFO, and its output becomes a
-control signal rather than a sound: something for another effect's parameter to follow.
-[Tremolo](tremolo.md) is the first consumer — an LFO driving a volume knob — and the
-delay-based effects of [Chapter 7](delay-modulation.md) are driven the same way.
+An oscillator run below roughly 20 Hz is no longer heard as a tone. It is felt as
+change. Used that way it is called a low-frequency oscillator, or LFO, and its output
+becomes a control signal rather than a sound, something for another effect's parameter
+to follow. [Tremolo](tremolo.md) is the first consumer, an LFO driving a volume knob,
+and the delay-based effects of [Chapter 7](delay-modulation.md) are driven the same way.
 
 ## Where this leads
 
@@ -134,4 +134,4 @@ the sum-of-sines claim precise.
   [ccrma.stanford.edu/~jos/filters](https://ccrma.stanford.edu/~jos/filters/) — the
   one-pole smoother, formally.
 - V. Välimäki and A. Huovilainen, "Antialiasing Oscillators in Subtractive Synthesis,"
-  IEEE Signal Processing Magazine, 2007 — the lead for bandlimited oscillator designs.
+  IEEE Signal Processing Magazine, 2007 — bandlimited oscillator designs.

@@ -14,8 +14,10 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Feedback specifics batch done (2026-07-13): bit-crush arbitrary levels; asymmetric
       clipping (+ figure curve); sawtooth rising/falling; AGC reworked to fast attack /
       slow release (Woodgate-backed; Ed still owns extra reference validation)
-- [ ] Tone batch, LAST: STYLE.md punctuation/idiom rules, then full-book self-adversarial
-      AI-tell sweep, then Ed's external AI-checker run
+- [x] Tone batch done (2026-07-13): STYLE.md rules 10 (plain punctuation) and 11 (no
+      idioms); full-book sweep of dashes/semicolons/kickers/reversals/idioms; two stale
+      Chapter-7 links caught by the audit and fixed
+- [ ] Ed runs the external AI detector; its hits feed a final fix round
 
 ### Superseded plan (2026-07-08)
 - [x] Ten-chapter skeleton in place (stubs for ch. 3, 6–10 + tremolo; envelopes moved to
