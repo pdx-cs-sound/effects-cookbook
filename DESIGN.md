@@ -72,6 +72,10 @@ Proposed sections for every effect entry:
 >   (compression, limiting, expanding). Supersedes the earlier one-chapter-per-concept plan.
 >   Each effect within a chapter still uses the template below.
 > - Lock this template using Compression as the prototype, then reuse.
+> - **Pseudocode convention** (2026-07-13, settles the long-open TBD): algorithms-textbook
+>   style. Procedure names in capitals, ← for assignment, "for each" loops, ▷ for
+>   comments, named subroutines (DETECT, SMOOTH, LINEAR, ENVELOPE, CLAMP), mathematical
+>   minus and middle dot. No language-specific syntax.
 
 ## 4. Decisions & Open Criteria
 

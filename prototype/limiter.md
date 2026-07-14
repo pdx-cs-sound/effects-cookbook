@@ -63,12 +63,16 @@ guarantee.*
 ## Pseudocode
 
 ```text
-for each sample x:
-    level   = dBFS(|x|)                       # peak detector
-    over    = level - ceiling
-    target  = -over  if over > 0 else 0       # infinite ratio: clamp to the ceiling
-    gain    = smooth(gain, target, attack, release)   # very fast attack
-    y = x * dB_to_linear(gain)
+LIMIT(x, ceiling, attack, release)
+    gain ← 0
+    for each sample s in x
+        level ← 20·log10(|s|)                      ▷ dBFS (peak)
+        if level > ceiling
+            target ← ceiling − level               ▷ remove the whole overshoot
+        else
+            target ← 0
+        gain ← SMOOTH(gain, target, attack, release)
+        emit s · LINEAR(gain)
 ```
 
 ## Reference implementation (Python)
@@ -83,7 +87,7 @@ def limit(x, sr, ceiling_db=-1.0, attack_ms=1.0, release_ms=50.0):
     infinite ratio (any overshoot is removed) and a very fast attack.
 
     x:  list of mono samples in [-1, 1]
-    sr: sample rate (Hz)
+    sr: sample rate, in samples per second
     Returns a new list of samples.
     """
     atk = math.exp(-1.0 / (sr * attack_ms  / 1000.0))

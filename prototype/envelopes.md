@@ -25,7 +25,12 @@ smoothed with two time constants:
 - Release: how quickly it relaxes when the level falls.
 
 The standard tool is a one-pole smoother, also called an exponential follower. A
-coefficient derived from a time in milliseconds controls how sluggish it is:
+coefficient derived from a time constant of $t$ milliseconds controls how sluggish it is,
+and each step moves the envelope partway toward the target:
+
+$$
+c = e^{-1000 / (f_s \, t)}, \qquad e[n] = c \cdot e[n-1] + (1 - c) \cdot |x[n]|
+$$
 
 ```python
 --8<-- "code/oscillators.py:follow"
@@ -53,7 +58,7 @@ residual ripple; shortening it does the reverse. Every effect in
 
 !!! warning "Pitfall"
     Sample rate is part of every time constant. The same `attack_ms` gives a different
-    coefficient at 44.1 kHz than at 48 kHz; always pass `sr` through.
+    coefficient at 44 100 samples per second than at 48 000; always pass `sr` through.
 
 ## Where this leads
 

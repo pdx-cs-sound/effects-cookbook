@@ -62,13 +62,16 @@ sections a compressor ignores.*
 ## Pseudocode
 
 ```text
-for each sample x:
-    level   = dBFS(|x|)
-    under   = threshold - level                  # how far BELOW threshold
-    target  = -under * (ratio - 1)  if under > 0 else 0
-    target  = max(target, range)                 # don't exceed the range
-    gain    = smooth(gain, target, attack, release)
-    y = x * dB_to_linear(gain)
+EXPAND(x, threshold, ratio, range, attack, release)
+    gain ← 0
+    for each sample s in x
+        level ← 20·log10(|s|)                      ▷ dBFS (peak)
+        if level < threshold
+            target ← max((level − threshold) · (ratio − 1), range)
+        else
+            target ← 0
+        gain ← SMOOTH(gain, target, attack, release)
+        emit s · LINEAR(gain)
 ```
 
 ## Reference implementation (Python)
@@ -84,7 +87,7 @@ def expand(x, sr, threshold_db=-40.0, ratio=2.0, range_db=-40.0,
     with a deep range_db turns it into a noise gate.
 
     x:  list of mono samples in [-1, 1]
-    sr: sample rate (Hz)
+    sr: sample rate, in samples per second
     Returns a new list of samples.
     """
     atk = math.exp(-1.0 / (sr * attack_ms  / 1000.0))

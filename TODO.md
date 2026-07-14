@@ -8,10 +8,12 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       6 = Companding restored); mu-law dropped (archived `research/dropped-mu-law.md`);
       compressor design page folded into Compression; MathJax (arithmatex, $..$) enabled;
       top+bottom page nav enabled. Full list: `research/feedback-2026-07-13.md`
-- [ ] Feedback general batch: equations as math on the pages; algorithms-textbook
-      pseudocode rework; ch. 2 notes (samples/sec, stereo scope, peak-to-peak treatment)
-- [ ] Feedback specifics batch: bit-crush arbitrary levels; asymmetric clipping;
-      sawtooth rising/falling; AGC fast-attack/slow-release (impl + prose; Ed owns refs)
+- [x] Feedback general batch done (2026-07-13): equations as math across ch. 2-6;
+      algorithms-textbook pseudocode on the four companding pages (convention in DESIGN
+      §3); ch. 2 notes (samples/sec, "Why mono only?", peak-to-peak subsection)
+- [x] Feedback specifics batch done (2026-07-13): bit-crush arbitrary levels; asymmetric
+      clipping (+ figure curve); sawtooth rising/falling; AGC reworked to fast attack /
+      slow release (Woodgate-backed; Ed still owns extra reference validation)
 - [ ] Tone batch, LAST: STYLE.md punctuation/idiom rules, then full-book self-adversarial
       AI-tell sweep, then Ed's external AI-checker run
 

@@ -1,7 +1,7 @@
 # Single-sample effects
 
 > A single-sample effect keeps no state: each output sample is a function of the current
-> input sample alone, `y[n] = f(x[n])`. The whole effect is one curve, applied one sample
+> input sample alone, $y[n] = f(x[n])$. The whole effect is one curve, applied one sample
 > at a time.
 
 *Chapter 3 — stateless effects: volume, distortion, and bit crush.*
@@ -10,7 +10,7 @@
 
 ## One curve is the whole effect
 
-Because `f` sees a single sample and remembers nothing, an effect in this class can be
+Because $f$ sees a single sample and remembers nothing, an effect in this class can be
 drawn completely: plot input sample against output sample, both in [-1, 1], and the curve
 is the effect. The diagonal is unity — the effect that does nothing. Everything in this
 chapter is a choice of curve.
@@ -25,7 +25,11 @@ These are linear-amplitude plots, not dB: a single sample has no level (see
 ## Volume
 
 The volume effect multiplies every sample by a constant. Its curve is a straight line
-through the origin; the gain is the slope.
+through the origin; the gain is the slope:
+
+$$
+y[n] = g \cdot x[n], \qquad g = 10^{\,\mathrm{dB}/20}
+$$
 
 ```python
 def volume(x, gain_db):
@@ -55,8 +59,9 @@ Distortion is clipping done on purpose. The input is driven into a curve that fl
 toward the limits, and the flattening reshapes the waveform. Two standard curves:
 
 - Hard clipping cuts everything past a limit to the limit: a plateau with sharp corners.
-- Soft clipping bends toward the limits gradually; `tanh` is the usual choice. The corners
-  are rounded, and the sound is smoother.
+- Soft clipping bends toward the limits gradually; the usual choice is
+  $y = \tanh(d \cdot x)$ for a drive $d$. The corners are rounded, and the sound is
+  smoother.
 
 ```python
 import math
@@ -70,15 +75,31 @@ def soft_clip(x, drive=3.0):
     return [math.tanh(drive * s) for s in x]
 ```
 
-![Distortion transfer curves: hard clipping's sharp-cornered plateau, and tanh soft clipping's gradual bend, both at drive 3.](img/distortion_transfer.svg)
-
-*Hard and soft clipping at the same drive (`code/make_figures.py`). The drive parameter
-sets how far the signal is pushed into the curve; the curve's shape sets the character of
-the result.*
-
 The [Visualizations](visualizations.md) appendix has two interactive demos of exactly this:
 a waveform explorer with an adjustable soft-clip depth, and a Web Audio tone generator
 whose clipping stage can be heard as well as seen.
+
+Both curves above are symmetric, $f(-x) = -f(x)$: the negative half-wave mirrors the
+positive. A symmetric curve driven by a sine adds only odd harmonics. Clipping the two
+half-waves at different limits breaks the symmetry and adds even harmonics as well:
+
+```python
+def asymmetric_clip(x, drive=3.0, ceiling=1.0, floor=-0.5):
+    """Clip the two half-waves at different limits."""
+    return [max(floor, min(ceiling, drive * s)) for s in x]
+```
+
+Even harmonics sit at octave-related intervals above the fundamental, and distortion that
+includes them is often described as warmer or fuller than the odd-only kind; the
+asymmetric response of tube amplifier stages is the usual reference for that description.
+[Chapter 8](frequency-domain.md) gives harmonics a precise meaning.
+
+![Distortion transfer curves: hard clipping's sharp-cornered plateau, tanh's gradual bend, and an asymmetric curve that clips the negative half-wave at −0.5, all at drive 3.](img/distortion_transfer.svg)
+
+*Three clipping curves at the same drive (`code/make_figures.py`). The drive sets how far
+the signal is pushed into the curve; the curve's shape sets the character of the result.
+The asymmetric curve shares the hard clip's ceiling, so the two coincide on the positive
+half; it is drawn dashed so both stay visible.*
 
 !!! warning "Pitfalls"
     - Clipping raises loudness without raising the peak: a clipped signal has a lower
@@ -92,21 +113,31 @@ whose clipping stage can be heard as well as seen.
 
 ## Bit crush
 
-Bit crush reduces the precision of every sample: each value is rounded to the nearest of a
-small set of levels, as if the audio were stored in fewer bits. The transfer curve is a
-staircase.
+Bit crush reduces the precision of every sample: each value is rounded to the nearest of
+a small set of levels, as if the audio were stored in fewer bits. For $L$ steps on each
+side of zero,
+
+$$
+y[n] = \frac{\mathrm{round}(x[n] \cdot L)}{L}
+$$
+
+and the transfer curve is a staircase.
 
 ```python
-def bit_crush(x, bits=3):
-    """Round every sample to a grid of 2**(bits-1) steps per side."""
-    levels = 2 ** (bits - 1)
+def bit_crush(x, levels=4):
+    """Round every sample to a grid of `levels` steps on each side of zero."""
     return [round(s * levels) / levels for s in x]
 ```
 
+The step count need not be a power of two. Storing audio in $b$ bits gives $2^{b-1}$
+steps per side, so powers of two are the common case, but the rounding works for any
+count.
+
 ![Bit crush transfer curve: a staircase with four steps per side replacing the unity diagonal.](img/bitcrush_transfer.svg)
 
-*Three-bit quantization (`code/make_figures.py`). The vertical gap between the staircase
-and the unity line is the quantization error for that input value.*
+*Quantization to four steps per side, the grid a 3-bit depth would give
+(`code/make_figures.py`). The vertical gap between the staircase and the unity line is
+the quantization error for that input value.*
 
 The error is largest, relative to the signal, when the signal is small: a quiet passage
 may spend its whole life inside two or three steps, and the rounding becomes a coarse,

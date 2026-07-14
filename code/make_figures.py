@@ -517,29 +517,35 @@ def fig_distortion_transfer():
         "Distortion transfer curves",
         "Hard clipping flattens everything past the limit into a plateau "
         "with sharp corners; tanh soft clipping bends toward the same "
-        "limits gradually. Both drawn at a drive of 3.")
+        "limits gradually; asymmetric clipping cuts the negative half-wave "
+        "at a shallower limit, which adds even harmonics. All at a drive "
+        "of 3. The asymmetric curve coincides with the hard clip on the "
+        "positive half and is drawn dashed.")
     plot.line(xs, [max(-1.0, min(1.0, 3.0 * x)) for x in xs], RED, 2.6)
     plot.line(xs, [math.tanh(3.0 * x) for x in xs], BLUE, 2.6)
+    plot.line(xs, [max(-0.5, min(1.0, 3.0 * x)) for x in xs], GREEN, 2.4,
+              dash="4 3")
     plot.legend([
         ("unity (no distortion)", GRAY, "5 4", 1.6),
         ("hard clip, drive 3", RED, None, 2.6),
         ("soft clip (tanh), drive 3", BLUE, None, 2.6),
+        ("asymmetric: floor −0.5, drive 3", GREEN, "4 3", 2.4),
     ], x=plot.x0 + 14, y=plot.y1 + 16)
     plot.save("distortion_transfer.svg")
 
 
 def fig_bitcrush_transfer():
-    levels = 4                                        # 3 bits: 4 steps per side
+    levels = 4                              # the grid a 3-bit depth would give
     plot, xs = _linear_plot(
         "Bit crush transfer curve",
-        "Three-bit quantization: every input sample is rounded to the "
-        "nearest of a few output levels, turning the unity line into a "
+        "Quantization to four levels per side of zero: every input sample "
+        "is rounded to the nearest level, turning the unity line into a "
         "staircase. The gap between staircase and unity is the "
         "quantization error.")
     plot.line(xs, [round(x * levels) / levels for x in xs], BLUE, 2.6)
     plot.legend([
         ("unity (full precision)", GRAY, "5 4", 1.6),
-        ("3-bit quantization", BLUE, None, 2.6),
+        ("4 steps per side (a 3-bit grid)", BLUE, None, 2.6),
     ], x=plot.x0 + 14, y=plot.y1 + 16)
     plot.save("bitcrush_transfer.svg")
 

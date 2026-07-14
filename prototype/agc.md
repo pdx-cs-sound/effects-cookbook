@@ -13,7 +13,8 @@
 
 AGC behaves like an engineer riding a fader during a panel discussion: one guest leans in
 and booms, another sits back and murmurs, and the fader moves over seconds to keep both at
-an even level without chasing individual syllables. AGC automates that slow hand.
+an even level without chasing individual syllables. When a guest suddenly booms, the
+hand comes down fast and drifts back up slowly afterward. AGC automates that hand.
 
 Typical uses: a lavalier microphone on a presenter who turns their head, a recording whose
 source drifts over minutes, a voice chat where every participant should arrive at the
@@ -32,7 +33,8 @@ listener at the same level.
 | Parameter | What it controls |
 |---|---|
 | Target level | The level (dBFS) the loop drives the output toward. |
-| Time constant | How fast the loop corrects. Slow (about 1 s or more) keeps it transparent; faster settings turn it into a leveler or limiter. |
+| Attack | How fast the gain comes down when the output is above the target (ms). Fast, tens of milliseconds, so a sudden loud passage is caught. |
+| Release | How fast the gain comes back up when the output is below the target. Slow, a second or more; the slow release is what keeps AGC transparent. |
 | Max gain | A ceiling on the boost, so quiet passages and noise are not over-amplified. |
 | Noise floor | A level below which the loop stops adapting, so silence is not pumped up. |
 
@@ -44,11 +46,14 @@ AGC is a closed feedback loop. Each sample:
 2. Measure the output level: smooth the output's magnitude into an envelope and convert to
    dBFS. This is the feedback: the loop watches its own output, not the input.
 3. Compare with the target: `error = target − measured_level`.
-4. Nudge the gain slowly toward closing the error (a slow integrator), clamped to the max
-   gain, and paused while the signal is below the noise floor.
+4. Nudge the gain toward closing the error: fast when the gain must come down (attack),
+   slowly when it may come back up (release). Clamp to the max gain, and pause while the
+   signal is below the noise floor.
 
-Because the loop is slow, it flattens long-term drift and leaves short-term dynamics
-essentially untouched.
+Because the release is slow, the loop flattens long-term drift and leaves short-term
+dynamics essentially untouched; the fast attack still catches a sudden jump in level.
+Following Woodgate, the attack is of the order of milliseconds while the release is a
+second or more.
 
 ### Where AGC sits among its cousins
 
@@ -72,14 +77,19 @@ separator, release time, only shows in the time domain. The
 ## Pseudocode
 
 ```text
-gain_db = 0
-for each sample x:
-    y     = x * dB_to_linear(gain_db)        # apply current gain
-    level = dBFS(smoothed |y|)               # measure the OUTPUT  (feedback)
-    if level > noise_floor:
-        gain_db += k * (target - level)      # nudge slowly toward target
-        clamp gain_db to ±max_gain
-    output y
+AGC(x, target, kattack, krelease, maxgain, floor)
+    gain ← 0
+    for each sample s in x
+        y ← s · LINEAR(gain)                       ▷ apply the current gain
+        level ← 20·log10(ENVELOPE(|y|))            ▷ measure the output: feedback
+        if level > floor
+            error ← target − level
+            if error < 0                           ▷ too loud: correct fast
+                gain ← gain + kattack · error
+            else                                   ▷ too quiet: correct slowly
+                gain ← gain + krelease · error
+            gain ← CLAMP(gain, −maxgain, +maxgain)
+        emit y
 ```
 
 ## Reference implementation (Python)
@@ -87,19 +97,22 @@ for each sample x:
 ```python
 import math
 
-def agc(x, sr, target_db=-20.0, time_ms=1000.0,
+def agc(x, sr, target_db=-20.0, attack_ms=50.0, release_ms=2000.0,
         max_gain_db=24.0, floor_db=-60.0):
     """Feedback automatic gain control — pure standard library, no dependencies.
 
-    Slowly drives the *output* level toward target_db by adjusting one smoothed
-    gain. The slow time constant is what makes it transparent: it corrects
-    long-term level drift while leaving short-term dynamics alone.
+    Drives the *output* level toward target_db at two speeds: the gain comes
+    down quickly when the output is too loud (attack) and comes back up
+    slowly when it is too quiet (release). The fast attack catches sudden
+    loud passages; the slow release is what keeps AGC transparent.
 
     x:  list of mono samples in [-1, 1]
-    sr: sample rate (Hz)
+    sr: sample rate, in samples per second
     Returns a new list of samples.
     """
-    coeff = math.exp(-1.0 / (sr * time_ms / 1000.0))   # one-pole time constant
+    k_atk = 1.0 - math.exp(-1.0 / (sr * attack_ms / 1000.0))
+    k_rel = 1.0 - math.exp(-1.0 / (sr * release_ms / 1000.0))
+    det = math.exp(-1.0 / (sr * 10.0 / 1000.0))    # 10 ms detector envelope
     eps = 1e-9
     gain_db = 0.0      # the loop's state: current gain, in dB
     env = 0.0          # smoothed |output| envelope
@@ -107,11 +120,12 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
     for s in x:
         g = 10.0 ** (gain_db / 20.0)                    # dB -> linear
         y = s * g                                       # apply the gain
-        env = coeff * env + (1.0 - coeff) * abs(y)      # measure the OUTPUT
+        env = det * env + (1.0 - det) * abs(y)          # measure the OUTPUT
         level_db = 20.0 * math.log10(env + eps)
         if level_db > floor_db:                         # don't chase silence
             error_db = target_db - level_db
-            gain_db += (1.0 - coeff) * error_db         # slow integrator
+            k = k_atk if error_db < 0.0 else k_rel      # fast down, slow up
+            gain_db = gain_db + k * error_db
             gain_db = max(-max_gain_db, min(max_gain_db, gain_db))
         out.append(y)
     return out
@@ -121,8 +135,8 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
     - Pumping and breathing. Without the noise-floor guard, the gain rises during pauses
       and amplifies hiss; when sound returns it lurches back down. Slow time constants and
       a noise floor prevent this.
-    - Too fast is not AGC. Shorten the time constant and the loop stops being transparent;
-      it becomes a leveler or limiter and changes the subjective sound.
+    - Too fast a release is not AGC. Shorten it and the loop stops being transparent; it
+      becomes a leveler or limiter and changes the subjective sound.
     - No peak protection. AGC boost can push transients into clipping; a downstream
       [limiter](limiter.md) is the standard guard.
     - Feedback instability. Too much loop gain makes the control hunt or oscillate around

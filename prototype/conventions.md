@@ -12,7 +12,11 @@
 
 Digital audio is a list of numbers. The signal's amplitude is measured many thousands of
 times per second and each measurement is stored as one sample. The measurement rate is
-called the sample rate, written `sr`; 44 100 Hz and 48 000 Hz are common.
+called the sample rate, written `sr` and measured in samples per second; 44 100 and
+48 000 are common. Other sources write sample rates in hertz, as in 44.1 kHz. It is the
+same quantity. This book reserves hertz for the frequency of a tone and uses samples per
+second for how often the signal is measured, so that the two stay visibly distinct when
+later chapters relate them.
 
 Throughout this cookbook a mono signal is a plain Python list of floats in the range
 [-1.0, 1.0]:
@@ -27,7 +31,7 @@ and a full-scale sine passes through 0.0 twice per cycle while being as loud as 
 allows.
 
 ```python
-# One second of a 440 Hz sine at half amplitude, 48 kHz.
+# One second of a 440 Hz sine at half amplitude, 48 000 samples per second.
 import math
 
 sr = 48_000
@@ -38,6 +42,12 @@ signal = [0.5 * math.sin(2 * math.pi * 440 * n / sr) for n in range(sr)]
     The range is format-independent: the math is the same whether the file is later
     rendered to 16-bit, 24-bit, or anything else. This book never works in raw integer
     sample values.
+
+!!! note "Why mono only?"
+    A stereo effect is usually the mono effect applied to each channel, sometimes with a
+    shared control signal (a stereo compressor often drives both channels from one
+    detector, so the image does not wander). Little is lost by working in mono, and every
+    algorithm in this book extends to stereo by running it per channel.
 
 ## Measuring level: decibels and dBFS
 
@@ -50,9 +60,11 @@ until peak or RMS is specified.
 
 A decibel is dimensionless. It compares a measured value against a fixed reference:
 
-```
-dB = 10 · log10( measured / reference )      # (for power quantities — see below)
-```
+$$
+\mathrm{dB} = 10 \log_{10}\!\left(\frac{\text{measured}}{\text{reference}}\right)
+$$
+
+This is the form for power quantities; the amplitude form follows below.
 
 - The numerator is the quantity being measured; the denominator is a fixed, agreed
   reference.
@@ -67,10 +79,10 @@ power-versus-amplitude question below.
 
 The reference must match the kind of quantity, and that sets the multiplier:
 
-- Power quantities (intensity, electrical power): `dB = 10 · log10(P / P₀)`.
+- Power quantities (intensity, electrical power): $\mathrm{dB} = 10 \log_{10}(P / P_0)$.
 - Amplitude, or field, quantities (sound pressure, voltage, sample values):
-  `dB = 20 · log10(A / A₀)`. The 20 appears because power is proportional to amplitude
-  squared.
+  $\mathrm{dB} = 20 \log_{10}(A / A_0)$. The 20 appears because power is proportional to
+  the square of amplitude, $P \propto A^2$.
 
 The two forms agree on the same physical change: doubling the amplitude and quadrupling
 the power are both +6 dB. The dB value therefore never tells which quantity was measured;
@@ -93,9 +105,9 @@ so the 20·log form is this book's default.
 This book works on samples, so the reference is full scale (amplitude 1.0) and the unit is
 dBFS: decibels relative to full scale. Samples are amplitudes, so the 20·log form applies:
 
-```
-dBFS = 20 · log10( |sample| / 1.0 )
-```
+$$
+\mathrm{dBFS} = 20 \log_{10}\frac{|x[n]|}{1.0}
+$$
 
 - amplitude 1.0 → 0 dBFS, the loudest representable level,
 - everything quieter is negative (0.5 → −6 dBFS),
@@ -132,10 +144,11 @@ A dBFS figure is under-specified until the detector is named: the number depends
 the signal is reduced to one value. The reference is always full scale (1.0); the detector
 is always labeled:
 
-- dBFS (peak): the instantaneous sample magnitude, `20·log10(|x|)`. Sample peak cannot
-  exceed 0 dBFS. This is the book's primary unit; the per-sample detectors report it.
-- dBFS (RMS): the energy average over a window, `20·log10(rms)`, against the same 1.0
-  reference.
+- dBFS (peak): the instantaneous sample magnitude, $20 \log_{10}|x[n]|$. Sample peak
+  cannot exceed 0 dBFS. This is the book's primary unit; the per-sample detectors report
+  it.
+- dBFS (RMS): the energy average over a window, $20 \log_{10}(\mathrm{rms})$, against the
+  same 1.0 reference.
 
 A full-scale sine reads 0 dBFS (peak) and −3.01 dBFS (RMS). The 3 dB gap is the signal's
 crest factor. Both readings use the same reference, so the RMS figure is whatever the
@@ -145,13 +158,13 @@ formula produces, with no meter convention added.
     Take a sine with peak amplitude 1.0. There are two correct routes to its RMS level,
     and one common wrong turn.
 
-    - Amplitude route. The RMS amplitude is 1/√2 ≈ 0.707. Amplitude takes the 20
-      multiplier: `20 · log10(0.707)` = −3.01 dBFS (RMS).
-    - Power route. The mean power is the square of the RMS amplitude: 0.707² = 0.5.
-      Power takes the 10 multiplier: `10 · log10(0.5)` = −3.01 dB. The two routes agree;
-      the 10/20 convention exists so that they do.
+    - Amplitude route. The RMS amplitude is $1/\sqrt{2} \approx 0.707$. Amplitude takes
+      the 20 multiplier: $20 \log_{10}(0.707) = -3.01$ dBFS (RMS).
+    - Power route. The mean power is the square of the RMS amplitude: $0.707^2 = 0.5$.
+      Power takes the 10 multiplier: $10 \log_{10}(0.5) = -3.01$ dB. The two routes
+      agree; the 10/20 convention exists so that they do.
     - The wrong turn. Pairing the amplitude value with the power multiplier,
-      `10 · log10(0.707)`, gives −1.5 dB. A result at exactly half (or double) the
+      $10 \log_{10}(0.707)$, gives $-1.5$ dB. A result at exactly half (or double) the
       expected value is the fingerprint of a 10/20 mix-up.
 
     The phrase "RMS power" usually sets this trap. RMS is an amplitude; its square is the
@@ -164,13 +177,22 @@ formula produces, with no meter convention added.
     not use the offset: it is a constant that hides the crest factor. The cost is that the
     book's RMS numbers sit about 3 dB below what a typical DAW meter shows.
 
-!!! warning "Peak-to-peak is not a level"
-    The signal spans up to 2 (from −1 to +1), but level is never measured peak-to-peak. A
-    detector that uses `max − min` reads 6 dB hot next to a true peak detector
-    (20·log10 2 ≈ 6.02 dB); one of the open-source compressors surveyed for this book
-    makes exactly this mistake. Level is the magnitude `|x|` (peak) or the RMS, never the
-    span. A sanity check for any reading: RMS ≤ peak ≤ 1.0, so no reading in this system
-    can exceed 0 dBFS.
+### Peak-to-peak
+
+Peak-to-peak amplitude is the full vertical span of a waveform, $\max - \min$. For a
+symmetric signal it is twice the peak; in this book's range it reaches 2.0. The
+measurement is legitimate where the span itself is the quantity of interest. An
+oscilloscope reports peak-to-peak because the screen shows the span. Electrical
+interfaces specify voltage swings peak-to-peak. A nonzero mean (a DC offset) shows up as
+asymmetry between max and min.
+
+Peak-to-peak is not a level. A level compares a magnitude against the full-scale
+reference, and the span is not a magnitude. A detector that uses $\max - \min$ reads 6 dB
+hot next to a true peak detector, since $20 \log_{10} 2 \approx 6.02$, and a DC offset
+inflates the span further without making anything louder. One of the open-source
+compressors surveyed for this book makes exactly this mistake. Level is the magnitude
+$|x[n]|$ (peak) or the RMS, never the span. A sanity check for any level reading:
+RMS ≤ peak ≤ 1.0, so no reading in this system can exceed 0 dBFS.
 
 ### Level vs. loudness vs. volume
 

@@ -13,7 +13,14 @@ rendered by the audio demos.*
 
 A sine wave is the simplest periodic signal. Its amplitude sets how far it swings, its
 frequency sets how many cycles fit into one second, and its phase sets where in the cycle
-it starts.
+it starts:
+
+$$
+x[n] = A \sin\!\left(2\pi f \frac{n}{f_s} + \phi\right)
+$$
+
+where $A$ is the amplitude, $f$ the frequency, $n$ the sample index, $f_s$ the sample
+rate in samples per second (`sr` in the code), and $\phi$ the phase.
 
 ```python
 --8<-- "code/oscillators.py:sine"
@@ -59,6 +66,13 @@ frequencies, where hearing is sensitive. All five clips read the same on a peak 
 same dBFS (peak), different loudness, the distinction
 [Measuring sound](conventions.md) draws.
 
+The sawtooth drawn here rises and drops; its mirror image falls and jumps. As tones the
+two are indistinguishable: the harmonic magnitudes are identical, and the ear is largely
+deaf to the phase difference between them. Direction starts to matter when the waveform
+is a control signal. A rising ramp swells gradually and cuts off; a falling ramp starts
+hard and fades. At LFO rates ([below](#low-frequency-oscillators)) the difference is
+plainly audible in whatever the ramp drives.
+
 The versions here are the naive versions, and the caveat from
 [Chapter 3](single-sample.md) applies to them too: shapes with jumps and corners contain
 frequencies without limit, and everything above what the sample rate can represent folds
@@ -68,8 +82,9 @@ exactly this reason, and this book leaves them as a lead (see below).
 
 ## The oscillator pattern
 
-All four waveforms come from one pattern: a phase value that climbs from 0 to 1 and wraps,
-and a shape function that maps phase to a sample.
+All four waveforms come from one pattern: a phase value that climbs from 0 to 1 and
+wraps, advancing by $f / f_s$ each sample, and a shape function that maps phase to a
+sample.
 
 ```python
 --8<-- "code/oscillators.py:oscillator"

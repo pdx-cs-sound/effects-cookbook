@@ -55,16 +55,21 @@ reducing gain; elsewhere it equals the input.*
 ## Pseudocode
 
 ```text
-for each sample x:
-    level   = envelope(|x|)                  # peak/RMS detector
-    if level > threshold:
-        excess      = level - threshold      # in dB
-        target_gain = -excess * (1 - 1/ratio)
-    else:
-        target_gain = 0
-    gain = smooth(gain, target_gain, attack, release)   # one-pole follow
-    y = x * dB_to_linear(gain) * dB_to_linear(makeup)
+COMPRESS(x, threshold, ratio, attack, release, makeup)
+    gain ← 0
+    for each sample s in x
+        level ← DETECT(s)                          ▷ peak or RMS, in dBFS
+        if level > threshold
+            target ← (threshold − level) · (1 − 1/ratio)
+        else
+            target ← 0
+        gain ← SMOOTH(gain, target, attack, release)
+        emit s · LINEAR(gain + makeup)
 ```
+
+DETECT reports a level in dBFS, SMOOTH is the one-pole follower of
+[Chapter 5](envelopes.md), and LINEAR converts a dB value to a linear gain. The pseudocode
+on the other pages of this chapter uses the same subroutines.
 
 ## Reference implementation
 

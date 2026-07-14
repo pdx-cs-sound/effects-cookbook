@@ -34,8 +34,9 @@ to a measured level.
 
 ## How it works
 
-1. Run an LFO: an oscillator at the rate, mapped into [0, 1].
-2. Convert it to a gain between 1 − depth and 1.
+1. Run an LFO: an oscillator at the rate, mapped into $[0, 1]$.
+2. Convert it to a gain between $1 - d$ and 1, for a depth $d$:
+   $g[n] = 1 - d \cdot m[n]$, where $m[n]$ is the LFO value.
 3. Multiply the signal by the gain, sample by sample.
 
 ![A steady tone through tremolo: the output magnitude swells and dips under a flat input level, following the LFO-driven gain.](img/tremolo.svg)
