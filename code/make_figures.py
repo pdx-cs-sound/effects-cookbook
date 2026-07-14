@@ -447,7 +447,7 @@ def fig_expander_gate():
 
 
 # --------------------------------------------------------------------------
-# Figure 7: the envelope follower (Conventions)
+# Figure: the envelope follower (Chapter 5)
 # --------------------------------------------------------------------------
 
 def fig_envelope_follower():
@@ -480,7 +480,7 @@ def fig_envelope_follower():
 
 
 # --------------------------------------------------------------------------
-# Figures 8-11: single-sample transfer curves (Chapter 3)
+# Figures: single-sample transfer curves (Chapter 3)
 #
 # These are linear-amplitude plots (input sample vs. output sample, both in
 # [-1, 1]), not dB: a single sample has no level. Unity keeps the same dashed
@@ -544,33 +544,10 @@ def fig_bitcrush_transfer():
     plot.save("bitcrush_transfer.svg")
 
 
-def fig_mulaw_transfer():
-    mu = 255.0
-    ln1mu = math.log(1.0 + mu)
-
-    def comp(x):
-        return math.copysign(math.log(1.0 + mu * abs(x)) / ln1mu, x)
-
-    def expand(y):
-        return math.copysign(((1.0 + mu) ** abs(y) - 1.0) / mu, y)
-
-    plot, xs = _linear_plot(
-        "Mu-law transfer curves",
-        "The mu-law compression curve is steep near zero, spending most of "
-        "its output range on quiet samples; the expansion curve is its "
-        "exact inverse. Mu is 255, the G.711 telephony value.")
-    plot.line(xs, [comp(x) for x in xs], BLUE, 2.6)
-    plot.line(xs, [expand(x) for x in xs], GREEN, 2.6)
-    plot.legend([
-        ("unity", GRAY, "5 4", 1.6),
-        ("compress (before quantizing)", BLUE, None, 2.6),
-        ("expand (after: the inverse)", GREEN, None, 2.6),
-    ], x=plot.x0 + 14, y=plot.y1 + 16)
-    plot.save("mulaw_transfer.svg")
 
 
 # --------------------------------------------------------------------------
-# Figures 12-13: waveforms and the phase accumulator (Chapter 4)
+# Figures: waveforms and the phase accumulator (Chapter 4)
 # --------------------------------------------------------------------------
 
 def fig_waveforms():
@@ -645,7 +622,7 @@ def fig_phase_accumulator():
 
 
 # --------------------------------------------------------------------------
-# Figure 14: tremolo (Chapter 5)
+# Figure: tremolo (Chapter 5)
 # --------------------------------------------------------------------------
 
 def fig_tremolo():
@@ -687,7 +664,6 @@ if __name__ == "__main__":
     fig_volume_transfer()
     fig_distortion_transfer()
     fig_bitcrush_transfer()
-    fig_mulaw_transfer()
     fig_waveforms()
     fig_phase_accumulator()
     fig_tremolo()

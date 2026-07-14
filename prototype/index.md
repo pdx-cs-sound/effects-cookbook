@@ -20,18 +20,18 @@ Ordered by machinery: each chapter's effects need everything before them and not
 1. **Introduction** — this page.
 2. **[Measuring sound](conventions.md)** — samples, decibels, dBFS, gain, level detection.
 3. **[Single-sample effects](single-sample.md)** — stateless: volume, distortion, bit
-   crush, mu-law.
-4. **[Waveforms & envelopes](waveforms.md)** — sines and other waveforms, oscillators,
-   LFOs, envelopes.
-5. **Time domain: level** — [Tremolo](tremolo.md),
-   [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md),
-   [AGC](agc.md).
-6. **[Delay & modulation](delay-modulation.md)** — reverb, chorus, vibrato; ring buffers.
+   crush.
+4. **[Waveforms & oscillators](waveforms.md)** — sines and other waveforms, oscillators,
+   LFOs.
+5. **Envelopes & tremolo** — [Envelopes](envelopes.md), [Tremolo](tremolo.md).
+6. **Companding** — [Compression](compression.md), [Limiting](limiter.md),
+   [Expanding](expander.md), [AGC](agc.md).
+7. **[Delay & modulation](delay-modulation.md)** — reverb, chorus, vibrato; ring buffers.
    *(planned)*
-7. **[The frequency domain](frequency-domain.md)** — audio as frequencies. *(planned)*
-8. **[Filters](filters.md)** — FIR and IIR. *(planned)*
-9. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
-10. **[Frequency-domain effects](frequency-effects.md)** — resampling, vocoding. *(planned)*
+8. **[The frequency domain](frequency-domain.md)** — audio as frequencies. *(planned)*
+9. **[Filters](filters.md)** — FIR and IIR. *(planned)*
+10. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
+11. **[Frequency-domain effects](frequency-effects.md)** — resampling, vocoding. *(planned)*
 
 ## How each effect page is laid out
 

@@ -4,8 +4,8 @@
 > of the loud ones, increasing the dynamic range. At extreme settings it becomes a noise
 > gate.
 
-*Chapter 5 — time-domain level effects. The inverse of [Compression](compression.md); a
-gate is its extreme setting.*
+*Chapter 6 — companding. The inverse of [Compression](compression.md); a gate is its
+extreme setting.*
 
 ---
 
@@ -20,8 +20,8 @@ words; restoring dynamics to over-compressed material; and, with a steep ratio, 
 muting a drum microphone except while the drum is struck.
 
 The word companding combines compressing and expanding: the two effects are the same
-machinery working in opposite directions around a threshold. (Mu-law, planned for
-[Chapter 3](single-sample.md), is companding in a different, codec sense.)
+machinery working in opposite directions around a threshold, and the pair gives this
+chapter its name.
 
 ## Key parameters
 
@@ -118,8 +118,8 @@ def expand(x, sr, threshold_db=-40.0, ratio=2.0, range_db=-40.0,
 
 - [Compression](compression.md): the inverse; it tames the loud parts above a threshold.
 - Noise gate: an expander with a high ratio and deep range; silence below threshold.
-- [Measuring sound](conventions.md) and [Waveforms & envelopes](waveforms.md): the level
-  detector and one-pole follower this effect is built from.
+- [Measuring sound](conventions.md) and [Envelopes](envelopes.md): the level detector and
+  one-pole follower this effect is built from.
 
 ## Learn more
 

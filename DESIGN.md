@@ -28,25 +28,15 @@ Cookbook ethos: consistent template per effect, copy-pasteable, learn-by-doing.
   2 = everyday worker in the space, 3 = dissertation-grade. We aim at **1, occasionally 2**.
   Explicitly **not** state-of-the-art; we are not pushing the envelope.
 - **Prerequisites assumed:** TBD (basic programming; comfort with samples and dB).
-- **Structure: ten chapters** (2026-07-07, from the meeting; supersedes the two-chapter plan).
-  Ordered by machinery — each chapter's effects need everything before them and nothing after:
-  1. Introduction / preface (the current Home page).
-  2. Measuring sound (dB, dBFS, gain, detectors — existing Conventions material).
-  3. Single-sample effects (stateless: volume, distortion, mu-law, bit crush).
-  4. Waveforms & envelopes (sines, other waveforms, oscillators/LFOs; the envelope follower
-     moved here from Conventions).
-  5. Time domain — level: **tremolo, then CLEA** (compression, limiter, expander, AGC).
-     Tremolo is the parametric (LFO-driven) volume knob; the rest replace the LFO with a
-     level detector.
-  6. Time domain — delay & modulation (reverb, chorus, vibrato; consume the LFOs of ch. 4;
-     ring buffers).
-  7. The frequency domain (audio as a collection of frequencies).
-  8. Filters (FIR / IIR).
-  9. DFT / FFT / STFT (benefits, disadvantages).
-  10. Frequency-domain effects (resampling, vocoding).
-  Chapters 1–6 are specified in more detail than 7–10; the complexity trend is the point.
-- **Naming note:** mu-law (ch. 3) is "companding" in the codec sense; the former "Companding"
-  chapter title is retired (ch. 5 is "time domain: level") to keep the two senses apart.
+- **Structure: eleven chapters** (2026-07-13, from meeting feedback; supersedes the
+  ten-chapter plan). Ordered by machinery:
+  1. Introduction. 2. Measuring sound. 3. Single-sample effects (volume, distortion, bit
+  crush; mu-law dropped). 4. Waveforms & oscillators. 5. Envelopes & tremolo. 6. Companding
+  (compression, limiter, expander, AGC). 7. Delay & modulation. 8. The frequency domain.
+  9. Filters. 10. DFT/FFT/STFT. 11. Frequency-domain effects.
+  Chapters 1-7 are specified in more detail than 8-11; the complexity trend is the point.
+- **Naming note:** "Companding" is chapter 6's title, restored 2026-07-13: dropping
+  mu-law (the codec-sense companding) dissolved the collision that had retired it.
 
 ### Explicit non-goals (scoping)
 - **No analog effects or analog explanations** — digital-domain only (the math, plus scoping).
@@ -120,7 +110,6 @@ decisions after. Generator scripts are repo infrastructure (like tests), not tea
   *(The earlier dBA-only / A-weighting question is closed — dBFS is the unit. See Decision Log.)*
 - **Visualization stack:** which browser tech for the *interactive* tiers (plain Canvas? a
   charting lib?). Deliberately deferred until the first embedded visuals get feedback.
-- **Pseudocode style/conventions** (format, how close to the chosen language).
 - **Authoring workflow** (who writes, how reviewed, branch/PR process).
 - **Per-effect companion notebook?** (yes/no — pairs with MkDocs page).
 - **Loudness / LUFS / psychoacoustics** (phon, sone, LUFS, A-weighting/dBA): **deferred** —
@@ -247,3 +236,5 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-07-07 | **Ten-chapter structure adopted** (§2); skeleton reshuffle done before the flat rewrite (structure before surface). Conventions split (envelopes → ch. 4); AGC joins ch. 5 in **tremolo-then-CLEA** order; unwritten chapters are one-paragraph stubs in the nav | Reshuffle crosses page boundaries, so rewriting first would have meant rewriting seams twice |
 | 2026-07-08 | **Implementation split to its own page** (`prototype/compressor-design.md`): decision map + `code/compressor.py` included at build time via `pymdownx.snippets` (`check_paths: true`); the simple inline `compress()` removed from the Compression chapter. Template for future design/implementation pages | Pages stay small; the include makes markdown-vs-file drift structurally impossible |
 | 2026-07-08 | **References appendix** (`prototype/references.md`): the five compressor sources with context + standards + texts; per-page one-liners link into it; `thirdparty/` paths removed from published pages | Some references deserve explanation; local folder paths mean nothing to readers |
+| 2026-07-13 | **Meeting feedback, structure batch**: eleven chapters (ch. 5 envelopes & tremolo; ch. 6 "Companding" restored); mu-law dropped from ch. 3, archived in `research/dropped-mu-law.md`; compressor design page folded into the Compression page (map iframe + GitHub link, embedded listing removed) | Feedback list in `research/feedback-2026-07-13.md` |
+| 2026-07-13 | **Stack**: MathJax via `pymdownx.arithmatex` (`$...$` authoring, matching Ed's Obsidian habit); top-of-page prev/next nav via theme override + `navigation.footer`; **pseudocode convention settled**: algorithms-textbook style (rework pending) | Same feedback batch |

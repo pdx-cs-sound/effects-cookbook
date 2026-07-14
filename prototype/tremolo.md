@@ -3,10 +3,16 @@
 > Tremolo varies a signal's volume periodically: an LFO drives the gain up and down at a
 > rate set by a clock, not by the signal.
 
-*Chapter 5 — time-domain level effects. The parametric member of the family; the rest of
-the chapter replaces its clock with a level detector.*
+*Chapter 5 — envelopes & tremolo. A generated control curve pointed at volume; the
+companding effects of [Chapter 6](compression.md) replace its clock with a level
+detector.*
 
 ---
+
+!!! note "Tremolo is not vibrato"
+    Tremolo modulates volume; vibrato modulates pitch ([Chapter 7](delay-modulation.md)).
+    Decades of guitar amplifiers label a tremolo circuit "vibrato," so the two words are
+    unreliable in the wild. This page is the volume effect.
 
 ## Intuition
 
@@ -14,9 +20,9 @@ Tremolo is a volume knob turned by an oscillator. The [LFO of Chapter 4](wavefor
 sweeps between 0 and 1 a few times per second, the gain follows it, and the sound swells
 and dips at that rate. Nothing about the effect listens to the signal: the same wobble is
 applied whether the input is loud, quiet, or silent. That indifference is what separates
-tremolo from everything else in this chapter — [Compression](compression.md),
-[Limiting](limiter.md), [Expanding](expander.md), and [AGC](agc.md) all move the same
-volume knob, but they move it in response to a measured level.
+tremolo from the companding effects of [Chapter 6](compression.md) — Compression,
+Limiting, Expanding, and AGC all move the same volume knob, but they move it in response
+to a measured level.
 
 ## Key parameters
 
@@ -58,19 +64,16 @@ Included at build time from `code/oscillators.py`:
       chopping.
     - A square LFO changes the gain instantaneously, and instantaneous gain changes click
       (the same fact that motivates attack and release in
-      [Chapter 4](waveforms.md)). Hardware tremolos smooth the square's edges.
+      [Chapter 5](envelopes.md)). Hardware tremolos smooth the square's edges.
     - Push the rate past roughly 20 Hz and the modulation itself becomes audible as new
       frequencies around the tone, not as movement. That boundary is the LFO definition
       from [Chapter 4](waveforms.md), met from the other side.
-    - Tremolo and vibrato name different effects: tremolo modulates volume, vibrato
-      modulates pitch ([Chapter 6](delay-modulation.md)). Decades of guitar amplifiers
-      label a tremolo circuit "vibrato," so the words are unreliable in the wild.
 
 ## Related effects
 
 - [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md), and
   [AGC](agc.md): the same volume knob, driven by a level detector instead of a clock.
-- Vibrato ([Chapter 6](delay-modulation.md)): the same LFO pointed at pitch instead of
+- Vibrato ([Chapter 7](delay-modulation.md)): the same LFO pointed at pitch instead of
   volume.
 
 ## Learn more

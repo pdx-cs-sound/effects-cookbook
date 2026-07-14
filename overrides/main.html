@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav style="display: flex; justify-content: space-between; gap: 1rem; font-size: 0.72rem; margin-bottom: 1.2em;">
+  <span>{% if page.previous_page %}<a href="{{ page.previous_page.url | url }}">&larr; {{ page.previous_page.title }}</a>{% endif %}</span>
+  <span>{% if page.next_page %}<a href="{{ page.next_page.url | url }}">{{ page.next_page.title }} &rarr;</a>{% endif %}</span>
+</nav>
+{{ super() }}
+{% endblock %}

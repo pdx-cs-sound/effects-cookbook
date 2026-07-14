@@ -15,7 +15,7 @@ and end with a complete compressor. Toggle the buttons to overlay five real open
 implementations — each is a different *path* through the same decisions, showing that "a
 compressor" is a region of choices, not one algorithm.
 
-<iframe src="../visualization/compressor_decision_map.html" title="Compressor design decision flow" loading="lazy" style="width:100%; height:720px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
+<iframe src="../visualization/compressor_decision_map.html" title="Compressor design decision flow" loading="lazy" style="width:100%; height:820px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
 
 <a href="../visualization/compressor_decision_map.html" target="_blank" rel="noopener">Open full page ↗</a>
 

@@ -4,9 +4,11 @@ docs_dir: prototype
 
 theme:
   name: material
+  custom_dir: overrides
   features:
     - navigation.sections
     - navigation.top
+    - navigation.footer
     - content.code.copy
   palette:
     - scheme: default
@@ -24,6 +26,8 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.snippets:
       check_paths: true
+  - pymdownx.arithmatex:
+      generic: true
   - tables
   - toc:
       permalink: true
@@ -32,20 +36,25 @@ nav:
   - "1 — Introduction": index.md
   - "2 — Measuring sound": conventions.md
   - "3 — Single-sample effects": single-sample.md
-  - "4 — Waveforms & envelopes": waveforms.md
-  - "5 — Time domain: level":
+  - "4 — Waveforms & oscillators": waveforms.md
+  - "5 — Envelopes & tremolo":
+      - Envelopes: envelopes.md
       - Tremolo: tremolo.md
+  - "6 — Companding":
       - Compression: compression.md
-      - "Designing a compressor": compressor-design.md
       - Limiting: limiter.md
       - Expanding: expander.md
       - Automatic Gain Control: agc.md
-  - "6 — Delay & modulation": delay-modulation.md
-  - "7 — The frequency domain": frequency-domain.md
-  - "8 — Filters": filters.md
-  - "9 — DFT, FFT, STFT": transforms.md
-  - "10 — Frequency-domain effects": frequency-effects.md
+  - "7 — Delay & modulation": delay-modulation.md
+  - "8 — The frequency domain": frequency-domain.md
+  - "9 — Filters": filters.md
+  - "10 — DFT, FFT, STFT": transforms.md
+  - "11 — Frequency-domain effects": frequency-effects.md
   - Appendix:
       - "Status & scope": status.md
       - References: references.md
       - Visualizations: visualizations.md
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

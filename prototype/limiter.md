@@ -3,7 +3,7 @@
 > A limiter holds its output at or below a fixed level, called the ceiling. Input below
 > the ceiling passes through unchanged; input above it is reduced to the ceiling.
 
-*Chapter 5 — time-domain level effects. The fast, output-flattening end of
+*Chapter 6 — companding. The fast, output-flattening end of
 [Compression](compression.md); contrast with the slow, transparent [AGC](agc.md).*
 
 ---

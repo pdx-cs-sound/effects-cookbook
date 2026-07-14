@@ -7,7 +7,7 @@ the bottom of each chapter; entries here carry the explanation those one-liners 
 
 The level-effects chapter was written against five open-source dynamic-range
 implementations, spanning textbook code to shipping products. The
-[design map](compressor-design.md) plots each one as a path through the same decisions, and
+[design map](compression.md) plots each one as a path through the same decisions, and
 the book's configurable compressor includes each as a preset. License terms are per
 upstream project; check before reusing code.
 

@@ -3,7 +3,19 @@
 Working task list for the Digital Audio Effects Cookbook. Design rationale lives in
 [DESIGN.md](DESIGN.md); this is the actionable view.
 
-## Now — ordered plan (updated 2026-07-08)
+## Now — ordered plan (updated 2026-07-13, post-feedback)
+- [x] Feedback structure batch (2026-07-13): eleven chapters (5 = envelopes & tremolo,
+      6 = Companding restored); mu-law dropped (archived `research/dropped-mu-law.md`);
+      compressor design page folded into Compression; MathJax (arithmatex, $..$) enabled;
+      top+bottom page nav enabled. Full list: `research/feedback-2026-07-13.md`
+- [ ] Feedback general batch: equations as math on the pages; algorithms-textbook
+      pseudocode rework; ch. 2 notes (samples/sec, stereo scope, peak-to-peak treatment)
+- [ ] Feedback specifics batch: bit-crush arbitrary levels; asymmetric clipping;
+      sawtooth rising/falling; AGC fast-attack/slow-release (impl + prose; Ed owns refs)
+- [ ] Tone batch, LAST: STYLE.md punctuation/idiom rules, then full-book self-adversarial
+      AI-tell sweep, then Ed's external AI-checker run
+
+### Superseded plan (2026-07-08)
 - [x] Ten-chapter skeleton in place (stubs for ch. 3, 6–10 + tremolo; envelopes moved to
       ch. 4; AGC into ch. 5, tremolo-then-CLEA order; index/status/cross-links updated)
 - [x] **Flat rewrite pass** done (2026-07-07): index, conventions (now titled "Measuring

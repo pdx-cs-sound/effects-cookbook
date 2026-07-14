@@ -3,9 +3,9 @@
 > Automatic gain control (AGC) holds a signal's level near a chosen target, correcting
 > slow drift without reshaping the moment-to-moment dynamics.
 
-*Chapter 5 — time-domain level effects. The slow, transparent member of the family; builds
-on [Measuring sound](conventions.md) and the envelope follower of
-[Chapter 4](waveforms.md).*
+*Chapter 6 — companding. The slow, transparent member of the family; builds on
+[Measuring sound](conventions.md) and the envelope follower of
+[Chapter 5](envelopes.md).*
 
 ---
 
@@ -25,7 +25,7 @@ listener at the same level.
     objective — hold the output near a target — rather than one transfer function. In
     practice it is built as a slow feedback loop from familiar primitives, a level
     detector ([Chapter 2](conventions.md)) and a one-pole follower
-    ([Chapter 4](waveforms.md)), wired to seek a target instead of applying a fixed curve.
+    ([Chapter 5](envelopes.md)), wired to seek a target instead of applying a fixed curve.
 
 ## Key parameters
 
@@ -130,8 +130,8 @@ def agc(x, sr, target_db=-20.0, time_ms=1000.0,
 
 ## Related effects
 
-- [Measuring sound](conventions.md) and [Waveforms & envelopes](waveforms.md): the level
-  detector and one-pole follower AGC is built from.
+- [Measuring sound](conventions.md) and [Envelopes](envelopes.md): the level detector and
+  one-pole follower AGC is built from.
 - [Compression](compression.md): faster, usually feed-forward; reshapes short-term
   dynamics.
 - [Limiting](limiter.md): AGC's flattening with a compressor's speed.

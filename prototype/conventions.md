@@ -243,8 +243,8 @@ For a sine wave, RMS sits about 3 dB below peak; the gap is the crest factor. Th
 of detector shifts the measured level, so readings are always labeled dBFS (peak) or
 dBFS (RMS).
 
-Following a level over time — attack, release, the one-pole envelope follower — is covered
-with the other envelopes in [Chapter 4](waveforms.md).
+Following a level over time — attack, release, the one-pole envelope follower — is
+covered in [Chapter 5](envelopes.md).
 
 ## Pitfalls
 
