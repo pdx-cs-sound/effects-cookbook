@@ -111,3 +111,12 @@ class TestWavWriter(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestReverseSawtooth(unittest.TestCase):
+    def test_is_the_negated_sawtooth(self):
+        from oscillators import reverse_sawtooth_shape, sawtooth_shape
+        for i in range(200):
+            phase = i / 200.0
+            self.assertAlmostEqual(reverse_sawtooth_shape(phase),
+                                   -sawtooth_shape(phase), places=12)

@@ -11,6 +11,6 @@ const [sr, n, volume, frequency, rate, depth] =
 const next = createTremolo(sr);
 const out = new Array(n);
 for (let i = 0; i < n; i++) {
-  out[i] = next({volume, frequency, rate, depth}).sample;
+  out[i] = next({volume, frequency, rate, depth});
 }
 process.stdout.write(JSON.stringify(out));

@@ -8,16 +8,13 @@ class TremoloProcessor extends ExplorerProcessor {
   constructor(options) {
     super(options);
     this.next = createTremolo(sampleRate);
-    this.lastGain = 1.0;
   }
 
   generate(p) {
-    const r = this.next(p);
-    this.lastGain = r.gain;
-    return r.sample;
+    return this.next(p);
   }
 
-  aux() { return this.lastGain; }
+  aux() { return this.next.gain; }
 }
 
 registerProcessor("tremolo-processor", TremoloProcessor);

@@ -58,6 +58,19 @@ LFO-driven gain trace.
 
 <a href="../visualization/tremolo_explorer.html" target="_blank" rel="noopener">Open full page ↗</a>
 
+## Waveform AudioExplorer
+
+The oscillators of [Chapter 4](waveforms.md) running live: pick one of five shapes
+(including the reverse sawtooth, which sounds identical to the sawtooth), set volume and
+frequency, and watch three cycles of the output. The frequency slider is wide enough
+that the naive square and sawtooth alias audibly at the top. The DSP is an AudioWorklet
+port of the chapter's oscillator and shape functions, golden-tested against the Python
+in CI.
+
+<iframe src="../visualization/waveform_explorer.html" title="Waveform AudioExplorer" loading="lazy" style="width:100%; height:560px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
+
+<a href="../visualization/waveform_explorer.html" target="_blank" rel="noopener">Open full page ↗</a>
+
 ---
 
 ## Planned

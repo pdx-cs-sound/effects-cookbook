@@ -5,12 +5,18 @@
  * from code/oscillators.py. Nothing here touches Web Audio, so the same
  * module runs under Node, and code/test_worklet_ports.py compares its
  * output against the Python originals sample by sample.
+ *
+ * next() returns a bare number and reports the gain through a property
+ * on the function rather than returning an object: the kernel runs on
+ * the audio thread, where a per-sample allocation becomes a steady
+ * rhythm of garbage-collection pauses, audible as a chirp (see
+ * lib/explorer_processor_base.js).
  */
 
 export function createTremolo(sr) {
   let phase = 0.0;      // carrier phase, in [0, 1)
   let lfoPhase = 0.0;   // tremolo LFO phase, in [0, 1)
-  return function next(p) {
+  function next(p) {
     const carrier = Math.sin(2.0 * Math.PI * phase);
     const m = 0.5 + 0.5 * Math.sin(2.0 * Math.PI * lfoPhase);  // LFO in [0, 1]
     const gain = 1.0 - p.depth * m;
@@ -18,6 +24,9 @@ export function createTremolo(sr) {
     if (phase >= 1.0) phase -= 1.0;
     lfoPhase += p.rate / sr;
     if (lfoPhase >= 1.0) lfoPhase -= 1.0;
-    return {sample: p.volume * gain * carrier, gain};
-  };
+    next.gain = gain;
+    return p.volume * gain * carrier;
+  }
+  next.gain = 1.0;
+  return next;
 }

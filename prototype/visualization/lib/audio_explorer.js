@@ -6,8 +6,19 @@
  * for the pattern; code/test_worklet_ports.py holds each kernel to its
  * Python original). The harness owns everything an explorer needs beyond
  * the DSP: the play/stop gesture the browser requires before audio may
- * start, labeled sliders with live readouts, the rolling oscilloscope
- * view, and message plumbing to the worklet.
+ * start, labeled controls with live readouts, the oscilloscope view, and
+ * message plumbing to the worklet.
+ *
+ * Controls are sliders ({id, label, min, max, step, value, format}, with
+ * scale: "log" for ranges the ear hears in octaves) or segmented radio
+ * groups ({type: "select", options: [{label, value}]}). Select values are
+ * discrete: the worklet applies them instantly instead of smoothing them,
+ * since a fractional waveform index means nothing.
+ *
+ * The scope has two modes. "envelope" (default) draws scope.seconds of
+ * per-block min/max columns, the right view when the story is slower than
+ * the waveform (a tremolo swell). "cycles" draws a few triggered periods
+ * from raw samples, the right view when the story is the shape itself.
  *
  * Plain JavaScript and Canvas, no dependencies. Colors follow the figure
  * conventions in code/make_figures.py: gray input/reference, blue output,
@@ -24,8 +35,8 @@ export class AudioExplorer {
    *   mount          element to build the UI inside
    *   processorUrl   worklet module URL (relative to the page)
    *   processorName  name passed to registerProcessor in that module
-   *   controls       [{id, label, min, max, step, value, format}]
-   *   scope          {seconds, description, gainLabel or null}
+   *   controls       slider and select descriptors, see above
+   *   scope          {mode, seconds, description, gainLabel or null}
    */
   constructor(config) {
     this.config = config;
@@ -34,9 +45,10 @@ export class AudioExplorer {
     this.ctx = null;
     this.node = null;
     this.running = false;
-    this.columns = [];        // ring of {min, max, aux} scope columns
+    this.columns = [];        // envelope mode: ring of {min, max, aux}
     this.capacity = 0;
     this.head = 0;
+    this.samples = [];        // cycles mode: rolling raw samples
     this.buildUi(config.mount);
     this.drawScope();
   }
@@ -54,34 +66,8 @@ export class AudioExplorer {
     const panel = document.createElement("div");
     panel.className = "ax-controls";
     for (const c of cfg.controls) {
-      const label = document.createElement("label");
-      label.className = "ax-control";
-      const name = document.createElement("span");
-      name.className = "ax-name";
-      name.textContent = c.label;
-      const input = document.createElement("input");
-      input.type = "range";
-      input.min = c.min;
-      input.max = c.max;
-      input.step = c.step;
-      input.value = c.value;
-      const readout = document.createElement("output");
-      readout.className = "ax-readout";
-      const show = () => { readout.textContent = c.format(Number(input.value)); };
-      input.addEventListener("input", () => {
-        this.values[c.id] = Number(input.value);
-        show();
-        if (this.node) {
-          this.node.port.postMessage(
-            {type: "param", id: c.id, value: this.values[c.id]});
-        }
-        this.drawScope();
-      });
-      show();
-      label.appendChild(name);
-      label.appendChild(input);
-      label.appendChild(readout);
-      panel.appendChild(label);
+      panel.appendChild(c.type === "select"
+        ? this.buildSelect(c) : this.buildSlider(c));
     }
     mount.appendChild(panel);
 
@@ -107,25 +93,103 @@ export class AudioExplorer {
     mount.appendChild(legend);
   }
 
+  buildSlider(c) {
+    const log = c.scale === "log";
+    const toValue = (raw) => log ? 2 ** raw : raw;
+    const toRaw = (value) => log ? Math.log2(value) : value;
+    const label = document.createElement("label");
+    label.className = "ax-control";
+    const name = document.createElement("span");
+    name.className = "ax-name";
+    name.textContent = c.label;
+    const input = document.createElement("input");
+    input.type = "range";
+    input.min = toRaw(c.min);
+    input.max = toRaw(c.max);
+    // A log slider is continuous: a step grid anchored at log2(min) has
+    // no representable values, and the browser flags them as invalid.
+    input.step = log ? "any" : c.step;
+    input.value = toRaw(c.value);
+    const readout = document.createElement("output");
+    readout.className = "ax-readout";
+    const show = () => { readout.textContent = c.format(this.values[c.id]); };
+    input.addEventListener("input", () => {
+      this.setParam(c.id, toValue(Number(input.value)));
+      show();
+    });
+    show();
+    label.appendChild(name);
+    label.appendChild(input);
+    label.appendChild(readout);
+    return label;
+  }
+
+  buildSelect(c) {
+    const group = document.createElement("div");
+    group.className = "ax-control ax-select";
+    const name = document.createElement("span");
+    name.className = "ax-name";
+    name.id = `ax-name-${c.id}`;
+    name.textContent = c.label;
+    const options = document.createElement("div");
+    options.className = "ax-options";
+    options.setAttribute("role", "radiogroup");
+    options.setAttribute("aria-labelledby", name.id);
+    for (const o of c.options) {
+      const label = document.createElement("label");
+      label.className = "ax-option";
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = `ax-${c.id}`;
+      radio.value = o.value;
+      radio.checked = o.value === c.value;
+      radio.addEventListener("change", () => {
+        if (radio.checked) this.setParam(c.id, Number(radio.value));
+      });
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(o.label));
+      options.appendChild(label);
+    }
+    group.appendChild(name);
+    group.appendChild(options);
+    return group;
+  }
+
+  setParam(id, value) {
+    this.values[id] = value;
+    if (this.node) {
+      this.node.port.postMessage({type: "param", id, value});
+    }
+    this.drawScope();
+  }
+
   async toggle() {
     if (this.running) { this.stop(); } else { await this.start(); }
   }
 
   async start() {
+    const cfg = this.config;
     if (!this.ctx) {
       this.ctx = new AudioContext();
-      await this.ctx.audioWorklet.addModule(this.config.processorUrl);
-      this.capacity = Math.ceil(
-        this.config.scope.seconds * this.ctx.sampleRate / 128);
+      await this.ctx.audioWorklet.addModule(cfg.processorUrl);
+      if (cfg.scope.mode !== "cycles") {
+        this.capacity = Math.ceil(cfg.scope.seconds * this.ctx.sampleRate / 128);
+      }
     }
     await this.ctx.resume();
     this.columns = [];
     this.head = 0;
-    this.node = new AudioWorkletNode(this.ctx, this.config.processorName, {
+    this.samples = [];
+    this.node = new AudioWorkletNode(this.ctx, cfg.processorName, {
       numberOfInputs: 0,
-      processorOptions: {params: {...this.values}},
+      processorOptions: {
+        params: {...this.values},
+        discrete: cfg.controls.filter((c) => c.type === "select")
+                              .map((c) => c.id),
+        postSamples: cfg.scope.mode === "cycles",
+      },
     });
-    this.node.port.onmessage = (e) => this.pushColumn(e.data);
+    this.node.port.onmessage = (e) => this.receive(e.data);
     this.node.connect(this.ctx.destination);
     this.running = true;
     this.button.textContent = "Stop";
@@ -147,15 +211,36 @@ export class AudioExplorer {
     this.running = false;
     this.button.textContent = "Play tone";
     this.button.setAttribute("aria-pressed", "false");
-    this.drawScope();       // freeze the last second on screen
+    this.drawScope();       // freeze the last view on screen
   }
 
-  pushColumn(col) {
-    if (this.columns.length < this.capacity) {
-      this.columns.push(col);
+  /* Scope data arrives packed (columns as min/max/aux triples, samples
+   * as one transferred buffer per batch); the buffers go back to the
+   * worklet for reuse, so the audio thread never allocates in steady
+   * state. */
+  receive(data) {
+    const cols = data.columns;
+    if (this.config.scope.mode === "cycles") {
+      this.samples.push(...data.samples);
+      const cap = Math.ceil(this.ctx.sampleRate / 2);
+      if (this.samples.length > cap) {
+        this.samples.splice(0, this.samples.length - cap);
+      }
     } else {
-      this.columns[this.head] = col;
-      this.head = (this.head + 1) % this.capacity;
+      for (let i = 0; i < cols.length; i += 3) {
+        const col = {min: cols[i], max: cols[i + 1], aux: cols[i + 2]};
+        if (this.columns.length < this.capacity) {
+          this.columns.push(col);
+        } else {
+          this.columns[this.head] = col;
+          this.head = (this.head + 1) % this.capacity;
+        }
+      }
+    }
+    if (this.node) {
+      const buffers = [cols.buffer];
+      if (data.samples) buffers.push(data.samples.buffer);
+      this.node.port.postMessage({type: "recycle", buffers}, buffers);
     }
   }
 
@@ -197,6 +282,14 @@ export class AudioExplorer {
     }
     g.setLineDash([]);
 
+    if (this.config.scope.mode === "cycles") {
+      this.drawCycles(g, w, y);
+    } else {
+      this.drawEnvelope(g, w, y);
+    }
+  }
+
+  drawEnvelope(g, w, y) {
     const n = this.columns.length;
     if (n === 0) return;
     const x = (i) => (i / (this.capacity - 1)) * w;
@@ -224,5 +317,41 @@ export class AudioExplorer {
       }
       g.stroke();
     }
+  }
+
+  /* A few periods of the raw waveform, anchored at a rising zero crossing
+   * (an oscilloscope trigger) so the drawing holds still. The crossing
+   * falls between two samples, so the anchor keeps its fractional
+   * position; snapping it to a whole sample makes the trace jitter
+   * sideways by up to a sample, which is a visible fraction of a period
+   * at high frequencies. */
+  drawCycles(g, w, y) {
+    const sr = this.ctx ? this.ctx.sampleRate : 48000;
+    const freq = this.values.frequency || 220;
+    const win = Math.min(this.samples.length,
+                         Math.round(3 * sr / freq));
+    if (win < 2) return;
+    let start = this.samples.length - win;
+    let frac = 0.0;
+    const search = Math.min(start, Math.round(sr / freq));
+    for (let i = start; i > start - search; i--) {
+      const a = this.samples[i - 1];
+      const b = this.samples[i];
+      if (a <= 0 && b > 0) {
+        start = i;
+        frac = 1.0 - a / (a - b);    // crossing sits frac before sample i
+        break;
+      }
+    }
+    g.strokeStyle = BLUE;
+    g.lineWidth = 2;
+    g.beginPath();
+    for (let i = 0; i < win; i++) {
+      const xi = ((i + frac) / (win - 1)) * w;
+      const yi = y(this.samples[start + i]);
+      if (i === 0) g.moveTo(xi, yi);
+      else g.lineTo(xi, yi);
+    }
+    g.stroke();
   }
 }

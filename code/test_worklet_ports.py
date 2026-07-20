@@ -19,7 +19,9 @@ import shutil
 import subprocess
 import unittest
 
-from oscillators import sine_wave, tremolo
+from oscillators import (oscillator, reverse_sawtooth_shape, sawtooth_shape,
+                         sine_shape, sine_wave, square_shape, tremolo,
+                         triangle_shape)
 
 HERE = os.path.dirname(__file__)
 
@@ -50,3 +52,23 @@ class TestTremoloKernel(unittest.TestCase):
         expected = sine_wave(220.0, n / sr, sr, amp=0.5)
         worst = max(abs(a - b) for a, b in zip(got, expected))
         self.assertLess(worst, 1e-6)
+
+
+@unittest.skipUnless(shutil.which("node"), "node is not installed")
+class TestWaveformKernel(unittest.TestCase):
+    # Index order matches SHAPES in lib/waveform_kernel.js and the
+    # explorer's selector.
+    SHAPES = [sine_shape, square_shape, sawtooth_shape,
+              reverse_sawtooth_shape, triangle_shape]
+
+    def test_every_shape_matches_python_sample_by_sample(self):
+        sr, n = 8000, 2000
+        volume, freq = 0.5, 220.0
+        for index, shape in enumerate(self.SHAPES):
+            with self.subTest(shape=shape.__name__):
+                expected = oscillator(shape, freq, n / sr, sr, amp=volume)
+                got = run_kernel("run_waveform_kernel.mjs",
+                                 sr, n, volume, freq, index)
+                self.assertEqual(len(got), len(expected))
+                worst = max(abs(a - b) for a, b in zip(got, expected))
+                self.assertLess(worst, 1e-6)

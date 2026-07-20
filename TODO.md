@@ -99,9 +99,13 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       library (DESIGN §4) — worklet kernels ported from the book's Python, golden tests
       vs. Python under Node in CI (`code/test_worklet_ports.py`); first instance =
       tremolo explorer in the Visualizations appendix
-- [ ] AudioExplorer next: Ed reviews the tremolo instance; then the waveforms &
-      oscillators explorer (wave type selector incl. reverse sawtooth, volume +
-      frequency sliders); embed into chapters once the shape settles
+- [x] Waveform AudioExplorer (2026-07-19): five-shape segmented selector (incl. reverse
+      sawtooth), volume + log-scaled frequency slider (55-3520 Hz so naive aliasing is
+      audible), triggered three-cycle scope view. Harness grew select controls, discrete
+      (unsmoothed) params, log sliders, and the "cycles" scope mode; golden test covers
+      all five shapes.
+- [ ] AudioExplorer next: Ed reviews both instances; embed into chapters once the shape
+      settles; candidates after that follow ch. 7 (echo, vibrato, chorus, reverb)
 - [ ] Adopt "two visuals per effect" (static curve + time-domain) per the AGC finding
 - [x] POSA-style compressor "design decision map" — single start/end flow, refined granularity,
       interactive five-implementation overlay (`prototype/visualization/compressor_decision_map.html`,

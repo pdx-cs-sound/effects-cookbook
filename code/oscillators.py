@@ -56,6 +56,16 @@ def triangle_shape(phase):
 # --8<-- [end:shapes]
 
 
+def reverse_sawtooth_shape(phase):
+    """The sawtooth's mirror image: a falling ramp with an upward jump.
+
+    Not part of the page listing; the waveform explorer offers it so a
+    listener can confirm the waveforms.md claim that the two sawtooths
+    are indistinguishable as tones.
+    """
+    return 1.0 - 2.0 * phase
+
+
 # --8<-- [start:follow]
 def smoothing_coeff(time_ms, sr):
     """One-pole coefficient for a given time constant at sample rate sr."""
