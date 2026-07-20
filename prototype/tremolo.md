@@ -10,7 +10,7 @@ detector.*
 ---
 
 !!! note "Tremolo is not vibrato"
-    Tremolo modulates volume; vibrato modulates pitch ([Chapter 7](delay-modulation.md)).
+    Tremolo modulates volume; vibrato modulates pitch ([Chapter 7](vibrato.md)).
     Decades of guitar amplifiers label a tremolo circuit "vibrato," so the label on an
     amplifier is unreliable. This page is the volume effect.
 
@@ -74,7 +74,7 @@ Included at build time from `code/oscillators.py`:
 
 - [Compression](compression.md), [Limiting](limiter.md), [Expanding](expander.md), and
   [AGC](agc.md): the same volume knob, driven by a level detector instead of a clock.
-- Vibrato ([Chapter 7](delay-modulation.md)): the same LFO pointed at pitch instead of
+- Vibrato ([Chapter 7](vibrato.md)): the same LFO pointed at pitch instead of
   volume.
 
 ## Learn more

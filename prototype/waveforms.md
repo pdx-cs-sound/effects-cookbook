@@ -118,7 +118,7 @@ An oscillator run below roughly 20 Hz is no longer heard as a tone. It is felt a
 change. Used that way it is called a low-frequency oscillator, or LFO, and its output
 becomes a control signal rather than a sound, something for another effect's parameter
 to follow. [Tremolo](tremolo.md) is the first consumer, an LFO driving a volume knob,
-and the delay-based effects of [Chapter 7](delay-modulation.md) are driven the same way.
+and the swept delays of [Chapter 7](vibrato.md) are driven the same way.
 
 ## Where this leads
 

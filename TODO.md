@@ -17,7 +17,8 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Tone batch done (2026-07-13): STYLE.md rules 10 (plain punctuation) and 11 (no
       idioms); full-book sweep of dashes/semicolons/kickers/reversals/idioms; two stale
       Chapter-7 links caught by the audit and fixed
-- [ ] Ed runs the external AI detector; its hits feed a final fix round
+- [x] Detector run (2026-07-19): lexical tells scrubbed; residual flags are structural
+      consistency, accepted as intentional (template + STYLE.md). Tone work closed.
 
 ### Superseded plan (2026-07-08)
 - [x] Ten-chapter skeleton in place (stubs for ch. 3, 6–10 + tremolo; envelopes moved to
@@ -38,7 +39,11 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Tremolo drafted (2026-07-13): Chapter 5 complete. `tremolo()` in oscillators.py
       (snippet-included, tested), figure, and the book's first before/after effect demo
       (plain tone vs. tremolo). Tremolo-vs-vibrato naming trap in pitfalls.
-- [ ] Then: ch. 6 (delay & modulation — ring buffers, vibrato, chorus, reverb)
+- [x] Chapter 7 drafted (2026-07-19): delay & modulation. `code/delays.py` (RingBuffer,
+      echo, vibrato, chorus, comb/allpass, Schroeder reverb) with `code/test_delays.py`;
+      four pages (delay-modulation, vibrato, chorus, reverb). Figures and audio demos
+      deferred until Ed's read-through.
+- [ ] Chapter 7 figures and audio demos (after Ed's read-through)
 - [ ] First per-effect before/after audio demos (compressor on the burst tone?) using the
       make_demos pipeline
 

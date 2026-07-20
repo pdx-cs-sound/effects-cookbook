@@ -45,7 +45,11 @@ nav:
       - Limiting: limiter.md
       - Expanding: expander.md
       - Automatic Gain Control: agc.md
-  - "7 — Delay & modulation": delay-modulation.md
+  - "7 — Delay & modulation":
+      - "Delay lines & echo": delay-modulation.md
+      - Vibrato: vibrato.md
+      - Chorus: chorus.md
+      - Reverb: reverb.md
   - "8 — The frequency domain": frequency-domain.md
   - "9 — Filters": filters.md
   - "10 — DFT, FFT, STFT": transforms.md

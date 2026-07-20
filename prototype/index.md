@@ -27,8 +27,8 @@ nothing after.
 5. **Envelopes & tremolo** — [Envelopes](envelopes.md), [Tremolo](tremolo.md).
 6. **Companding** — [Compression](compression.md), [Limiting](limiter.md),
    [Expanding](expander.md), [AGC](agc.md).
-7. **[Delay & modulation](delay-modulation.md)** — reverb, chorus, vibrato; ring buffers.
-   *(planned)*
+7. **Delay & modulation** — [Delay lines & echo](delay-modulation.md),
+   [Vibrato](vibrato.md), [Chorus](chorus.md), [Reverb](reverb.md).
 8. **[The frequency domain](frequency-domain.md)** — audio as frequencies. *(planned)*
 9. **[Filters](filters.md)** — FIR and IIR. *(planned)*
 10. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
