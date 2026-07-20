@@ -95,7 +95,13 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       for the dynamics effects; reproducible counterpoint to subjective listening tests
 
 ## Visualization
-- [ ] Decide the browser viz stack (plain Canvas vs a charting lib) — DESIGN §4
+- [x] Browser viz stack decided (2026-07-19): plain Canvas + in-repo **AudioExplorer**
+      library (DESIGN §4) — worklet kernels ported from the book's Python, golden tests
+      vs. Python under Node in CI (`code/test_worklet_ports.py`); first instance =
+      tremolo explorer in the Visualizations appendix
+- [ ] AudioExplorer next: Ed reviews the tremolo instance; then the waveforms &
+      oscillators explorer (wave type selector incl. reverse sawtooth, volume +
+      frequency sliders); embed into chapters once the shape settles
 - [ ] Adopt "two visuals per effect" (static curve + time-domain) per the AGC finding
 - [x] POSA-style compressor "design decision map" — single start/end flow, refined granularity,
       interactive five-implementation overlay (`prototype/visualization/compressor_decision_map.html`,

@@ -46,6 +46,18 @@ A Web Audio demo of basic waveforms and what clipping does to them — press pla
 
 <a href="../visualization/gemma_local_waves.html" target="_blank" rel="noopener">Open full page ↗</a>
 
+## Tremolo AudioExplorer
+
+The first AudioExplorer: the book's tremolo running live. The DSP is an AudioWorklet
+port of `tremolo()` from `code/oscillators.py`, and a golden test in CI
+(`code/test_worklet_ports.py`) compares the port against the Python sample by sample.
+Press Play tone, adjust the sliders, and watch the last second of output under the
+LFO-driven gain trace.
+
+<iframe src="../visualization/tremolo_explorer.html" title="Tremolo AudioExplorer" loading="lazy" style="width:100%; height:560px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
+
+<a href="../visualization/tremolo_explorer.html" target="_blank" rel="noopener">Open full page ↗</a>
+
 ---
 
 ## Planned
