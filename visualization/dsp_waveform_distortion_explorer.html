@@ -1,0 +1,209 @@
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">Interactive demo: choose a waveform type, adjust frequency and soft-clip distortion depth, see the resulting shape, and play the sound</h2>
+
+<div style="display:flex;gap:8px;margin:0 0 1.25rem;flex-wrap:wrap;">
+  <button data-type="sine" class="wave-btn">sine</button>
+  <button data-type="sawtooth" class="wave-btn">sawtooth</button>
+  <button data-type="square" class="wave-btn">square</button>
+  <button data-type="triangle" class="wave-btn">triangle</button>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin:0 0 1rem;">
+  <label style="font-size:14px;color:var(--color-text-secondary);min-width:90px;">Frequency</label>
+  <input type="range" id="freq" min="100" max="800" step="10" value="220" style="flex:1;" />
+  <span id="freq-out" style="font-size:14px;font-weight:500;min-width:60px;text-align:right;">220 Hz</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin:0 0 1.5rem;">
+  <label style="font-size:14px;color:var(--color-text-secondary);min-width:90px;">Clip depth</label>
+  <input type="range" id="depth" min="0" max="10" step="0.5" value="0" style="flex:1;" />
+  <span id="depth-out" style="font-size:14px;font-weight:500;min-width:60px;text-align:right;">0 (clean)</span>
+</div>
+
+<div style="position:relative;height:180px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:1.25rem;">
+  <canvas id="cv" style="width:100%;height:100%;display:block;"></canvas>
+</div>
+
+<div style="display:flex;justify-content:center;">
+  <button id="play" style="display:flex;align-items:center;gap:8px;padding:8px 20px;">
+    <i class="ti ti-player-play" id="play-icon" aria-hidden="true"></i>
+    <span id="play-label">Play</span>
+  </button>
+</div>
+
+<style>
+.wave-btn{flex:1;padding:8px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:14px;cursor:pointer;}
+.wave-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);font-weight:500;}
+</style>
+
+<script>
+(function(){
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var freqInput = document.getElementById('freq');
+  var depthInput = document.getElementById('depth');
+  var freqOut = document.getElementById('freq-out');
+  var depthOut = document.getElementById('depth-out');
+  var playBtn = document.getElementById('play');
+  var playIcon = document.getElementById('play-icon');
+  var playLabel = document.getElementById('play-label');
+  var waveBtns = document.querySelectorAll('.wave-btn');
+
+  var currentType = 'sine';
+  var currentFreq = 220;
+  var currentDepth = 0;
+  var playing = false;
+  var audioCtx, osc, shaper, gain;
+
+  function resizeCanvas(){
+    var rect = cv.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = rect.width * dpr;
+    cv.height = rect.height * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function waveformValue(type, phase){
+    var p = phase - Math.floor(phase);
+    if (type === 'sine') return Math.sin(2*Math.PI*p);
+    if (type === 'square') return p < 0.5 ? 1 : -1;
+    if (type === 'sawtooth') return 2*(p - Math.floor(p+0.5));
+    if (type === 'triangle') return 1 - 4*Math.abs(Math.round(p - 0.25) - (p - 0.25));
+    return 0;
+  }
+
+  function distort(x, drive){
+    if (drive < 0.05) return x;
+    return Math.tanh(drive*x) / Math.tanh(drive);
+  }
+
+  function buildCurve(drive){
+    var n = 1024;
+    var curve = new Float32Array(n);
+    var norm = drive < 0.05 ? 1 : Math.tanh(drive);
+    for (var i=0;i<n;i++){
+      var x = i/(n-1)*2 - 1;
+      curve[i] = drive < 0.05 ? x : Math.tanh(drive*x)/norm;
+    }
+    return curve;
+  }
+
+  function getColor(varName, fallback){
+    var v = getComputedStyle(document.documentElement).getPropertyValue(varName);
+    return v ? v.trim() : fallback;
+  }
+
+  function draw(){
+    var rect = cv.getBoundingClientRect();
+    var w = rect.width, h = rect.height;
+    ctx.clearRect(0,0,w,h);
+    var mid = h/2;
+    var amp = h*0.38;
+
+    ctx.strokeStyle = getColor('--color-border-tertiary', '#ddd');
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, mid);
+    ctx.lineTo(w, mid);
+    ctx.stroke();
+
+    var windowSec = 0.02;
+    var origColor = getColor('--color-text-tertiary', '#aaa');
+    var mainColor = getColor('--color-text-info', '#185fA5');
+
+    if (currentDepth >= 0.05){
+      ctx.strokeStyle = origColor;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3,3]);
+      ctx.beginPath();
+      for (var x=0; x<=w; x++){
+        var t = (x/w)*windowSec;
+        var v = waveformValue(currentType, t*currentFreq);
+        var y = mid - v*amp;
+        if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var x2=0; x2<=w; x2++){
+      var t2 = (x2/w)*windowSec;
+      var v2 = waveformValue(currentType, t2*currentFreq);
+      var d2 = distort(v2, currentDepth);
+      var y2 = mid - d2*amp;
+      if (x2===0) ctx.moveTo(x2,y2); else ctx.lineTo(x2,y2);
+    }
+    ctx.stroke();
+  }
+
+  function setActiveButton(){
+    waveBtns.forEach(function(b){
+      if (b.getAttribute('data-type') === currentType) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+  }
+
+  function startAudio(){
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    osc = audioCtx.createOscillator();
+    shaper = audioCtx.createWaveShaper();
+    gain = audioCtx.createGain();
+    osc.type = currentType;
+    osc.frequency.value = currentFreq;
+    shaper.curve = buildCurve(currentDepth);
+    gain.gain.value = 0.15;
+    osc.connect(shaper);
+    shaper.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    playing = true;
+    playIcon.className = 'ti ti-player-pause';
+    playLabel.textContent = 'Stop';
+  }
+
+  function stopAudio(){
+    if (osc){ try { osc.stop(); } catch(e){} osc.disconnect(); osc = null; }
+    if (shaper){ shaper.disconnect(); shaper = null; }
+    if (gain){ gain.disconnect(); gain = null; }
+    playing = false;
+    playIcon.className = 'ti ti-player-play';
+    playLabel.textContent = 'Play';
+  }
+
+  playBtn.addEventListener('click', function(){
+    if (playing) stopAudio(); else startAudio();
+  });
+
+  waveBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      currentType = b.getAttribute('data-type');
+      setActiveButton();
+      if (playing && osc) osc.type = currentType;
+      draw();
+    });
+  });
+
+  freqInput.addEventListener('input', function(){
+    currentFreq = parseFloat(freqInput.value);
+    freqOut.textContent = Math.round(currentFreq) + ' Hz';
+    if (playing && osc) osc.frequency.setValueAtTime(currentFreq, audioCtx.currentTime);
+    draw();
+  });
+
+  depthInput.addEventListener('input', function(){
+    currentDepth = parseFloat(depthInput.value);
+    depthOut.textContent = currentDepth < 0.05 ? '0 (clean)' : currentDepth.toFixed(1);
+    if (playing && shaper) shaper.curve = buildCurve(currentDepth);
+    draw();
+  });
+
+  window.addEventListener('resize', function(){ resizeCanvas(); draw(); });
+
+  setActiveButton();
+  resizeCanvas();
+  draw();
+})();
+</script>

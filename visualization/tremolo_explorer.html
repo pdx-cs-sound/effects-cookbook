@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tremolo — AudioExplorer</title>
+<link rel="stylesheet" href="lib/audio_explorer.css">
+<style>
+  :root {
+    color-scheme: light dark;
+    --text: #333;
+    --faint: #888780;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #d8d8d2; }
+  }
+  body {
+    font-family: system-ui, sans-serif;
+    color: var(--text);
+    margin: 1rem;
+    background: transparent;
+  }
+  p.intro { max-width: 44rem; line-height: 1.5; margin-top: 0; }
+</style>
+</head>
+<body>
+<p class="intro">
+The book's tremolo, running live. The sound is a sine tone through
+<code>tremolo()</code> from the <a href="../tremolo/">Tremolo</a> chapter: the gain
+swings between 1 and 1 − depth at the LFO rate. Press Play tone, then move the sliders.
+The display shows the last second of output, drawn with the same conventions as the
+book's figures.
+</p>
+<div id="explorer"></div>
+<script type="module">
+import {AudioExplorer} from "./lib/audio_explorer.js";
+
+new AudioExplorer({
+  mount: document.getElementById("explorer"),
+  processorUrl: "lib/tremolo_processor.js",
+  processorName: "tremolo-processor",
+  controls: [
+    {id: "volume", label: "Volume", min: 0, max: 1, step: 0.01, value: 0.5,
+     format: (v) => Math.round(v * 100) + "%"},
+    {id: "frequency", label: "Tone frequency", min: 110, max: 880, step: 1,
+     value: 220, format: (v) => v + " Hz"},
+    {id: "depth", label: "Tremolo depth", min: 0, max: 1, step: 0.01, value: 0.5,
+     format: (v) => v.toFixed(2)},
+    {id: "rate", label: "Tremolo rate", min: 0.5, max: 15, step: 0.1, value: 5,
+     format: (v) => v.toFixed(1) + " Hz"},
+  ],
+  scope: {
+    seconds: 1.0,
+    gainLabel: "gain: 1 − depth·LFO",
+    description: "Oscilloscope view of the last second of tremolo output: " +
+      "the waveform swells and dips under the LFO-driven gain trace.",
+  },
+});
+</script>
+</body>
+</html>

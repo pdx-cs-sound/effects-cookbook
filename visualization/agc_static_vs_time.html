@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGC vs limiter — static transfer vs time domain</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280; --grid: #e8e8e3; --border: #e2e2dc;
+    --panel: #fafaf8;
+    --unity: #9ca3af; --agc: #2a78d6; --limiter: #e34948;
+    --comp2: #1baf7a; --comp3: #eda100; --input: #8a8880; --target: #4a3aa7;
+    --clipzone: rgba(227, 73, 72, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1a1a19; --fg: #ececec; --muted: #9a988f; --grid: #2c2c2a; --border: #383835;
+            --panel: #232321;
+            --unity: #6b6a66; --agc: #3987e5; --limiter: #e66767;
+            --comp2: #199e70; --comp3: #c98500; --input: #a09e94; --target: #9085e9;
+            --clipzone: rgba(230, 103, 103, 0.14); }
+  }
+  body { margin: 0; padding: 22px; background: var(--bg); color: var(--fg);
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif; }
+  h1 { font-size: 1.1rem; font-weight: 500; margin: 0 0 4px; }
+  p.lede { color: var(--muted); margin: 0 0 18px; max-width: 70ch; font-size: 0.9rem; line-height: 1.6; }
+  .panels { display: flex; flex-wrap: wrap; gap: 18px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+           padding: 14px 16px; flex: 1 1 380px; }
+  .panel h2 { font-size: 0.92rem; font-weight: 500; margin: 0 0 2px; }
+  .panel .sub { color: var(--muted); font-size: 0.78rem; margin: 0 0 8px; }
+  canvas { width: 100%; height: auto; display: block; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; font-size: 0.76rem; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend svg { flex: none; }
+  .note { margin-top: 18px; font-size: 0.82rem; color: var(--muted); max-width: 78ch; line-height: 1.6; }
+  .note strong { color: var(--fg); font-weight: 500; }
+</style>
+</head>
+<body>
+  <h1>AGC vs. limiter — what a static curve can and can't show</h1>
+  <p class="lede">Left: steady-state transfer curves — AGC and a limiter are the same line.
+  Right: the same two effects over time, where they behave nothing alike. The thing that separates
+  them (release time) is a time-domain property, invisible on a static curve.</p>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>1 · static transfer (steady state)</h2>
+      <p class="sub">output dBFS vs input dBFS</p>
+      <canvas id="staticCanvas" width="520" height="360" role="img"
+        aria-label="Static transfer curves. Below threshold all are unity. Above threshold, AGC and limiter flatten identically while 2 to 1 and 3 to 1 compression reduce slope."></canvas>
+      <div class="legend">
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--unity)" stroke-width="2.5" stroke-dasharray="5 4"/></svg>unity (no processing)</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--agc)" stroke-width="3"/></svg>AGC or limiter (∞:1)</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--comp2)" stroke-width="3"/></svg>compression 2:1</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--comp3)" stroke-width="3"/></svg>compression 3:1</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2 · time domain</h2>
+      <p class="sub">level envelopes over time (dBFS) — not waveforms</p>
+      <canvas id="timeCanvas" width="520" height="360" role="img"
+        aria-label="Level envelopes over time. AGC slowly drives the envelope toward the target, but its accumulated boost carries a fast transient past full scale into a shaded clipping region. The limiter passes the signal through unchanged below the ceiling and is drawn bold only where it reduces gain."></canvas>
+      <div class="legend">
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--input)" stroke-width="2.5" stroke-dasharray="4 3"/></svg>input level</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--agc)" stroke-width="3"/></svg>AGC (slow → target)</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--limiter)" stroke-width="3"/></svg>limiter — bold where limiting, unity elsewhere</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--target)" stroke-width="2.5" stroke-dasharray="5 4"/></svg>AGC target (−20 dBFS)</span>
+        <span><svg width="22" height="6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="var(--limiter)" stroke-width="2" stroke-dasharray="2 3"/></svg>limiter ceiling (−10 dBFS)</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="note"><strong>The point:</strong> on the left, "AGC or limiter" is one curve — a
+  steady-state plot cannot distinguish them. On the right, the slow AGC loop rides the whole
+  envelope toward the target; but the gain it accumulated while boosting quiet material carries
+  the fast transient <em>past full scale</em>, into the shaded clipping region — the standard
+  reason an AGC is followed by a limiter. The limiter, by contrast, is one-sided: below the
+  ceiling it passes the input through unchanged — drawn faint, under the dashed gray — and never
+  boosts quiet material. The bold red is where it is actually reducing gain (drawn idealized: no
+  attack or release). The two dashed reference lines belong to different effects: the target is
+  where the AGC steers the average; the ceiling is the line the limiter lets nothing cross. They
+  are set apart on purpose — aim for a comfortable level, guard a margin above it — which is the
+  usual arrangement when the two run in series. Both axes matter, so each
+  effect page pairs a static curve with a time-domain view. <em>Illustrative mock; axes relabeled
+  to dBFS after Woodgate, ISCVE Engineering Note 27.1, Fig. 1.</em></p>
+
+<script>
+(function () {
+  const IN_MIN = -60, IN_MAX = 0, OUT_MIN = -60, OUT_MAX = 0, THRESH = -30;
+  const css = v => getComputedStyle(document.body).getPropertyValue(v).trim() || '#000';
+
+  function frame(canvas) {
+    const ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+    const padL = 46, padR = 14, padT = 14, padB = 34;
+    return { ctx, W, H, x0: padL, x1: W - padR, y0: H - padB, y1: padT };
+  }
+
+  // Panel 1 — static transfer
+  (function () {
+    const f = frame(document.getElementById('staticCanvas'));
+    const { ctx, x0, x1, y0, y1 } = f;
+    ctx.clearRect(0, 0, f.W, f.H);
+    ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted');
+    ctx.lineWidth = 1; ctx.font = '11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    for (let v = IN_MIN; v <= IN_MAX; v += 10) {
+      const x = x0 + (v - IN_MIN) / (IN_MAX - IN_MIN) * (x1 - x0);
+      ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1); ctx.stroke();
+      ctx.fillText(v, x, y0 + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let v = OUT_MIN; v <= OUT_MAX; v += 10) {
+      const y = y0 + (v - OUT_MIN) / (OUT_MAX - OUT_MIN) * (y1 - y0);
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+      ctx.fillText(v, x0 - 6, y + 3);
+    }
+    ctx.textAlign = 'center'; ctx.fillText('input dBFS', (x0 + x1) / 2, y0 + 30);
+    ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('output dBFS', 0, 0); ctx.restore();
+
+    const sx = v => x0 + (v - IN_MIN) / (IN_MAX - IN_MIN) * (x1 - x0);
+    const sy = v => y0 + (v - OUT_MIN) / (OUT_MAX - OUT_MIN) * (y1 - y0);
+
+    ctx.strokeStyle = css('--border'); ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(sx(THRESH), y0); ctx.lineTo(sx(THRESH), y1); ctx.stroke();
+    ctx.setLineDash([]);
+
+    const curve = (fn, color, dash, w) => {
+      ctx.strokeStyle = color; ctx.lineWidth = w || 2.4; ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      for (let i = IN_MIN; i <= IN_MAX; i += 0.5) {
+        const X = sx(i), Y = sy(fn(i));
+        i === IN_MIN ? ctx.moveTo(X, Y) : ctx.lineTo(X, Y);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    };
+    const comp = (i, r) => i <= THRESH ? i : THRESH + (i - THRESH) / r;
+    curve(i => i, css('--unity'), [5, 4], 1.6);   // unity
+    curve(i => comp(i, 3), css('--comp3'));       // 3:1
+    curve(i => comp(i, 2), css('--comp2'));       // 2:1
+    curve(i => i <= THRESH ? i : THRESH, css('--agc'), [], 2.8); // ∞:1
+  })();
+
+  // Panel 2 — time domain (level envelopes, NOT waveforms)
+  (function () {
+    const f = frame(document.getElementById('timeCanvas'));
+    const { ctx, x0, x1, y0, y1 } = f;
+    const N = 240, target = -20, ceiling = -10, maxGain = 22, a = 0.97;
+    const Y_MAX = 6;   // headroom above 0 dBFS so clipping is shown, not cropped
+
+    // Input: quiet -> loud (above the ceiling, so the limiter visibly limits) -> quiet,
+    // plus one fast transient wide enough to see.
+    const input = new Array(N);
+    for (let i = 0; i < N; i++) {
+      const t = i / N;
+      input[i] = t < 0.25 ? -35 : t < 0.55 ? -6 : -28;
+    }
+    for (let k = 0; k < 10; k++) input[180 + k] = -2;
+
+    // AGC: smoothed level -> slow gain integrator toward the target. The output trace is
+    // deliberately not clamped: the boost accumulated on quiet material carries the
+    // transient past 0 dBFS, into the clipping region.
+    const agc = new Array(N); let g = 0, sm = input[0];
+    for (let i = 0; i < N; i++) {
+      sm = a * sm + (1 - a) * input[i];
+      g = a * g + (1 - a) * (target - sm);
+      g = Math.max(-maxGain, Math.min(maxGain, g));
+      agc[i] = input[i] + g;
+    }
+    // Limiter: idealized instantaneous clamp at the ceiling (no ballistics).
+    const lim = input.map(v => Math.min(v, ceiling));
+
+    ctx.clearRect(0, 0, f.W, f.H);
+    const syt = v => { v = Math.max(OUT_MIN, Math.min(Y_MAX, v));
+                       return y0 + (v - OUT_MIN) / (Y_MAX - OUT_MIN) * (y1 - y0); };
+
+    // Shaded clipping region above 0 dBFS.
+    ctx.fillStyle = css('--clipzone');
+    ctx.fillRect(x0, syt(Y_MAX), x1 - x0, syt(0) - syt(Y_MAX));
+    ctx.fillStyle = css('--limiter'); ctx.font = '10px system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('clipping — over full scale', x1 - 6, syt(0) - 5);
+
+    // Grid, with the 0 dBFS line emphasized.
+    ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted');
+    ctx.lineWidth = 1; ctx.font = '11px system-ui, sans-serif'; ctx.textAlign = 'right';
+    for (let v = OUT_MIN; v <= 0; v += 10) {
+      ctx.beginPath(); ctx.moveTo(x0, syt(v)); ctx.lineTo(x1, syt(v)); ctx.stroke();
+      ctx.fillText(v, x0 - 6, syt(v) + 3);
+    }
+    ctx.strokeStyle = css('--muted'); ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, syt(0)); ctx.lineTo(x1, syt(0)); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.fillStyle = css('--muted');
+    ctx.fillText('time →', (x0 + x1) / 2, y0 + 30);
+    ctx.save(); ctx.translate(13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('level dBFS', 0, 0); ctx.restore();
+
+    const sxt = i => x0 + i / (N - 1) * (x1 - x0);
+    const line = (arr, color, dash, w) => {
+      ctx.strokeStyle = color; ctx.lineWidth = w || 2; ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) { const X = sxt(i), Y = syt(arr[i]); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+      ctx.stroke(); ctx.setLineDash([]);
+    };
+
+    // Draw order: target at the bottom of the stack; then the limiter; then the dashed
+    // input on top of it, so the input stays visible where the two coincide; AGC last.
+    ctx.strokeStyle = css('--target'); ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, syt(target)); ctx.lineTo(x1, syt(target)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // The limiter's own reference level, annotated like the AGC's target: two
+    // parameters of two different effects, deliberately set apart.
+    ctx.strokeStyle = css('--limiter'); ctx.setLineDash([2, 3]); ctx.lineWidth = 1.2;
+    ctx.globalAlpha = 0.75;
+    ctx.beginPath(); ctx.moveTo(x0, syt(ceiling)); ctx.lineTo(x1, syt(ceiling)); ctx.stroke();
+    ctx.globalAlpha = 1.0; ctx.setLineDash([]);
+
+    // Limiter: faint where it is unity (output = input), bold only where it limits,
+    // so inactivity does not read as behavior.
+    ctx.globalAlpha = 0.3;
+    line(lim, css('--limiter'), [], 1.5);
+    ctx.globalAlpha = 1.0;
+    ctx.strokeStyle = css('--limiter'); ctx.lineWidth = 2.6; ctx.beginPath();
+    let pen = false;
+    for (let i = 0; i < N; i++) {
+      if (input[i] > ceiling) {
+        const X = sxt(i), Y = syt(lim[i]);
+        pen ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+        pen = true;
+      } else {
+        pen = false;
+      }
+    }
+    ctx.stroke();
+
+    line(input, css('--input'), [4, 3], 2);
+    line(agc, css('--agc'), [], 2.8);
+  })();
+})();
+</script>
+</body>
+</html>

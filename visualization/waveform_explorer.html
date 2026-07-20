@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waveforms — AudioExplorer</title>
+<link rel="stylesheet" href="lib/audio_explorer.css">
+<style>
+  :root {
+    color-scheme: light dark;
+    --text: #333;
+    --faint: #888780;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #d8d8d2; }
+  }
+  body {
+    font-family: system-ui, sans-serif;
+    color: var(--text);
+    margin: 1rem;
+    background: transparent;
+  }
+  p.intro { max-width: 44rem; line-height: 1.5; margin-top: 0; }
+</style>
+</head>
+<body>
+<p class="intro">
+The oscillators of the <a href="../waveforms/">Waveforms</a> chapter, running live. All
+five shapes play at the same peak amplitude and sound neither equally bright nor equally
+loud. The reverse sawtooth is the sawtooth's mirror image, and as a tone the two are
+indistinguishable. The shapes are the naive versions, so the square and sawtooth alias
+audibly near the top of the frequency range. The display shows three cycles of the
+output.
+</p>
+<div id="explorer"></div>
+<script type="module">
+import {AudioExplorer} from "./lib/audio_explorer.js";
+
+new AudioExplorer({
+  mount: document.getElementById("explorer"),
+  processorUrl: "lib/waveform_processor.js",
+  processorName: "waveform-processor",
+  controls: [
+    {id: "shape", type: "select", label: "Waveform", value: 0, options: [
+      {label: "sine", value: 0},
+      {label: "square", value: 1},
+      {label: "sawtooth", value: 2},
+      {label: "reverse sawtooth", value: 3},
+      {label: "triangle", value: 4},
+    ]},
+    {id: "volume", label: "Volume", min: 0, max: 1, step: 0.01, value: 0.5,
+     format: (v) => Math.round(v * 100) + "%"},
+    {id: "frequency", label: "Frequency", min: 55, max: 3520, scale: "log",
+     value: 220, format: (v) => Math.round(v) + " Hz"},
+  ],
+  scope: {
+    mode: "cycles",
+    gainLabel: null,
+    description: "Oscilloscope view of three cycles of the selected " +
+      "waveform at the chosen volume and frequency.",
+  },
+});
+</script>
+</body>
+</html>
