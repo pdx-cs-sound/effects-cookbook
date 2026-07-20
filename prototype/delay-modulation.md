@@ -43,6 +43,12 @@ by $g$, so the repeats decay geometrically.
 --8<-- "code/delays.py:echo"
 ```
 
+![A single impulse into an echo: the dry impulse at time zero, then a train of taps every 250 milliseconds, each 0.6 times the height of the last.](img/echo_impulse.svg)
+
+*The echo's impulse response (`code/make_figures.py`, run through this page's `echo`).
+Feedback is the whole picture: every tap is the previous tap times the feedback factor,
+which is a geometric decay.*
+
 ## Key parameters
 
 | Parameter | What it controls |

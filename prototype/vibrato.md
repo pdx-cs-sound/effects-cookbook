@@ -52,6 +52,15 @@ $$
 --8<-- "code/delays.py:vibrato"
 ```
 
+![The delay commanded by the LFO, sweeping between 5 and 7 milliseconds over two cycles at 5 hertz.](img/vibrato_sweep.svg)
+
+![The pitch offset produced by the sweep, in percent, zero at the sweep's turning points and largest between them.](img/vibrato_pitch.svg)
+
+*The sweep and its result (`code/make_figures.py`). The two figures share a time axis,
+and the marked turning point lines up with a zero crossing of the pitch offset. Pitch
+follows the slope of the delay, not its value, so the pitch offset runs a quarter cycle
+behind the sweep, and the deepest drop lands where the delay climbs fastest.*
+
 !!! warning "Pitfalls"
     - Too much depth or rate stops sounding like vibrato. Wide fast sweeps read as a
       siren or as seasickness. Musical settings stay small.

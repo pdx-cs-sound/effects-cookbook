@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
 
 from compressor import compress, db_from_amplitude
+from delays import allpass, comb, echo
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
                          sine_shape, sine_wave, square_shape, tremolo,
                          triangle_shape)
@@ -659,6 +660,147 @@ def fig_tremolo():
     plot.save("tremolo.svg")
 
 
+# --------------------------------------------------------------------------
+# Figures: delay & modulation (Chapter 7)
+# --------------------------------------------------------------------------
+
+def fig_echo_impulse():
+    """The echo's impulse response: a geometric train of taps."""
+    sr = 8000
+    feedback = 0.6
+    x = [1.0] + [0.0] * (sr * 3 // 2 - 1)
+    y = echo(x, sr, delay_ms=250.0, feedback=feedback, mix=0.5)
+
+    plot = Plot(520, 320, (0, 1.5), (0, 0.55),
+                "Echo: impulse response",
+                "A single impulse into an echo with 250 ms delay, feedback "
+                "0.6, and mix 0.5. The dry impulse passes through at time "
+                "zero, and each later tap is the previous tap times the "
+                "feedback factor, a geometric decay.")
+    plot.grid(0.25, 0.1, "time (s)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.2f}", y_tick_fmt=lambda v: f"{v:.1f}")
+
+    for n, v in enumerate(y):
+        if abs(v) > 1e-6:
+            t = n / sr
+            color = GRAY if n == 0 else BLUE
+            plot.line([t, t], [0.0, v], color, 2.6)
+    plot.legend([
+        ("dry impulse, through the mix", GRAY, None, 2.6),
+        ("echo taps, each 0.6 \u00d7 the last", BLUE, None, 2.6),
+    ], x=plot.x0 + 220, y=plot.y1 + 16)
+    plot.save("echo_impulse.svg")
+
+
+def fig_vibrato_sweep():
+    """The vibrato control signal: delay versus time."""
+    rate, depth, base = 5.0, 2.0, 5.0
+    n_pts = 400
+    t_end = 0.4
+    ts = [i * t_end / n_pts for i in range(n_pts + 1)]
+    delay = [base + depth * (0.5 + 0.5 * math.sin(2.0 * math.pi * rate * t))
+             for t in ts]
+
+    plot = Plot(520, 300, (0, t_end), (4, 8),
+                "Vibrato: the delay sweep",
+                "The delay the LFO commands, over two cycles at 5 Hz: a sine "
+                "sweep between 5 and 7 ms. A vertical reference marks a "
+                "turning point of the sweep, where the delay is momentarily "
+                "steady.")
+    plot.grid(0.1, 1.0, "time (s)", "delay (ms)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.ref_vertical(0.05, "delay turning point")
+    plot.line(ts, delay, GREEN, 2.4)
+    plot.legend([
+        ("delay = base + depth \u00b7 LFO", GREEN, None, 2.4),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("vibrato_sweep.svg")
+
+
+def fig_vibrato_pitch():
+    """The pitch offset the sweep in fig_vibrato_sweep produces."""
+    rate, depth = 5.0, 2.0
+    n_pts = 400
+    t_end = 0.4
+    ts = [i * t_end / n_pts for i in range(n_pts + 1)]
+    # d(delay in samples)/dn = pi * rate * depth_s * cos(2 pi rate t);
+    # the output pitch is scaled by 1 minus that slope.
+    offset = [-100.0 * math.pi * rate * (depth / 1000.0)
+              * math.cos(2.0 * math.pi * rate * t) for t in ts]
+
+    plot = Plot(520, 300, (0, t_end), (-4, 4),
+                "Vibrato: the resulting pitch offset",
+                "The pitch offset produced by the delay sweep above, in "
+                "percent. Pitch follows the slope of the delay, not its "
+                "value: the offset is zero at the sweep's turning points and "
+                "largest where the delay crosses its center.")
+    plot.grid(0.1, 2.0, "time (s)", "pitch offset (%)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.ref_level(0.0, "no pitch shift")
+    plot.ref_vertical(0.05, "delay turning point")
+    plot.line(ts, offset, BLUE, 2.4)
+    plot.legend([
+        ("pitch offset = \u2212slope of delay", BLUE, None, 2.4),
+    ], x=plot.x0 + 14, y=plot.y1 + 16)
+    plot.save("vibrato_pitch.svg")
+
+
+def _reverb_wet(x, sr, decay, with_allpasses):
+    """The reverberator's wet path, optionally stopping before the allpasses."""
+    wet = [0.0] * len(x)
+    for ms in (29.7, 37.1, 41.1, 43.7):
+        for i, v in enumerate(comb(x, sr, ms, decay)):
+            wet[i] += 0.25 * v
+    if with_allpasses:
+        for ms in (5.0, 1.7):
+            wet = allpass(wet, sr, ms)
+    return wet
+
+
+def fig_reverb_combs():
+    """The comb bank alone: a decaying but countable spike pattern."""
+    sr = 8000
+    x = [1.0] + [0.0] * (sr * 2 // 5 - 1)
+    y = _reverb_wet(x, sr, decay=0.84, with_allpasses=False)
+    ts = [n / sr for n in range(len(y))]
+
+    plot = Plot(520, 300, (0, 0.4), (-1, 1),
+                "Reverb: the comb bank alone",
+                "The impulse response of the four parallel combs before the "
+                "allpass stages. The echoes decay, but they stay sparse and "
+                "countable, and the sparseness is audible as discrete "
+                "flutter rather than a wash.")
+    plot.grid(0.1, 0.5, "time (s)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    plot.line(ts, y, GREEN, 1.0)
+    plot.legend([
+        ("four combs, summed", GREEN, None, 1.0),
+    ], x=plot.x0 + 320, y=plot.y1 + 16)
+    plot.save("reverb_combs.svg")
+
+
+def fig_reverb_tail():
+    """The full wet path: the allpasses fill the gaps between echoes."""
+    sr = 8000
+    x = [1.0] + [0.0] * (sr * 2 // 5 - 1)
+    y = _reverb_wet(x, sr, decay=0.84, with_allpasses=True)
+    ts = [n / sr for n in range(len(y))]
+
+    plot = Plot(520, 300, (0, 0.4), (-1, 1),
+                "Reverb: combs plus allpasses",
+                "The same comb bank followed by the two series allpass "
+                "stages. The decay is unchanged, but each echo is smeared "
+                "into a cluster and the gaps fill in, which is the density a "
+                "room has and the comb bank lacks.")
+    plot.grid(0.1, 0.5, "time (s)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    plot.line(ts, y, BLUE, 1.0)
+    plot.legend([
+        ("combs, then allpasses", BLUE, None, 1.0),
+    ], x=plot.x0 + 320, y=plot.y1 + 16)
+    plot.save("reverb_tail.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -673,3 +815,8 @@ if __name__ == "__main__":
     fig_waveforms()
     fig_phase_accumulator()
     fig_tremolo()
+    fig_echo_impulse()
+    fig_vibrato_sweep()
+    fig_vibrato_pitch()
+    fig_reverb_combs()
+    fig_reverb_tail()

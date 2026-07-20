@@ -95,6 +95,20 @@ Proposed sections for every effect entry:
   - **Visualization & display = runs in the browser** (JavaScript / Web Audio / Canvas — exact
     stack TBD). Whatever powers the visuals must run client-side in the rendered docs.
 
+**Settled (2026-07-19) — interactive-sound stack: the AudioExplorer library.**
+Plain JavaScript and Canvas, no dependencies, as a small in-repo library under
+`prototype/visualization/lib/`: `audio_explorer.js` (harness: the play/stop gesture the
+browser requires, labeled sliders with readouts, rolling scope view in the figure color
+grammar), `explorer_processor_base.js` (AudioWorklet base: parameter smoothing so a
+moving slider cannot click, full-scale clamp, scope columns), and one kernel + processor
+pair per effect. A kernel is a direct port of the book's Python and touches nothing
+Web-Audio-specific, so the same module runs under Node; `code/test_worklet_ports.py`
+compares each kernel against its Python original sample by sample in CI. Native Web
+Audio nodes are deliberately avoided for the DSP: `OscillatorNode` is bandlimited and
+`DelayNode` interpolates its own way, which would contradict what the pages teach.
+Defaults per Ed: conservative volume (50 %), sine first, good starting parameters.
+First instance: `tremolo_explorer.html` in the Visualizations appendix.
+
 **Settled (2026-07-05) — visualization taxonomy, by interface:**
 
 | Type | Examples | Produced by |
@@ -112,8 +126,6 @@ decisions after. Generator scripts are repo infrastructure (like tests), not tea
 - **Conventions chapter scope:** how much foundational material (samples, dB/dBFS math, peak
   vs RMS, gain, time constants) lives in Chapter 1 vs. is restated per effect.
   *(The earlier dBA-only / A-weighting question is closed — dBFS is the unit. See Decision Log.)*
-- **Visualization stack:** which browser tech for the *interactive* tiers (plain Canvas? a
-  charting lib?). Deliberately deferred until the first embedded visuals get feedback.
 - **Authoring workflow** (who writes, how reviewed, branch/PR process).
 - **Per-effect companion notebook?** (yes/no — pairs with MkDocs page).
 - **Loudness / LUFS / psychoacoustics** (phon, sone, LUFS, A-weighting/dBA): **deferred** —
@@ -230,6 +242,7 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-06-27 | Plan **two visuals per effect** (static transfer curve + time-domain) | A static curve can't distinguish AGC from a limiter; the difference is in the time domain |
 | 2026-06-30 | **Units-rigor policy** (Conventions page): dB always names a reference; power=10·log / amplitude=20·log; dBFS reference = full scale 1.0; **primary = dBFS (peak)**; always label peak/RMS; **decline the AES17 RMS offset** (full-scale sine = −3.01 dBFS RMS, so the peak/RMS gap teaches crest factor) | Direct response to "be rigorous about units" feedback; one honest reference beats meter-matching at depth 1–2 |
 | 2026-06-30 | Distinguish **level (objective dB) vs loudness (perceptual) vs volume (a control)**; "louder" = higher level in dB, never "twice as loud" | The exact confusion that makes unit usage sloppy |
+| 2026-07-19 | **Interactive-sound stack = AudioExplorer**: plain JS/Canvas library + AudioWorklet kernels that are line-for-line ports of the book's Python, golden-tested against it under Node in CI; native Web Audio nodes rejected for DSP | A second implementation may not contradict the book (OscillatorNode is bandlimited, hiding the aliasing ch. 3–4 teach); ports + golden tests keep the demo the book's own algorithm |
 | 2026-06-30 | **Defer loudness/LUFS/psychoacoustics** (phon, sone, LUFS, A-weighting/dBA) — mention only, marked TBD | Needs SPL + hearing models, outside the sample domain; keep v1 scoped |
 | 2026-07-01 | **Configurable reference compressor**: `code/compressor.py` — one engine whose kwargs are the decision-map rows; five reference impls as `PRESETS`; program-dependent ballistics sketched in prose only; sox Bézier knee documented as collapsing to the quad spline for a single knee. (Not called "capstone" — that names the PSU CS undergrad final project.) | The decision map made executable; ~230 lines plays every valid path |
 | 2026-07-01 | **Tests via stdlib `unittest`** (`code/test_compressor.py`); "no harness" non-goal clarified: it bans harness/deps in *teaching snippets*, not repo test infrastructure | Signal-level assertions (unity, ratio math, ceilings, preset pairwise-difference) caught a real lookahead alignment bug on first run |
