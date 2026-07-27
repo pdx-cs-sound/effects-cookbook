@@ -463,7 +463,7 @@ def fig_envelope_follower():
     plot = Plot(520, 360, (0, 0.35), (0, 0.6),
                 "An envelope follower tracing a burst",
                 "The magnitude of a quiet-loud-quiet tone, drawn as a filled "
-                "region, and the one-pole envelope that follows it: the "
+                "region, and the smoothed envelope that follows it: the "
                 "envelope rises with the burst in about 5 ms (attack) and "
                 "decays after it in about 50 ms (release). It rides below "
                 "the crests, because each crest lasts an instant while the "

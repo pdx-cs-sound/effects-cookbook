@@ -269,7 +269,7 @@ choice of detector shifts the measured level, so readings are always labeled dBF
 or dBFS (RMS).
 
 Following a level over time is covered in [Chapter 5](envelopes.md), with attack,
-release, and the one-pole envelope follower.
+release, and the envelope follower.
 
 ## Pitfalls
 

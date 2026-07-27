@@ -3,7 +3,7 @@
 > An envelope is a curve that describes how a signal's level changes over time: the
 > outline of the signal's body, ignoring the wiggles inside it.
 
-*Chapter 5 — envelopes & tremolo. The code below is included at build time from
+*Chapter 5 — tremolo & envelopes. The code below is included at build time from
 `code/oscillators.py`, which is tested and drawn from by the figures.*
 
 ---
@@ -18,19 +18,35 @@ uses a generated control curve. The follower below produces the measured one tha
 
 ## Following level over time: attack & release
 
-Effects rarely react instantly, because an instantaneous gain change distorts. The response is
-smoothed with two time constants:
+Effects rarely react instantly, because an instantaneous gain change distorts. The response
+is smoothed with two settings:
 
 - Attack: how quickly the effect responds when the level rises.
 - Release: how quickly it relaxes when the level falls.
 
-The standard tool is a one-pole smoother, also called an exponential follower. A
-coefficient derived from a time constant of $t$ milliseconds controls how sluggish it is,
-and each step moves the envelope partway toward the target:
+The standard tool is an exponential moving average, the same smoothing that load averages
+and download-time estimates use. Each sample, the envelope moves a fixed fraction of the
+remaining distance toward its target, here the current magnitude. A coefficient $c$
+between 0 and 1 sets the fraction: the envelope keeps $c$ of its previous value and takes
+$1 - c$ of the target, so a $c$ near 1 is sluggish and a smaller $c$ snaps.
 
 $$
-c = e^{-1000 / (f_s \, t)}, \qquad e[n] = c \cdot e[n-1] + (1 - c) \cdot |x[n]|
+e[n] = c \cdot e[n-1] + (1 - c) \cdot |x[n]|
 $$
+
+Attack and release are two values of $c$, chosen by direction: the attack coefficient
+applies while the target is above the envelope, the release coefficient while it is
+below. The settings are given in milliseconds rather than as bare coefficients, since a
+response time is what a listener can judge, and the coefficient for a response time of
+$t$ milliseconds at sample rate $f_s$ is
+
+$$
+c = e^{-1000 / (f_s \, t)}
+$$
+
+The filter literature calls this smoother a one-pole filter, for a reason
+[Chapter 9](filters.md) explains. Later pages use that name because it is the term
+other references use.
 
 ```python
 --8<-- "code/oscillators.py:follow"
@@ -40,7 +56,7 @@ The follow pattern (measure, then smooth toward the measurement) is the backbone
 effect in [Chapter 6](compression.md). The effects differ mainly in what they do with the
 smoothed level.
 
-![Rectified samples of a quiet–loud–quiet tone, with the one-pole envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
+![Rectified samples of a quiet–loud–quiet tone, with the smoothed envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
 
 *The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
 gray region is the input's magnitude, the value the follower chases. The blue line is the
@@ -50,14 +66,14 @@ it ends (release). The amplitude axis is linear, like the transfer curves of
 
 The envelope does not reach the crests, and the gap is not an error. Each crest of the
 magnitude lasts an instant, while the follower's 5 ms attack spans several 2 ms humps of
-the rectified tone: the follower charges partway up during each hump, decays slightly
-between humps, and settles where the two balance. A one-pole follower reports a smoothed
-magnitude, not the true peak. Lengthening the attack widens that gap but shrinks the
+the rectified tone: the follower closes part of the remaining gap during each hump,
+gives some back between humps, and settles where the two balance. The follower reports a
+smoothed magnitude, not the true peak. Lengthening the attack widens that gap but shrinks the
 residual ripple. Shortening it does the reverse. Every effect in
 [Chapter 6](compression.md) inherits this trade.
 
 !!! warning "Pitfall"
-    Sample rate is part of every time constant. The same `attack_ms` gives a different
+    Sample rate is part of every attack and release setting. The same `attack_ms` gives a different
     coefficient at 44 100 samples per second than at 48 000; always pass `sr` through.
 
 ## Where this leads

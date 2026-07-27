@@ -14,6 +14,11 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
 - [x] Feedback specifics batch done (2026-07-13): bit-crush arbitrary levels; asymmetric
       clipping (+ figure curve); sawtooth rising/falling; AGC reworked to fast attack /
       slow release (Woodgate-backed; Ed still owns extra reference validation)
+- [x] AGC reference research closed (2026-07-27): finding = the term migrated, not the
+      function — offline loudness normalization (BS.1770/R128) absorbed the transparent
+      job, real-time AGC survives in telephony (ITU-T G.169, WebRTC AGC2), hearing aids
+      (Kates AGC-i/AGC-o), and SDR. Verified sources + possible agc.md additions in
+      `research/agc-in-the-digital-world.md`
 - [x] Tone batch done (2026-07-13): STYLE.md rules 10 (plain punctuation) and 11 (no
       idioms); full-book sweep of dashes/semicolons/kickers/reversals/idioms; two stale
       Chapter-7 links caught by the audit and fixed
@@ -67,6 +72,14 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
 ## Content
+- [x] Chapter 5 swapped to tremolo-first (2026-07-19 feedback): nav, chapter title now
+      "Tremolo & envelopes", subtitles, index, waveforms lead-out, DESIGN structure
+      note; tremolo's sibling reference relabeled (was "[Chapter 5](envelopes.md)")
+- [x] Envelopes page reworded digital-first (2026-07-19 feedback: read like an analog
+      description): exponential moving average is the primary framing, coefficient c
+      before the ms formula, two-coefficient attack/release form shown (matches
+      follow()), capacitor verbs removed, "one-pole" demoted to the literature's name
+      with a Chapter 9 pointer; conventions forward-ref and figure desc updated
 - [x] Configurable reference compressor exercising every decision-map choice
       (`code/compressor.py`, 5 reference presets) + stdlib unittest suite
       (`code/test_compressor.py`, 23 tests) — run `python3 -m unittest discover -s code`

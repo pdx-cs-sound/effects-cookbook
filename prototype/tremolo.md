@@ -3,7 +3,7 @@
 > Tremolo varies a signal's volume periodically: an LFO drives the gain up and down at a
 > rate set by a clock, not by the signal.
 
-*Chapter 5 — envelopes & tremolo. A generated control curve pointed at volume; the
+*Chapter 5 — tremolo & envelopes. A generated control curve pointed at volume; the
 companding effects of [Chapter 6](compression.md) replace its clock with a level
 detector.*
 
@@ -65,7 +65,8 @@ Included at build time from `code/oscillators.py`:
       chopping.
     - A square LFO changes the gain instantaneously, and instantaneous gain changes click
       (the same fact that motivates attack and release in
-      [Chapter 5](envelopes.md)). Hardware tremolos smooth the square's edges.
+      [Envelopes](envelopes.md), this chapter's next page). Hardware tremolos smooth the
+      square's edges.
     - Push the rate past roughly 20 Hz and the modulation itself becomes audible as new
       frequencies around the tone, not as movement. That boundary is the 20 Hz LFO
       definition from [Chapter 4](waveforms.md), approached from above.

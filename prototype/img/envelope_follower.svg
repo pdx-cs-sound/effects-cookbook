@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360" role="img" aria-label="An envelope follower tracing a burst">
 <title>An envelope follower tracing a burst</title>
-<desc>The magnitude of a quiet-loud-quiet tone, drawn as a filled region, and the one-pole envelope that follows it: the envelope rises with the burst in about 5 ms (attack) and decays after it in about 50 ms (release). It rides below the crests, because each crest lasts an instant while the attack spans several. Linear amplitude, not dB.</desc>
+<desc>The magnitude of a quiet-loud-quiet tone, drawn as a filled region, and the smoothed envelope that follows it: the envelope rises with the burst in about 5 ms (attack) and decays after it in about 50 ms (release). It rides below the crests, because each crest lasts an instant while the attack spans several. Linear amplitude, not dB.</desc>
 <g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
 <line x1="46.0" y1="326" x2="46.0" y2="14"/>
 <line x1="177.4" y1="326" x2="177.4" y2="14"/>

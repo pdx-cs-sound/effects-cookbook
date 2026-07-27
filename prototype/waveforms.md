@@ -122,8 +122,8 @@ and the swept delays of [Chapter 7](vibrato.md) are driven the same way.
 
 ## Where this leads
 
-[Chapter 5](envelopes.md) takes up envelopes, and its [tremolo](tremolo.md) puts this
-chapter's LFO on a volume knob. [Chapter 7](delay-modulation.md) points LFOs at delay
+[Chapter 5](tremolo.md) puts this chapter's LFO on a volume knob (tremolo), then takes
+up the [envelopes](envelopes.md) that Chapter 6 runs on. [Chapter 7](delay-modulation.md) points LFOs at delay
 times instead of volume. [Chapter 8](frequency-domain.md) returns to the sine and makes
 the sum-of-sines claim precise.
 

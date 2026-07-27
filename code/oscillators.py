@@ -68,7 +68,7 @@ def reverse_sawtooth_shape(phase):
 
 # --8<-- [start:follow]
 def smoothing_coeff(time_ms, sr):
-    """One-pole coefficient for a given time constant at sample rate sr."""
+    """Smoothing coefficient for a response time of time_ms at sample rate sr."""
     return math.exp(-1.0 / (sr * time_ms / 1000.0))
 
 

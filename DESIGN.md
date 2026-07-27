@@ -31,7 +31,7 @@ Cookbook ethos: consistent template per effect, copy-pasteable, learn-by-doing.
 - **Structure: eleven chapters** (2026-07-13, from meeting feedback; supersedes the
   ten-chapter plan). Ordered by machinery:
   1. Introduction. 2. Measuring sound. 3. Single-sample effects (volume, distortion, bit
-  crush; mu-law dropped). 4. Waveforms & oscillators. 5. Envelopes & tremolo. 6. Companding
+  crush; mu-law dropped). 4. Waveforms & oscillators. 5. Tremolo & envelopes (tremolo first, 2026-07-19). 6. Companding
   (compression, limiter, expander, AGC). 7. Delay & modulation. 8. The frequency domain.
   9. Filters. 10. DFT/FFT/STFT. 11. Frequency-domain effects.
   Chapters 1-7 are specified in more detail than 8-11; the complexity trend is the point.

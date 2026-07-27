@@ -24,7 +24,7 @@ nothing after.
    crush.
 4. **[Waveforms & oscillators](waveforms.md)** — sines and other waveforms, oscillators,
    LFOs.
-5. **Envelopes & tremolo** — [Envelopes](envelopes.md), [Tremolo](tremolo.md).
+5. **Tremolo & envelopes** — [Tremolo](tremolo.md), [Envelopes](envelopes.md).
 6. **Companding** — [Compression](compression.md), [Limiting](limiter.md),
    [Expanding](expander.md), [AGC](agc.md).
 7. **Delay & modulation** — [Delay lines & echo](delay-modulation.md),
