@@ -27,6 +27,9 @@ from xml.sax.saxutils import escape
 
 from compressor import compress, db_from_amplitude
 from delays import allpass, comb, echo
+from filters import (FIRST_DIFFERENCE, biquad, fir, frequency_response,
+                     moving_average, one_pole, rbj_lowpass)
+from frequency import sine_amount
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
                          sine_shape, sine_wave, square_shape, tremolo,
                          triangle_shape)
@@ -801,6 +804,136 @@ def fig_reverb_tail():
     plot.save("reverb_tail.svg")
 
 
+# --------------------------------------------------------------------------
+# Figures: frequency domain (Chapter 8)
+# --------------------------------------------------------------------------
+
+def fig_waveform_spectra():
+    """Measured spectra of the square and sawtooth: which harmonics exist."""
+    sr, f0 = 8000, 100.0
+    saw = oscillator(sawtooth_shape, f0, 1.0, sr)
+    sq = oscillator(square_shape, f0, 1.0, sr)
+
+    plot = Plot(520, 320, (0, 1600), (0, 1.5),
+                "Spectra of the square and sawtooth",
+                "Amplitude of each harmonic of a 100 Hz square and sawtooth, "
+                "measured with the probe on this page. The sawtooth carries "
+                "every harmonic and the square only the odd ones, and both "
+                "sets fall off as one over the harmonic number.")
+    plot.grid(200, 0.5, "frequency (Hz)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    for n in range(1, 16):
+        f = n * f0
+        a_saw = sine_amount(saw, sr, f)
+        a_sq = sine_amount(sq, sr, f)
+        plot.line([f - 8, f - 8], [0.0, a_sq], BLUE, 2.6)
+        plot.line([f + 8, f + 8], [0.0, a_saw], GREEN, 2.6)
+    plot.legend([
+        ("square: odd harmonics only", BLUE, None, 2.6),
+        ("sawtooth: every harmonic", GREEN, None, 2.6),
+    ], x=plot.x0 + 220, y=plot.y1 + 16)
+    plot.save("waveform_spectra.svg")
+
+
+def fig_aliasing():
+    """Two sines that share every sample: folding made visible."""
+    sr = 8000
+    t_end = 0.002
+    fine = 400
+    ts = [i * t_end / fine for i in range(fine + 1)]
+    low = [0.8 * math.sin(2.0 * math.pi * 1000.0 * t) for t in ts]
+    high = [0.8 * math.sin(2.0 * math.pi * 9000.0 * t) for t in ts]
+
+    plot = Plot(520, 320, (0, t_end * 1000.0), (-1.05, 1.05),
+                "Aliasing: two tones, one set of samples",
+                "A 9000 Hz sine and a 1000 Hz sine drawn continuously over "
+                "two milliseconds, with the samples an 8000 samples per "
+                "second system takes. Every sample lands where the two "
+                "curves cross, so the samples cannot tell the tones apart.")
+    plot.grid(0.5, 0.5, "time (ms)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    plot.line([t * 1000.0 for t in ts], high, RED, 1.4, opacity=0.75)
+    plot.line([t * 1000.0 for t in ts], low, BLUE, 2.2, opacity=0.85)
+    for i in range(int(t_end * sr) + 1):
+        tms = i / sr * 1000.0
+        v = 0.8 * math.sin(2.0 * math.pi * 1000.0 * i / sr)
+        plot.line([tms, tms], [0.0, v], GRAY, 2.4)
+    plot.legend([
+        ("9000 Hz, above Nyquist", RED, None, 1.4),
+        ("1000 Hz, its alias", BLUE, None, 2.2),
+        ("the shared samples", GRAY, None, 2.4),
+    ], x=plot.x0 + 320, y=plot.y1 + 16)
+    plot.save("aliasing.svg")
+
+
+# --------------------------------------------------------------------------
+# Figures: filters (Chapter 9)
+# --------------------------------------------------------------------------
+
+def fig_fir_response():
+    """The 8-tap moving average, measured with probe tones."""
+    sr = 8000
+    freqs = [40.0 * k for k in range(1, 100)]
+    gains = frequency_response(lambda x: fir(x, moving_average(8)), sr, freqs)
+    diff = frequency_response(lambda x: fir(x, FIRST_DIFFERENCE), sr, freqs)
+
+    plot = Plot(520, 320, (0, 4000), (0, 1.1),
+                "Two FIR responses, measured",
+                "The gain of an 8-tap moving average and of the first "
+                "difference at each probe frequency. The average passes low "
+                "frequencies and nulls the tones whose cycles fit the "
+                "window; the difference blocks low frequencies and passes "
+                "high ones.")
+    plot.grid(1000, 0.25, "frequency (Hz)", "gain (linear)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.2f}")
+    plot.line([0, 4000], [1.0, 1.0], GRAY, 2.0, dash="4 3")
+    plot.line(freqs, gains, BLUE, 2.2)
+    plot.line(freqs, diff, AMBER, 2.2)
+    plot.legend([
+        ("8-tap moving average", BLUE, None, 2.2),
+        ("first difference", AMBER, None, 2.2),
+        ("unity gain", GRAY, "4 3", 2.0),
+    ], x=plot.x0 + 300, y=plot.sy(0.62)),
+    plot.save("fir_response.svg")
+
+
+def fig_iir_response():
+    """One pole versus biquads, in dB, measured with probe tones."""
+    sr = 8000
+    freqs = [40.0 * k for k in range(1, 100)]
+
+    def db(gains):
+        return [max(-40.0, 20.0 * math.log10(g if g > 1e-9 else 1e-9))
+                for g in gains]
+
+    onep = db(frequency_response(lambda x: one_pole(x, 0.9), sr, freqs))
+    flat = db(frequency_response(
+        lambda x: biquad(x, rbj_lowpass(sr, 1000.0)), sr, freqs))
+    peaky = db(frequency_response(
+        lambda x: biquad(x, rbj_lowpass(sr, 1000.0, q=4.0)), sr, freqs))
+
+    plot = Plot(520, 340, (0, 4000), (-40, 15),
+                "Three IIR lowpass responses, measured",
+                "Gain in dB against frequency for the one-pole smoother and "
+                "for the biquad lowpass at two resonance settings. The "
+                "biquad falls faster past the cutoff, and raising the "
+                "resonance lifts a peak at the cutoff itself.")
+    plot.grid(1000, 10, "frequency (Hz)", "gain (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.ref_vertical(1000.0, "cutoff")
+    plot.line([0, 4000], [0.0, 0.0], GRAY, 2.0, dash="4 3")
+    plot.line(freqs, onep, GREEN, 2.2, opacity=0.85)
+    plot.line(freqs, flat, BLUE, 2.2, opacity=0.85)
+    plot.line(freqs, peaky, RED, 2.2, opacity=0.85)
+    plot.legend([
+        ("one pole, c = 0.9", GREEN, None, 2.2),
+        ("biquad, Q = 0.71", BLUE, None, 2.2),
+        ("biquad, Q = 4", RED, None, 2.2),
+        ("unity gain", GRAY, "4 3", 2.0),
+    ], x=plot.x0 + 310, y=plot.sy(9))
+    plot.save("iir_response.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -820,3 +953,7 @@ if __name__ == "__main__":
     fig_vibrato_pitch()
     fig_reverb_combs()
     fig_reverb_tail()
+    fig_waveform_spectra()
+    fig_aliasing()
+    fig_fir_response()
+    fig_iir_response()

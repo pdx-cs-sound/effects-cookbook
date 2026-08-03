@@ -72,6 +72,15 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
 ## Content
+- [x] Chapters 8 and 9 drafted (2026-08-03): `code/frequency.py` (sine/cosine probe +
+      spectrum; the unnamed single DFT bin) and `code/filters.py` (FIR via ch7
+      RingBuffer, moving average, first difference, one-pole, biquad + RBJ
+      lowpass/highpass, probe-measured frequency_response) with test suites; four
+      measured figures (waveform spectra, aliasing, FIR + IIR responses); pages pay the
+      ch4 sum-of-sines, ch3/4 aliasing, and ch5 pole-name promises. Audio demos and
+      explorers deferred until Ed's read-through.
+- [ ] Chapter 8/9 demos after read-through (candidates: aliasing sweep demo, biquad
+      cutoff/Q AudioExplorer, live spectrum view)
 - [x] General-rules batch (2026-07-27, from Ed's ch7 read-through, rules in DESIGN
       decision log): real-time-bias scope stated in Status & scope (with Bart);
       "How the book is built" apparatus paragraph added there; apparatus

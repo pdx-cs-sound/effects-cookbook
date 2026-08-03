@@ -29,8 +29,9 @@ nothing after.
    [Expanding](expander.md), [AGC](agc.md).
 7. **Delay & modulation** — [Delay lines & echo](delay-modulation.md),
    [Vibrato](vibrato.md), [Chorus](chorus.md), [Reverb](reverb.md).
-8. **[The frequency domain](frequency-domain.md)** — audio as frequencies. *(planned)*
-9. **[Filters](filters.md)** — FIR and IIR. *(planned)*
+8. **[The frequency domain](frequency-domain.md)** — spectra, harmonics, Nyquist,
+   aliasing.
+9. **[Filters](filters.md)** — frequency response; FIR and IIR; the biquad.
 10. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
 11. **[Frequency-domain effects](frequency-effects.md)** — resampling, vocoding. *(planned)*
 

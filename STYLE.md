@@ -54,6 +54,12 @@ Each rule is checkable during review.
     "chew on": say the literal thing. A load-bearing analogy (rule 5) is not an idiom; the
     difference is that an analogy is introduced, developed, and used to teach.
 
+12. **New prose gets an adversarial pass before delivery** (2026-08-03). Drafting speed
+    reintroduces the structural patterns: reversal pairs, kickers, aphorisms, narrative
+    reveals, personification, rhetorical word-chains. Knowing rules 1-11 does not
+    prevent them; a separate read against this list does. The chapter 8-9 draft is the
+    documented case.
+
 ## Tics to cut
 
 These patterns are the main reason the current prose reads machine-generated:
