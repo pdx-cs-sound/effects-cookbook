@@ -62,8 +62,7 @@ stays countable. The allpasses smear each echo into a cluster, which is the dens
 combs lack.*
 
 The delay values are Schroeder's, chosen so that no comb's repeats line up with
-another's. An impulse through an allpass keeps its energy while spreading in time, which
-makes the flat-level claim exact.
+another's. An impulse through an allpass keeps its energy while spreading in time.
 
 !!! warning "Pitfalls"
     - Related delay lengths ring. If the comb delays share factors, their repeats

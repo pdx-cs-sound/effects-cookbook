@@ -86,3 +86,9 @@ anything.
     retaining it. Fix: parenthetical gloss at the point of use, "the phase reset that
     starts each new cycle." Pattern: a term coined mid-page cannot be assumed later on
     the page; re-gloss at distant reuse.)
+24. "Where is the flat-level claim?" (2026-07-27, reverb.md: "which makes the flat-level
+    claim exact" referred back to prose that said allpasses leave levels unchanged but
+    never named any claim. Same defect as #23, written the same week the rule was
+    derived — definite references need an antecedent that was actually established,
+    and the pattern survives knowing the rule. Fix: Ed's simpler sentence, no
+    back-reference.)
