@@ -54,8 +54,8 @@ Compression page's figure is this same curve.*
 
 ![A quiet–loud–quiet tone through the limiter, with and without lookahead. Without lookahead the output overshoots the ceiling while the attack catches up; with 6 ms of true lookahead it never crosses, and arrives 6 ms late.](img/limiter_lookahead.svg)
 
-*Both traces come from running this book's configurable compressor
-(`code/make_figures.py`) at ∞:1. Without lookahead, the leading edge of the burst passes
+*Both traces come from running this book's configurable compressor at ∞:1. Without
+lookahead, the leading edge of the burst passes
 the ceiling while the 2 ms attack catches up. With true lookahead the gain is pre-armed
 and the output never crosses the ceiling. It also arrives 6 ms late, which is the cost
 of the guarantee.*

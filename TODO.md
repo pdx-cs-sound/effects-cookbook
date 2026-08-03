@@ -72,6 +72,14 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
 ## Content
+- [x] General-rules batch (2026-07-27, from Ed's ch7 read-through, rules in DESIGN
+      decision log): real-time-bias scope stated in Status & scope (with Bart);
+      "How the book is built" apparatus paragraph added there; apparatus
+      subtitles/sentences removed from 9 pages, captions keep compressed origin clause
+      only; ring-buffer section rewritten (why-this-structure, state contrast moved
+      above code); waveforms pitfall split into period quantization vs. accumulated
+      drift, "phase wraparound" named at first use; read() assert removed (no-asserts
+      policy). Mechanical sweep delegated to Sonnet subagent, diff reviewed.
 - [x] Chapter 5 swapped to tremolo-first (2026-07-19 feedback): nav, chapter title now
       "Tremolo & envelopes", subtitles, index, waveforms lead-out, DESIGN structure
       note; tremolo's sibling reference relabeled (was "[Chapter 5](envelopes.md)")

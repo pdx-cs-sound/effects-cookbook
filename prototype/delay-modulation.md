@@ -5,27 +5,27 @@
 > directly it is an echo. Swept by an LFO it becomes vibrato and chorus, and a network of
 > delay lines becomes reverb.
 
-*Chapter 7 — delay and modulation. The code on this page is included at build time from
-`code/delays.py`, which is tested.*
+*Chapter 7 — delay and modulation.*
 
 ---
 
 ## The ring buffer
 
-A delay line needs the recent past. Offline code can index into the input list directly,
-since the whole signal is already in memory. Real-time code cannot, because the input has
-no end to hold. The standard tool is a ring buffer: a fixed block of memory with a write
-position that advances and wraps. Writing overwrites the oldest value, and reading looks
-backward from the write position, also wrapping. The memory only needs to be as long as
-the longest delay.
+A delay line needs the recent past: the last $N$ samples, readable by age. A plain
+queue would serve a fixed delay, one sample in and the oldest sample out. The effects in
+this chapter ask for more. Vibrato reads at an offset that changes every sample, and the
+reverberator's allpass stages read two lines at once, so the delay line has to offer
+random access by age rather than only the oldest value. The structure with exactly those
+properties is the ring buffer, one write position advancing through fixed memory.
+
+A delay line also remembers more than anything earlier in the book. The envelope
+follower of [Chapter 5](envelopes.md) carries one number between samples. A delay line
+carries a stretch of signal, and the stretch has to cover the longest delay the effect
+will ask for.
 
 ```python
 --8<-- "code/delays.py:ringbuffer"
 ```
-
-This is the first effect machinery in the book with more than one sample of state. The
-envelope follower of [Chapter 5](envelopes.md) remembers a single number. A delay line
-remembers a stretch of signal.
 
 ## Echo
 
@@ -45,9 +45,9 @@ by $g$, so the repeats decay geometrically.
 
 ![A single impulse into an echo: the dry impulse at time zero, then a train of taps every 250 milliseconds, each 0.6 times the height of the last.](img/echo_impulse.svg)
 
-*The echo's impulse response (`code/make_figures.py`, run through this page's `echo`).
-Feedback is the whole picture: every tap is the previous tap times the feedback factor,
-which is a geometric decay.*
+*The echo's impulse response, generated with the `echo` above. Feedback is the whole
+picture: every tap is the previous tap times the feedback factor, which is a geometric
+decay.*
 
 ## Key parameters
 

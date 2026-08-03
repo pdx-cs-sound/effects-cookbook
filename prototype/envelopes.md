@@ -3,8 +3,7 @@
 > An envelope is a curve that describes how a signal's level changes over time: the
 > outline of the signal's body, ignoring the wiggles inside it.
 
-*Chapter 5 — tremolo & envelopes. The code below is included at build time from
-`code/oscillators.py`, which is tested and drawn from by the figures.*
+*Chapter 5 — tremolo & envelopes.*
 
 ---
 
@@ -58,7 +57,7 @@ smoothed level.
 
 ![Rectified samples of a quiet–loud–quiet tone, with the smoothed envelope riding over them: it rises with the burst in about 5 ms and decays after it in about 50 ms.](img/envelope_follower.svg)
 
-*The `follow` function above, run on a quiet–loud–quiet tone (`code/make_figures.py`). The
+*The `follow` function above, run on a quiet–loud–quiet tone. The
 gray region is the input's magnitude, the value the follower chases. The blue line is the
 follower's output. It rises quickly when the burst starts (attack) and decays slowly after
 it ends (release). The amplitude axis is linear, like the transfer curves of

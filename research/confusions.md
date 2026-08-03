@@ -80,3 +80,9 @@ anything.
     (At every period boundary three opaque vertical strokes coincided — phase drop, saw
     drop, square flip — and the last-drawn hid the rest. New figure convention: jumps are
     drawn as gaps, not verticals, and co-plotted signal lines get slight transparency.)
+23. "What is 'the wrap' from 'the exact sample on which the wrap lands can shift by
+    one'?" (2026-07-27, waveforms.md float pitfall. The term is defined two sections
+    earlier — "climbs from 0 to 1 and wraps" — but the pitfall leaned on the reader
+    retaining it. Fix: parenthetical gloss at the point of use, "the phase reset that
+    starts each new cycle." Pattern: a term coined mid-page cannot be assumed later on
+    the page; re-gloss at distant reuse.)

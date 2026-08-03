@@ -41,11 +41,11 @@ a measured level.
 
 ![A steady tone through tremolo: the output magnitude swells and dips under a flat input level, following the LFO-driven gain.](img/tremolo.svg)
 
-*Tremolo at 4 Hz, depth 0.6 (`code/make_figures.py`). The input level is constant; the
+*Tremolo at 4 Hz, depth 0.6. The input level is constant; the
 gain swings between 1 and 1 − depth; the output magnitude carries the wobble.*
 
 The table below plays a steady tone, then the identical tone through tremolo at 5 Hz
-with depth 0.8 (`code/make_demos.py`):
+with depth 0.8:
 
 | signal | listen |
 |---|---|

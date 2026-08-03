@@ -56,14 +56,14 @@ Four combs in parallel, then two allpasses in series:
 
 ![The impulse response of the combs followed by the allpasses: the same decay with the gaps filled in.](img/reverb_tail.svg)
 
-*The wet path's impulse response, before and after the allpass stages
-(`code/make_figures.py`, run through this page's code). The comb bank alone decays but
+*The wet path's impulse response, before and after the allpass stages,
+generated with this page's code. The comb bank alone decays but
 stays countable. The allpasses smear each echo into a cluster, which is the density the
 combs lack.*
 
 The delay values are Schroeder's, chosen so that no comb's repeats line up with
-another's. The allpass test in `code/test_delays.py` checks the flat-level claim: an
-impulse through an allpass keeps its energy while spreading in time.
+another's. An impulse through an allpass keeps its energy while spreading in time, which
+makes the flat-level claim exact.
 
 !!! warning "Pitfalls"
     - Related delay lengths ring. If the comb delays share factors, their repeats

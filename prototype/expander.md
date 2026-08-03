@@ -55,7 +55,7 @@ page's figure the bend is above it. The steep red curve is close to a gate.*
 
 ![Two loud bursts over a −45 dBFS bleed floor. Between bursts the expander pushes the bleed down; it opens fast when a burst arrives and closes slowly after it ends.](img/expander_gate.svg)
 
-*The expander in time (`code/make_figures.py`, using this page's implementation). The
+*The expander in time, using this page's implementation. The
 output is bold where the expander is attenuating, in the quiet stretches. These are
 the sections a compressor ignores.*
 

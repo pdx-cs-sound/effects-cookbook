@@ -44,7 +44,7 @@ line runs into the edge of the range.
 
 ![Volume transfer curves: a shallow line for gain 0.5, and a steeper line for gain 2 that flattens at the ±1.0 limits.](img/volume_transfer.svg)
 
-*Two volume settings (`code/make_figures.py`). The gain-2 line reaches ±1.0 at input
+*Two volume settings. The gain-2 line reaches ±1.0 at input
 ±0.5, and whatever plays this signal flattens everything beyond that point. A volume
 control always raises the question of where clipping happens.*
 
@@ -98,7 +98,7 @@ description.
 
 ![Distortion transfer curves: hard clipping's sharp-cornered plateau, tanh's gradual bend, and an asymmetric curve that clips the negative half-wave at −0.5, all at drive 3.](img/distortion_transfer.svg)
 
-*Three clipping curves at the same drive (`code/make_figures.py`). The drive sets how far
+*Three clipping curves at the same drive. The drive sets how far
 the signal is pushed into the curve; the curve's shape sets the character of the result.
 The asymmetric curve shares the hard clip's ceiling, so the two coincide on the positive
 half; it is drawn dashed so both stay visible.*
@@ -137,8 +137,8 @@ count.
 
 ![Bit crush transfer curve: a staircase with four steps per side replacing the unity diagonal.](img/bitcrush_transfer.svg)
 
-*Quantization to four steps per side, the grid a 3-bit depth would give
-(`code/make_figures.py`). The vertical gap between the staircase and the unity line is
+*Quantization to four steps per side, the grid a 3-bit depth would give. The vertical
+gap between the staircase and the unity line is
 the quantization error for that input value.*
 
 The error is largest, relative to the signal, when the signal is small: a quiet passage

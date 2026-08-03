@@ -17,11 +17,11 @@ import math
 class RingBuffer:
     """Fixed-length memory for a delay line.
 
-    Values are written into a fixed list, and a write position advances and
-    wraps. Reading looks backward from the write position, also wrapping.
     Call read before push on each sample: read(d) then returns the value
     pushed d samples ago, for 1 <= d <= length, and returns 0.0 before
-    anything has been written there.
+    anything has been written there. An offset outside that range returns a
+    stored sample from the wrong time, so the length must cover the largest
+    delay the caller will ask for.
     """
 
     def __init__(self, length):
