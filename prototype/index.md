@@ -32,8 +32,9 @@ nothing after.
 8. **[The frequency domain](frequency-domain.md)** — spectra, harmonics, Nyquist,
    aliasing.
 9. **[Filters](filters.md)** — frequency response; FIR and IIR; the biquad.
-10. **[DFT, FFT, STFT](transforms.md)** — the transforms. *(planned)*
-11. **[Frequency-domain effects](frequency-effects.md)** — resampling, vocoding. *(planned)*
+10. **[DFT, FFT, STFT](transforms.md)** — the transforms, windows, the spectrogram.
+11. **[Frequency-domain effects](frequency-effects.md)** — resampling, spectral
+    filtering, robotization.
 
 ## How each effect page is laid out
 

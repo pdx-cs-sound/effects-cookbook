@@ -30,6 +30,8 @@ from delays import allpass, comb, echo
 from filters import (FIRST_DIFFERENCE, biquad, fir, frequency_response,
                      moving_average, one_pole, rbj_lowpass)
 from frequency import sine_amount
+from frequency_effects import resample
+from transforms import fft, hann, magnitudes, stft
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
                          sine_shape, sine_wave, square_shape, tremolo,
                          triangle_shape)
@@ -970,6 +972,114 @@ def fig_iir_response():
     plot.save("iir_response.svg")
 
 
+# --------------------------------------------------------------------------
+# Figures: transforms (Chapter 10)
+# --------------------------------------------------------------------------
+
+def fig_leakage():
+    """An off-bin sine through the DFT, with and without the Hann window."""
+    sr, n = 8000, 512
+    f = 1023.0    # between bins: bin spacing is 15.625 Hz
+    x = [0.5 * math.sin(2.0 * math.pi * f * m / sr) for m in range(n)]
+    w = hann(n)
+    rect = magnitudes(fft(x))
+    windowed = magnitudes(fft([v * wm for v, wm in zip(x, w)]))
+
+    def db(mags):
+        return [max(-80.0, 20.0 * math.log10(m if m > 1e-9 else 1e-9))
+                for m in mags]
+
+    bins = [k * sr / n for k in range(40, 120)]
+    plot = Plot(520, 340, (bins[0], bins[-1]), (-80, 0),
+                "Spectral leakage, with and without a window",
+                "Bin magnitudes in dB for a 1023 Hz sine that falls between "
+                "bins, transformed with no window and with the Hann window. "
+                "Without a window the tone leaks across the whole range; the "
+                "window confines it to a few bins.")
+    plot.grid(200, 20, "bin frequency (Hz)", "bin magnitude (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.line(bins, db(rect)[40:120], GRAY, 2.0, opacity=0.85)
+    plot.line(bins, db(windowed)[40:120], BLUE, 2.2, opacity=0.85)
+    plot.legend([
+        ("no window", GRAY, None, 2.0),
+        ("Hann window", BLUE, None, 2.2),
+    ], x=plot.x1 - 130, y=plot.y1 + 16)
+    plot.save("leakage.svg")
+
+
+def fig_spectrogram():
+    """Spectra over time for a three-part signal."""
+    sr = 8000
+    x = (sine_wave(300.0, 0.3, sr, amp=0.8)
+         + [0.8 * v for v in oscillator(square_shape, 300.0, 0.3, sr)]
+         + sine_wave(600.0, 0.3, sr, amp=0.8))
+    frame, hop = 256, 128
+    frames = [magnitudes(bins) for bins in stft(x, frame, hop)]
+    peak = max(max(f) for f in frames)
+    f_max = 2000.0
+    k_max = int(f_max * frame / sr)
+
+    plot = Plot(520, 344, (0, len(x) / sr), (0, f_max),
+                "A spectrogram: the STFT drawn over time",
+                "Time runs left to right, frequency bottom to top, and darker "
+                "cells hold more amplitude. A 300 Hz sine is one line; the "
+                "300 Hz square adds its stack of odd harmonics; a 600 Hz "
+                "sine is one line again, higher.",
+                legend_band=True)
+    plot.grid(0.2, 500, "time (s)", "frequency (Hz)",
+              x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    dt = hop / sr
+    df = sr / frame
+    for i, mags in enumerate(frames):
+        for k in range(1, k_max):
+            a = mags[k] / peak
+            if a < 0.02:
+                continue
+            x0 = plot.sx(i * dt)
+            y0 = plot.sy((k + 0.5) * df)
+            wpx = plot.sx(dt) - plot.sx(0)
+            hpx = plot.sy(0) - plot.sy(df)
+            plot.parts.append(
+                f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{wpx + 0.3:.1f}" '
+                f'height="{hpx + 0.3:.1f}" fill="{BLUE}" '
+                f'fill-opacity="{min(1.0, a):.2f}"/>')
+    plot.legend_row([
+        ("bin amplitude, darker is louder", BLUE, "area", 0),
+    ])
+    plot.save("spectrogram.svg")
+
+
+# --------------------------------------------------------------------------
+# Figure: frequency-domain effects (Chapter 11)
+# --------------------------------------------------------------------------
+
+def fig_resample_spectrum():
+    """Resampling scales the whole spectrum by the ratio."""
+    sr, f0, ratio = 8000, 200.0, 1.5
+    x = oscillator(sawtooth_shape, f0, 1.0, sr)
+    y = resample(x, ratio)
+
+    plot = Plot(520, 320, (0, 2000), (0, 0.8),
+                "Resampling: the spectrum scales by the ratio",
+                "Measured harmonics of a 200 Hz sawtooth before and after "
+                "resampling at ratio 1.5. Every harmonic moves to 1.5 times "
+                "its frequency; the spacing scales with the fundamental, so "
+                "the sound is higher, not just brighter.")
+    plot.grid(400, 0.2, "frequency (Hz)", "amplitude (linear)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    for n in range(1, 10):
+        a0 = sine_amount(x, sr, n * f0)
+        a1 = sine_amount(y, sr, n * f0 * ratio)
+        plot.line([n * f0 - 6, n * f0 - 6], [0.0, a0], BLUE, 2.6)
+        plot.line([n * f0 * ratio + 6, n * f0 * ratio + 6], [0.0, a1],
+                  GREEN, 2.6)
+    plot.legend([
+        ("200 Hz sawtooth", BLUE, None, 2.6),
+        ("resampled, ratio 1.5", GREEN, None, 2.6),
+    ], x=plot.x0 + 300, y=plot.y1 + 16)
+    plot.save("resample_spectrum.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -993,3 +1103,6 @@ if __name__ == "__main__":
     fig_aliasing()
     fig_fir_response()
     fig_iir_response()
+    fig_leakage()
+    fig_spectrogram()
+    fig_resample_spectrum()

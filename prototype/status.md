@@ -28,9 +28,8 @@ deeper.
 
 ## Chapter status
 
-The book follows an eleven-chapter plan (see the [Introduction](index.md)). Chapters 1
-through 9 have drafted content. Chapters 10 and 11 are stubs. Drafted pages follow
-the book's flat register.
+The book follows an eleven-chapter plan (see the [Introduction](index.md)). All eleven
+chapters have drafted content. Drafted pages follow the book's flat register.
 
 ## Deferred topics
 

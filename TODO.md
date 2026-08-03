@@ -72,6 +72,15 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       demos with `code/compressor.py` + stdlib `wave` — zero deps, zero licensing questions)
 
 ## Content
+- [x] Chapters 10 and 11 drafted (2026-08-03) — ALL ELEVEN CHAPTERS NOW DRAFTED.
+      `code/transforms.py` (naive DFT as "every ch8 probe at once", recursive radix-2
+      FFT tested equal to the DFT, Hann window, STFT/ISTFT with exact round-trip test)
+      and `code/frequency_effects.py` (resample, spectral_lowpass, robotize). Three
+      figures: leakage (rect vs Hann, dB), spectrogram (sine/square/sine, legend_row
+      band), resample spectrum. STFT latency = tier-2 realtime pitfall. Demos/explorers
+      deferred to Ed's read-through.
+- [ ] Ch10/11 demos after read-through (candidates: robotize before/after WAV, spectral
+      lowpass vs ch9 biquad listening comparison, spectrogram AudioExplorer)
 - [x] Chapters 8 and 9 drafted (2026-08-03): `code/frequency.py` (sine/cosine probe +
       spectrum; the unnamed single DFT bin) and `code/filters.py` (FIR via ch7
       RingBuffer, moving average, first difference, one-pole, biquad + RBJ
