@@ -67,12 +67,16 @@ def _esc_attr(s):
 class Plot:
     """A single x/y plot with dB-style axes, rendered to an SVG string."""
 
-    def __init__(self, width, height, x_range, y_range, title, desc):
+    def __init__(self, width, height, x_range, y_range, title, desc,
+                 legend_band=False):
+        """legend_band reserves a strip above the plot area for
+        legend_row(), for figures whose data leaves no clear spot
+        inside the frame."""
         self.w, self.h = width, height
         self.x_min, self.x_max = x_range
         self.y_min, self.y_max = y_range
         self.x0, self.x1 = 46, width - 14
-        self.y0, self.y1 = height - 34, 14
+        self.y0, self.y1 = height - 34, (38 if legend_band else 14)
         self.parts = [
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
             f'role="img" aria-label="{_esc_attr(title)}">',
@@ -86,28 +90,36 @@ class Plot:
     def sy(self, v):
         return self.y0 + (v - self.y_min) / (self.y_max - self.y_min) * (self.y1 - self.y0)
 
+    @staticmethod
+    def _tick_start(v_min, step):
+        """First multiple of step at or above v_min, so a range like
+        (-1.05, 1.05) ticks at -1.0, -0.5, 0, ... instead of -1.05."""
+        return math.ceil(v_min / step - 1e-9) * step
+
     def grid(self, x_step, y_step, x_label, y_label, x_tick_fmt=str,
              y_tick_fmt=lambda v: str(int(v))):
         p = self.parts
+        x_start = self._tick_start(self.x_min, x_step)
+        y_start = self._tick_start(self.y_min, y_step)
         p.append(f'<g stroke="{GRID}" stroke-opacity="0.25" stroke-width="1">')
-        v = self.x_min
+        v = x_start
         while v <= self.x_max + 1e-9:
             x = self.sx(v)
             p.append(f'<line x1="{x:.1f}" y1="{self.y0}" x2="{x:.1f}" y2="{self.y1}"/>')
             v += x_step
-        v = self.y_min
+        v = y_start
         while v <= self.y_max + 1e-9:
             y = self.sy(v)
             p.append(f'<line x1="{self.x0}" y1="{y:.1f}" x2="{self.x1}" y2="{y:.1f}"/>')
             v += y_step
         p.append('</g>')
         p.append(f'<g fill="{GRAY}" font-size="11" {FONT}>')
-        v = self.x_min
+        v = x_start
         while v <= self.x_max + 1e-9:
             p.append(f'<text x="{self.sx(v):.1f}" y="{self.y0 + 16}" '
                      f'text-anchor="middle">{x_tick_fmt(v)}</text>')
             v += x_step
-        v = self.y_min
+        v = y_start
         while v <= self.y_max + 1e-9:
             p.append(f'<text x="{self.x0 - 6}" y="{self.sy(v) + 3:.1f}" '
                      f'text-anchor="end">{y_tick_fmt(v)}</text>')
@@ -178,6 +190,29 @@ class Plot:
                          f'stroke="{color}" stroke-width="{width}"{d}/>')
             p.append(f'<text x="{x + 26}" y="{yy + 3.5}" fill="{GRAY}" '
                      f'font-size="11" {FONT}>{_esc(label)}</text>')
+
+    def legend_row(self, entries):
+        """One horizontal legend line in the reserved band above the plot
+        (construct the Plot with legend_band=True). Swatches mirror the
+        marks, as in legend(). Raises if the row cannot fit, so an
+        overflowing legend fails the build instead of overlapping."""
+        p = self.parts
+        cx = self.x0
+        cy = 22
+        for label, color, dash, width in entries:
+            if dash == "area":
+                p.append(f'<rect x="{cx}" y="{cy - 4}" width="20" height="9" '
+                         f'fill="{color}" fill-opacity="0.35"/>')
+            else:
+                d = f' stroke-dasharray="{dash}"' if dash else ""
+                p.append(f'<line x1="{cx}" y1="{cy}" x2="{cx + 20}" y2="{cy}" '
+                         f'stroke="{color}" stroke-width="{width}"{d}/>')
+            p.append(f'<text x="{cx + 26}" y="{cy + 3.5}" fill="{GRAY}" '
+                     f'font-size="11" {FONT}>{_esc(label)}</text>')
+            cx += 26 + 5.8 * len(label) + 22
+        if cx - 22 > self.x1:
+            raise RuntimeError(
+                f"legend_row overflows the figure width ({cx:.0f} > {self.x1})")
 
     def save(self, name):
         self.parts.append('</svg>')
@@ -841,28 +876,29 @@ def fig_aliasing():
     t_end = 0.002
     fine = 400
     ts = [i * t_end / fine for i in range(fine + 1)]
-    low = [0.8 * math.sin(2.0 * math.pi * 1000.0 * t) for t in ts]
-    high = [0.8 * math.sin(2.0 * math.pi * 9000.0 * t) for t in ts]
+    low = [math.sin(2.0 * math.pi * 1000.0 * t) for t in ts]      # full scale
+    high = [math.sin(2.0 * math.pi * 9000.0 * t) for t in ts]
 
-    plot = Plot(520, 320, (0, t_end * 1000.0), (-1.05, 1.05),
+    plot = Plot(520, 344, (0, t_end * 1000.0), (-1.15, 1.15),
                 "Aliasing: two tones, one set of samples",
                 "A 9000 Hz sine and a 1000 Hz sine drawn continuously over "
                 "two milliseconds, with the samples an 8000 samples per "
                 "second system takes. Every sample lands where the two "
-                "curves cross, so the samples cannot tell the tones apart.")
+                "curves cross, so the samples cannot tell the tones apart.",
+                legend_band=True)
     plot.grid(0.5, 0.5, "time (ms)", "amplitude (linear)",
               x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.1f}")
     plot.line([t * 1000.0 for t in ts], high, RED, 1.4, opacity=0.75)
     plot.line([t * 1000.0 for t in ts], low, BLUE, 2.2, opacity=0.85)
     for i in range(int(t_end * sr) + 1):
         tms = i / sr * 1000.0
-        v = 0.8 * math.sin(2.0 * math.pi * 1000.0 * i / sr)
+        v = math.sin(2.0 * math.pi * 1000.0 * i / sr)
         plot.line([tms, tms], [0.0, v], GRAY, 2.4)
-    plot.legend([
+    plot.legend_row([
         ("9000 Hz, above Nyquist", RED, None, 1.4),
         ("1000 Hz, its alias", BLUE, None, 2.2),
         ("the shared samples", GRAY, None, 2.4),
-    ], x=plot.x0 + 320, y=plot.y1 + 16)
+    ])
     plot.save("aliasing.svg")
 
 

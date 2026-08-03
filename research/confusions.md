@@ -92,3 +92,11 @@ anything.
     derived — definite references need an antecedent that was actually established,
     and the pattern survives knowing the rule. Fix: Ed's simpler sentence, no
     back-reference.)
+25. "Why does the frequency graph have amplitudes of 1.27 and 0.637 for the fundamental?
+    Does that number mean something, or is the point relative values?" (2026-08-03,
+    waveform_spectra.svg. Both: the stems are the Fourier coefficients, 4/pi and 2/pi,
+    and the buried surprise is that a component can exceed the signal containing it —
+    a book built on full scale = 1.0 shows an amplitude axis reaching 1.27. Fix: a
+    page paragraph stating the coefficients and the cancellation. Pattern: when a
+    figure shows a number the book's conventions make surprising, the page must say
+    so.)

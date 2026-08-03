@@ -48,6 +48,11 @@ content behind their brightness ranking.
 sawtooth carries every harmonic and the square only the odd ones; both fall off as one
 over the harmonic number.*
 
+The measured fundamentals are the Fourier coefficients themselves: $4/\pi$, about
+1.27, for the square, and $2/\pi$, about 0.64, for the sawtooth. A component can be
+larger than the signal that contains it. The square never leaves $\pm 1$, but its
+fundamental alone swings to $\pm 1.27$, and the higher harmonics cancel the overshoot.
+
 The shapes' edges determine which harmonics exist and how fast they fall off. A jump
 contains every rate of change, so the square and sawtooth carry harmonics that fall
 slowly, as $1/n$, and sound bright. The triangle has corners but no jumps, its harmonics
