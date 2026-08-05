@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" role="img" aria-label="Resampling: the spectrum scales by the ratio">
+<title>Resampling: the spectrum scales by the ratio</title>
+<desc>Measured harmonics of a 200 Hz sawtooth before and after resampling at ratio 1.5. Every harmonic moves to 1.5 times its frequency; the spacing scales with the fundamental, so the sound is higher, not just brighter.</desc>
+<g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
+<line x1="46.0" y1="286" x2="46.0" y2="14"/>
+<line x1="138.0" y1="286" x2="138.0" y2="14"/>
+<line x1="230.0" y1="286" x2="230.0" y2="14"/>
+<line x1="322.0" y1="286" x2="322.0" y2="14"/>
+<line x1="414.0" y1="286" x2="414.0" y2="14"/>
+<line x1="506.0" y1="286" x2="506.0" y2="14"/>
+<line x1="46" y1="286.0" x2="506" y2="286.0"/>
+<line x1="46" y1="218.0" x2="506" y2="218.0"/>
+<line x1="46" y1="150.0" x2="506" y2="150.0"/>
+<line x1="46" y1="82.0" x2="506" y2="82.0"/>
+<line x1="46" y1="14.0" x2="506" y2="14.0"/>
+</g>
+<g fill="#888780" font-size="11" font-family="system-ui, sans-serif">
+<text x="46.0" y="302" text-anchor="middle">0</text>
+<text x="138.0" y="302" text-anchor="middle">400</text>
+<text x="230.0" y="302" text-anchor="middle">800</text>
+<text x="322.0" y="302" text-anchor="middle">1200</text>
+<text x="414.0" y="302" text-anchor="middle">1600</text>
+<text x="506.0" y="302" text-anchor="middle">2000</text>
+<text x="40" y="289.0" text-anchor="end">0.0</text>
+<text x="40" y="221.0" text-anchor="end">0.2</text>
+<text x="40" y="153.0" text-anchor="end">0.4</text>
+<text x="40" y="85.0" text-anchor="end">0.6</text>
+<text x="40" y="17.0" text-anchor="end">0.8</text>
+<text x="276.0" y="316" text-anchor="middle">frequency (Hz)</text>
+<text x="13" y="150.0" text-anchor="middle" transform="rotate(-90 13 150.0)">amplitude (linear)</text>
+</g>
+<polyline points="90.6,286.0 90.6,69.3" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="116.4,286.0 116.4,69.6" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="136.6,286.0 136.6,177.3" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="185.4,286.0 185.4,178.0" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="182.6,286.0 182.6,213.2" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="254.4,286.0 254.4,214.2" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="228.6,286.0 228.6,231.0" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="323.4,286.0 323.4,232.3" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="274.6,286.0 274.6,241.6" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="392.4,286.0 392.4,243.3" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="320.6,286.0 320.6,248.6" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="461.4,286.0 461.4,250.6" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="366.6,286.0 366.6,253.5" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="530.4,286.0 530.4,255.9" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="412.6,286.0 412.6,257.1" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="599.4,286.0 599.4,259.8" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<polyline points="458.6,286.0 458.6,259.8" fill="none" stroke="#378add" stroke-width="2.6"/>
+<polyline points="668.4,286.0 668.4,262.9" fill="none" stroke="#1baf7a" stroke-width="2.6"/>
+<line x1="346" y1="30" x2="366" y2="30" stroke="#378add" stroke-width="2.6"/>
+<text x="372" y="33.5" fill="#888780" font-size="11" font-family="system-ui, sans-serif">200 Hz sawtooth</text>
+<line x1="346" y1="45" x2="366" y2="45" stroke="#1baf7a" stroke-width="2.6"/>
+<text x="372" y="48.5" fill="#888780" font-size="11" font-family="system-ui, sans-serif">resampled, ratio 1.5</text>
+</svg>

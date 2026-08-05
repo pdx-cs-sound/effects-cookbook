@@ -1,0 +1,79 @@
+/* Shared styles for AudioExplorer pages (see lib/audio_explorer.js).
+ * Pages link this stylesheet and add only page-specific rules. */
+
+.ax-play {
+  font: inherit;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--faint, #888780);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.ax-play[aria-pressed="true"] { border-color: #d98a00; }
+
+.ax-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 0.4rem 1.5rem;
+  margin: 0.8rem 0;
+  max-width: 44rem;
+}
+.ax-control {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 4.5rem;
+  align-items: center;
+  gap: 0.6rem;
+}
+.ax-control input {
+  min-width: 0;
+  width: 100%;
+}
+.ax-name { overflow-wrap: break-word; }
+.ax-select {
+  grid-column: 1 / -1;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+}
+.ax-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.ax-option {
+  position: relative;   /* keeps the hidden radio inside the pill */
+  border: 1px solid var(--faint, #888780);
+  border-radius: 6px;
+  padding: 0.15rem 0.7rem;
+  cursor: pointer;
+}
+.ax-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.ax-option:has(input:checked) { border-color: #378add; }
+.ax-option:has(input:focus-visible) { outline: 2px solid #378add; }
+.ax-readout {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ax-scope {
+  width: 100%;
+  max-width: 44rem;
+  height: 240px;
+  display: block;
+}
+.ax-legend {
+  font-size: 0.85rem;
+  color: var(--faint, #888780);
+  max-width: 44rem;
+}
+.ax-swatch {
+  display: inline-block;
+  width: 20px;
+  vertical-align: middle;
+}
