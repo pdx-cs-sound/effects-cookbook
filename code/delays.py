@@ -97,7 +97,7 @@ def comb(x, sr, delay_ms, feedback):
     line = RingBuffer(d)
     out = []
     for s in x:
-        y = s + feedback * line.read(d)
+        y = s + feedback * line.read(d)   # the value pushed d samples ago
         line.push(y)
         out.append(y)
     return out

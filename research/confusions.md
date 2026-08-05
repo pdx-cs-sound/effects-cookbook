@@ -100,3 +100,10 @@ anything.
     page paragraph stating the coefficients and the cancellation. Pattern: when a
     figure shows a number the book's conventions make surprising, the page must say
     so.)
+26. "For comb, why are we reading from d on every iteration?" (2026-08-03, delays.py.
+    read(d)'s argument is an age relative to the advancing write position, not an
+    index, so a constant argument returns a different stored sample each step. The
+    comb is also the degenerate case: buffer length equals d, so read(d) is exactly
+    the slot push is about to overwrite, a FIFO in ring clothing. Fix: comment at the
+    read site. Pattern: relative-to-now semantics need a nudge wherever the argument
+    looks constant.)
