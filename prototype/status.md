@@ -35,11 +35,12 @@ chapters have drafted content. Drafted pages follow the book's flat register.
 
 - **Perceived loudness.** Phon, sone, LUFS (ITU-R BS.1770), A-weighting/dBA, and
   psychoacoustics generally. The book stays in objective signal level (dBFS).
-- **Per-effect audio demos.** Before/after clips per effect are planned. The first
-  generated demos (the waveform tones of [Chapter 4](waveforms.md)) set the pipeline.
-  Samples come from the book's own code, rendered by `code/make_demos.py`.
-- **Per-page visualizations.** Interactive figures are being tested in the
-  [Visualizations](visualizations.md) appendix before being embedded in chapters.
+- **Per-effect listening.** Chapters 4, 5, and 7 carry live AudioExplorers, which
+  replaced the recorded clips that first set the pipeline. The remaining effects have
+  figures but no sound yet.
+- **Per-page visualizations.** Interactive figures are tried in the
+  [Visualizations](visualizations.md) appendix, then embedded in the chapters they
+  belong to.
 - **Program-dependent ballistics.** Sketched in prose in the reference compressor's
   documentation, not implemented.
 

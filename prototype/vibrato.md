@@ -61,6 +61,12 @@ and the marked turning point lines up with a zero crossing of the pitch offset. 
 follows the slope of the delay, not its value, so the pitch offset runs a quarter cycle
 behind the sweep, and the deepest drop lands where the delay climbs fastest.*
 
+The effect is audible below. Depth 0 holds the delay still and plays the tone
+unchanged, and the three-cycle display shows the wobble as the wave stretching and
+compressing.
+
+<iframe src="../visualization/vibrato_explorer.html" title="Vibrato AudioExplorer" loading="lazy" style="width:100%; height:440px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
+
 !!! warning "Pitfalls"
     - Too much depth or rate stops sounding like vibrato. Wide fast sweeps read as a
       siren or as seasickness. Musical settings stay small.

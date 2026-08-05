@@ -143,8 +143,21 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       audible), triggered three-cycle scope view. Harness grew select controls, discrete
       (unsmoothed) params, log sliders, and the "cycles" scope mode; golden test covers
       all five shapes.
-- [ ] AudioExplorer next: Ed reviews both instances; embed into chapters once the shape
-      settles; candidates after that follow ch. 7 (echo, vibrato, chorus, reverb)
+- [x] AudioExplorers embedded into chapters (2026-08-03): tremolo → Tremolo page,
+      waveform → Waveforms page (both replacing the recorded WAV players), plus a new
+      Vibrato explorer (swept fractional delay ported from delays.py, golden-tested to
+      1e-9). Gallery keeps a pointer to the three; no "Open full page" links on chapter
+      pages, per the compression-iframe precedent.
+- [ ] Orphaned demo assets: `prototype/audio/*.wav` and `code/make_demos.py` are now
+      unreferenced by any page (Ed's call: keep as archive, or delete with the WAV
+      writer's tests)
+- [ ] Possible refactor (deferred 2026-08-03, DESIGN §4): inline the chapter-embedded
+      explorers into the markdown instead of iframing them. Would remove the hard-coded
+      frame height and let the widget follow the site's palette toggle rather than the
+      reader's OS setting; costs managing the theme's CSS cascade. Ed's read: dark mode
+      and resizing behave well as-is, so this is not urgent.
+- [ ] AudioExplorer candidates remaining: echo/chorus/reverb (ch. 7), biquad cutoff+Q
+      (ch. 9), live spectrum (ch. 10)
 - [ ] Adopt "two visuals per effect" (static curve + time-domain) per the AGC finding
 - [x] POSA-style compressor "design decision map" — single start/end flow, refined granularity,
       interactive five-implementation overlay (`prototype/visualization/compressor_decision_map.html`,

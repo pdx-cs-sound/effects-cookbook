@@ -34,9 +34,9 @@ function triangleShape(phase) {
 export const SHAPES = [sineShape, squareShape, sawtoothShape,
                        reverseSawtoothShape, triangleShape];
 
-/* next() returns a bare number: a per-sample allocation on the audio
- * thread becomes a steady rhythm of garbage-collection pauses, audible
- * as a chirp (see lib/explorer_processor_base.js). */
+/* next() returns a bare number: the kernel runs on the audio thread,
+ * which must not allocate per sample (see
+ * lib/explorer_processor_base.js). */
 export function createOscillator(sr) {
   let phase = 0.0;      // in [0, 1), the Chapter 4 phase accumulator
   return function next(p) {

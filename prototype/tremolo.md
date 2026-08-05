@@ -44,13 +44,11 @@ a measured level.
 *Tremolo at 4 Hz, depth 0.6. The input level is constant; the
 gain swings between 1 and 1 − depth; the output magnitude carries the wobble.*
 
-The table below plays a steady tone, then the identical tone through tremolo at 5 Hz
-with depth 0.8:
+The effect is audible below. Depth 0 leaves the tone steady, which is the reference
+to listen against, and raising the depth opens the swing between 1 and 1 − depth. The
+display shows the last second of output under the LFO-driven gain.
 
-| signal | listen |
-|---|---|
-| plain tone | <audio controls src="../audio/sine_220hz.wav" aria-label="plain sine tone, 220 hertz"></audio> |
-| with tremolo | <audio controls src="../audio/tremolo_220hz.wav" aria-label="the same tone with tremolo at 5 hertz"></audio> |
+<iframe src="../visualization/tremolo_explorer.html" title="Tremolo AudioExplorer" loading="lazy" style="width:100%; height:440px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
 
 ## Reference implementation (Python)
 

@@ -40,32 +40,28 @@ lines.
 *The four standard waveforms. The square and sawtooth contain
 jumps, and the triangle contains corners; only the sine is smooth everywhere.*
 
-The same four, audible — 220 Hz for 1.5 s, generated from the oscillators on this
-page:
+The shapes are audible below. The display shows three cycles of the output, and the
+frequency slider reaches high enough for the naive square and sawtooth to alias
+audibly:
 
-| waveform | listen |
-|---|---|
-| sine | <audio controls src="../audio/sine_220hz.wav" aria-label="sine wave, 220 hertz"></audio> |
-| square | <audio controls src="../audio/square_220hz.wav" aria-label="square wave, 220 hertz"></audio> |
-| sawtooth | <audio controls src="../audio/sawtooth_220hz.wav" aria-label="sawtooth wave, 220 hertz"></audio> |
-| triangle | <audio controls src="../audio/triangle_220hz.wav" aria-label="triangle wave, 220 hertz"></audio> |
-| all four in sequence | <audio controls src="../audio/all_waveforms_220hz.wav" aria-label="all four waveforms in sequence, 220 hertz"></audio> |
+<iframe src="../visualization/waveform_explorer.html" title="Waveform AudioExplorer" loading="lazy" style="width:100%; height:440px; border:1px solid #d8d8d2; border-radius:8px;"></iframe>
 
-All four tones have the same peak amplitude, and they sound neither equally bright nor
-equally loud. Ranked by brightness they run sine, triangle, square,
-sawtooth. The sine is a pure tone, the triangle adds faint upper harmonics, and the
-square and sawtooth are rich and buzzy. The ranking follows the edges. Corners add weak
-harmonics, and jumps add strong ones. Jumps and corners are what harmonics look like in
-the time domain, and [Chapter 8](frequency-domain.md) makes that correspondence exact.
+At one volume setting the shapes all reach the same peak amplitude, and they sound
+neither equally bright nor equally loud. Ranked by brightness they run sine, triangle,
+square, sawtooth. The sine is a pure tone, the triangle adds faint upper harmonics, and
+the square and sawtooth are rich and buzzy. The ranking follows the edges. Corners add
+weak harmonics, and jumps add strong ones. Jumps and corners are what harmonics look
+like in the time domain, and [Chapter 8](frequency-domain.md) makes that correspondence
+exact.
 
 The square and sawtooth also sound louder. At the same peak, a squarer shape carries
 more energy (a higher RMS, so a lower crest factor), and much of that energy sits at
-high frequencies, where hearing is sensitive. All five clips read the same on a peak
-meter. The peak level matches while the loudness differs, which is the distinction
-[Measuring sound](conventions.md) draws.
+high frequencies, where hearing is sensitive. Every shape reads the same on a peak
+meter at a given volume setting. The peak level matches while the loudness differs,
+which is the distinction [Measuring sound](conventions.md) draws.
 
-The sawtooth drawn here rises and drops; its mirror image falls and jumps. As tones the
-two are indistinguishable. The harmonic magnitudes are identical, and the ear is largely
+The sawtooth drawn here rises and drops; its mirror image falls and jumps. The
+explorer offers both, and as tones the two are indistinguishable. The harmonic magnitudes are identical, and the ear is largely
 deaf to the phase difference between them. Direction starts to matter when the waveform
 is a control signal. A rising ramp swells gradually and cuts off. A falling ramp starts
 hard and fades. At LFO rates ([below](#low-frequency-oscillators)) the difference is

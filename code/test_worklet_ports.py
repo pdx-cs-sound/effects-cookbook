@@ -19,6 +19,7 @@ import shutil
 import subprocess
 import unittest
 
+from delays import vibrato
 from oscillators import (oscillator, reverse_sawtooth_shape, sawtooth_shape,
                          sine_shape, sine_wave, square_shape, tremolo,
                          triangle_shape)
@@ -72,3 +73,31 @@ class TestWaveformKernel(unittest.TestCase):
                 self.assertEqual(len(got), len(expected))
                 worst = max(abs(a - b) for a, b in zip(got, expected))
                 self.assertLess(worst, 1e-6)
+
+
+@unittest.skipUnless(shutil.which("node"), "node is not installed")
+class TestVibratoKernel(unittest.TestCase):
+    # The explorer holds the base delay at the Python default; see
+    # prototype/visualization/lib/vibrato_kernel.js.
+    BASE_MS = 5.0
+
+    def test_matches_python_sample_by_sample(self):
+        sr, n = 8000, 4000
+        volume, freq, rate, depth = 0.5, 220.0, 5.0, 2.0
+        carrier = sine_wave(freq, n / sr, sr, amp=volume)
+        expected = vibrato(carrier, sr, rate_hz=rate, depth_ms=depth,
+                           base_ms=self.BASE_MS)
+        got = run_kernel("run_vibrato_kernel.mjs",
+                         sr, n, volume, freq, rate, depth)
+        self.assertEqual(len(got), len(expected))
+        worst = max(abs(a - b) for a, b in zip(got, expected))
+        self.assertLess(worst, 1e-9)
+
+    def test_depth_zero_is_a_plain_delay(self):
+        # With no sweep the output is the carrier, late by the base delay.
+        sr, n = 8000, 2000
+        got = run_kernel("run_vibrato_kernel.mjs", sr, n, 0.5, 220.0, 5.0, 0.0)
+        carrier = sine_wave(220.0, n / sr, sr, amp=0.5)
+        d = int(self.BASE_MS * sr / 1000.0)
+        worst = max(abs(got[m] - carrier[m - d]) for m in range(d, n))
+        self.assertLess(worst, 1e-9)

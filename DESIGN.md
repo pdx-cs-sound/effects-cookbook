@@ -108,6 +108,11 @@ Audio nodes are deliberately avoided for the DSP: `OscillatorNode` is bandlimite
 `DelayNode` interpolates its own way, which would contradict what the pages teach.
 Defaults per Ed: conservative volume (50 %), sine first, good starting parameters.
 First instance: `tremolo_explorer.html` in the Visualizations appendix.
+Chapter-embedded explorers are iframed (2026-08-03), which buys CSS isolation from the
+theme, failure isolation, and lazy loading, and costs a hard-coded frame height and a
+widget theme that follows the reader's operating system rather than the site's palette
+toggle. Inlining the markup into the pages would remove both costs at the price of
+managing the theme's cascade; deferred, since neither cost bites in practice.
 
 **Settled (2026-07-05) — visualization taxonomy, by interface:**
 

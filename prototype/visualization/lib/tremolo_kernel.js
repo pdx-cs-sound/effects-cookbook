@@ -8,8 +8,7 @@
  *
  * next() returns a bare number and reports the gain through a property
  * on the function rather than returning an object: the kernel runs on
- * the audio thread, where a per-sample allocation becomes a steady
- * rhythm of garbage-collection pauses, audible as a chirp (see
+ * the audio thread, which must not allocate per sample (see
  * lib/explorer_processor_base.js).
  */
 

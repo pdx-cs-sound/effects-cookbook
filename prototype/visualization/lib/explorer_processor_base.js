@@ -11,15 +11,15 @@
  * clicks audibly under a live slider. Roughly 5 ms one-pole smoothing
  * removes the click without changing anything a page teaches.
  *
- * Everything here avoids allocating on the audio thread in steady state.
- * The worklet's JavaScript heap is collected on the rendering thread, so
- * a steady allocation rate becomes a steady rhythm of collection pauses:
- * a few dropouts per second, audible as a chirp riding on high tones in
- * every browser engine. Hence the rules below: kernels return bare
- * numbers rather than objects, scope data is packed into typed arrays,
- * batches are posted every BATCH_BLOCKS quanta with their buffers
- * transferred rather than copied, and the harness sends the buffers back
- * to be reused instead of leaving them for the collector.
+ * Everything here avoids allocating on the audio thread in steady state,
+ * which is standard practice for realtime audio callbacks: the worklet's
+ * JavaScript heap is collected on the rendering thread, so a steady
+ * allocation rate risks collection pauses inside process(), and a pause
+ * there is a dropout. Hence the rules below: kernels return bare numbers
+ * rather than objects, scope data is packed into typed arrays, batches
+ * are posted every BATCH_BLOCKS quanta with their buffers transferred
+ * rather than copied, and the harness sends the buffers back to be
+ * reused instead of leaving them for the collector.
  */
 
 const BATCH_BLOCKS = 8;   // 8 x 128 samples: one message per ~21 ms
