@@ -128,3 +128,18 @@ anything.
     the bins land near the sidelobe peaks, so the curve is the smooth 18 dB/octave
     envelope either way. Fix: caption states the floor is a floor and gives the number
     it keeps falling to. Pattern: a clipped axis has to admit it is clipping.
+29. "For spectrogram.svg, I can see the square wave at 300 Hz and its odd harmonics at
+    900 and 1500 Hz, but what are those intermediate values at like 500, 700, 1100,
+    1300?" (2026-08-10. Aliasing, and the caption had claimed the square contributes
+    "its stack of odd harmonics" — true of three lines, silent about the other six the
+    reader can plainly see. The naive square's harmonics run past Nyquist and fold:
+    7500 Hz back to 500, 8100 to 100, 6900 to 1100. They land on multiples of 100
+    because gcd(300, 8000) = 100 and on the odd multiples because folding preserves
+    oddness, so they interleave between the true harmonics rather than hiding under
+    them, which is exactly what makes them catch the eye. Fix: caption names both
+    stacks, and a following paragraph works the fold arithmetic and links back to the
+    Chapter 8 Nyquist section. Pattern: same as #27 — a caption that names one
+    mechanism gets the reader to attribute every visible feature to it. Corollary
+    learned here: a figure generated from the book's own naive code inherits that
+    code's artifacts, and the figure will show them whether or not the chapter is
+    ready to talk about them.)

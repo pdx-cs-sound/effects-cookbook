@@ -54,11 +54,23 @@ Each rule is checkable during review.
     "chew on": say the literal thing. A load-bearing analogy (rule 5) is not an idiom; the
     difference is that an analogy is introduced, developed, and used to teach.
 
-12. **New prose gets an adversarial pass before delivery** (2026-08-03). Drafting speed
-    reintroduces the structural patterns: reversal pairs, kickers, aphorisms, narrative
-    reveals, personification, rhetorical word-chains. Knowing rules 1-11 does not
-    prevent them; a separate read against this list does. The chapter 8-9 draft is the
-    documented case.
+12. **New prose gets an adversarial pass before delivery** (2026-08-03, restated
+    2026-08-10). Drafting speed reintroduces the structural patterns: reversal pairs,
+    kickers, aphorisms, narrative reveals, personification, rhetorical word-chains,
+    reader-attention direction. Knowing rules 1-11 does not prevent them. Knowing rule
+    12 does not prevent them either, which is the finding of the second documented
+    case. The pass is a separate read of the finished draft against the tic list
+    below, made before delivery, and it is not satisfied by having written carefully.
+
+    Documented cases. The chapter 8-9 draft (2026-08-03). The chapter 10 figure
+    captions (2026-08-10): roughly thirty lines of new prose, delivered without the
+    pass, carried one reader-direction fragment, five prose em-dashes, four British
+    spellings, four reversal pairs, two personifications, one reader address, and
+    assorted kickers and verdict adverbs. The reader caught one of them by eye and
+    asked for the rule; the pass, run afterward, found the rest. Two consequences
+    worth keeping. Rate: a draft that feels clean while being written is the expected
+    condition, not evidence. Order: run the pass on the whole delivery, because the
+    tics cluster in the passages written last and fastest.
 
 ## Tics to cut
 
@@ -76,6 +88,12 @@ These patterns are the main reason the current prose reads machine-generated:
 - Bold or italics doing work that word order should do (see rule 9).
 - Verdict adjectives standing in for the reason: honest, clean, sane, proper, principled,
   natural, elegant — and their adverbs (genuinely, simply, actually).
+- Reader-attention direction: sentences that tell the reader how to regard the material
+  instead of stating it. "It is worth chasing down rather than reading past," "note
+  that," "importantly," "this is where it gets interesting," "the thing to see here."
+  These assert that a fact deserves attention, which is the job of its placement and of
+  the consequence stated next to it (rule 6). Cutting the clause loses nothing; if it
+  does lose something, the missing part is a fact and should be written as one.
 
 ## Sample rewrite
 

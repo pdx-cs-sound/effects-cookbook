@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="A tone on a bin and a tone between bins">
 <title>A tone on a bin and a tone between bins</title>
-<desc>Bin magnitudes in dB for two unwindowed sines. The one at 1015.6 Hz sits exactly on bin 65 and reads as a single bin at its true amplitude, every other bin empty. The one at 1023 Hz sits between bins 65 and 66 and spreads across the whole range, its two nearest bins reading about a decibel apart. Dots mark the bins; the line between them is drawn, not measured.</desc>
+<desc>Bin magnitudes in dB for two unwindowed sines. The one at 1015.6 Hz sits exactly on bin 65 and reads as a single bin at its true amplitude, with every other bin empty. The one at 1023 Hz sits between bins 65 and 66 and spreads across the whole range, its two nearest bins reading about a decibel apart. Dots mark the bins, and the line between the dots carries no data.</desc>
 <g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
 <line x1="46.0" y1="306" x2="46.0" y2="14"/>
 <line x1="134.5" y1="306" x2="134.5" y2="14"/>

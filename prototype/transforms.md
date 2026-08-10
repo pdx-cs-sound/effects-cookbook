@@ -42,22 +42,23 @@ are usually powers of two.
 
 [Chapter 8](frequency-domain.md) noted that a probe over partial cycles reports
 amplitude at frequencies the signal does not contain, and named the error spectral
-leakage. The block length decides which frequencies escape it. Bins sit $sr/N$ apart —
-15.625 Hz for the 8000 Hz, 512-sample block used below — and a tone parked exactly on a
-bin centre completes a whole number of cycles in the block. Only those tones come
-through clean. Almost no real tone is one of them:
+leakage. Which frequencies leak depends on the block length. Bins sit $sr/N$ apart,
+which is 15.625 Hz for the 8000 Hz, 512-sample block used below. A tone at exactly a bin
+frequency completes a whole number of cycles in the block and reports as that one bin.
+Almost no real tone sits at a bin frequency.
 
-![Bin magnitudes in dB for two unwindowed sines: the one on a bin centre occupies a single bin, and the one between bins spreads across the whole range.](img/bin_alignment.svg)
+![Bin magnitudes in dB for two unwindowed sines: the one at a bin frequency occupies a single bin, and the one between bins spreads across the whole range.](img/bin_alignment.svg)
 
 *Two sines through the same transform, neither windowed. At 1015.6 Hz the tone is bin 65
-exactly, and it reads $-6$ dB — its true amplitude — with every other bin empty. Move it
-7 Hz to 1023 Hz, still a perfectly steady sine, and no bin reads it correctly: the two
-nearest split it at $-9.5$ and $-10.5$ dB and the rest of the block carries the
-remainder. Dots mark the bins; the line between them is drawn, not measured.*
+exactly. It reads $-6$ dB, its true amplitude, and every other bin is empty. At 1023 Hz,
+7 Hz higher and equally steady, no bin reads it correctly. The two nearest bins split it
+at $-9.5$ and $-10.5$ dB, and the rest of the block carries the remainder. Dots mark the
+bins. A magnitude exists only at a dot, and the line between the dots carries no data.*
 
-That spread is leakage, and the figure above pins the cause on the bin grid rather than
-on the transform. The standard treatment multiplies the block by a window, a curve that
-fades the frame in and out so its edges no longer jump:
+The spread in the second trace is leakage. Both tones went through the same unwindowed
+transform, so the bin grid accounts for the difference between them. The standard
+treatment multiplies the block by a window, a curve that fades the frame in and out so
+its edges no longer jump:
 
 ```python
 --8<-- "code/transforms.py:window"
@@ -65,13 +66,13 @@ fades the frame in and out so its edges no longer jump:
 
 ![Bin magnitudes in dB for an off-bin sine, transformed without a window and with the Hann window: the unwindowed spectrum leaks across the whole range.](img/leakage.svg)
 
-*The 1023 Hz tone again, now with the window as the only thing that changes. Both traces
-share the same two-bin top, tilted because 1023 Hz sits nearer bin 65 than bin 66 — that
-part is the bin grid's doing, not the window's. What the window changes is the skirt.
-Unwindowed, the tone is still reporting above $-52$ dB at every bin in the range;
-windowed, it is through the $-80$ dB floor of the plot within about ten bins. The flat
-blue run is that floor, not the signal: the windowed skirt keeps falling, below $-100$ dB
-by 700 Hz.*
+*The 1023 Hz tone again, with the window as the only difference between the traces. Both
+share the same two-bin top, tilted because 1023 Hz sits nearer bin 65 than bin 66. That
+tilt comes from the bin grid, which is why it appears in both traces. The window acts on
+the skirt. Unwindowed, the tone still reports above $-52$ dB at every bin in the range.
+Windowed, it falls through the $-80$ dB floor of the plot within about ten bins. That
+flat blue run is the floor of the plot. The windowed skirt keeps falling, and reaches
+$-100$ dB by 700 Hz.*
 
 ## The STFT
 
@@ -84,11 +85,22 @@ is a spectrogram:
 --8<-- "code/transforms.py:stft"
 ```
 
-![A spectrogram of a three-part signal: one horizontal line for a sine, a stack of lines when a square takes over, then a single higher line for a higher sine.](img/spectrogram.svg)
+![A spectrogram of a three-part signal: one horizontal line for a sine, then two interleaved stacks of lines when the square takes over, its odd harmonics and a fainter set of aliases between them, then a single higher line for a higher sine.](img/spectrogram.svg)
 
 *The STFT of a 300 Hz sine, then a 300 Hz square, then a 600 Hz sine, generated with the
-code above. The sine is one line, the square is the odd-harmonic stack of
-[Chapter 8](frequency-domain.md), and the higher sine is one line again, higher.*
+code above. The sine is one line, and the higher sine is one line again, higher. The
+square shows two interleaved stacks. Its odd harmonics fall at 300, 900, and 1500 Hz,
+and a fainter set falls at 100, 500, 700, 1100, 1300, and 1700 Hz.*
+
+The fainter stack is aliasing. The square here is the naive one from
+[Chapter 4](waveforms.md), so its odd harmonics continue past the 4000 Hz Nyquist
+frequency without limit, and each one folds to $|f - k \cdot f_s|$ as
+[Chapter 8](frequency-domain.md) describes. The 25th harmonic at 7500 Hz returns as
+500 Hz, the 27th at 8100 Hz returns as 100 Hz, and the 23rd at 6900 Hz returns as
+1100 Hz. The folded frequencies are all multiples of 100 Hz because
+$\gcd(300, 8000) = 100$, and all odd multiples because folding preserves oddness, so
+they occupy the gaps between the true harmonics and show as separate lines. A
+bandlimited oscillator would leave only the three true lines.
 
 The inverse path matters as much as the forward one. `istft` adds the overlapping frames
 back together, and with the Hann window at half-frame overlap the shifted windows sum to

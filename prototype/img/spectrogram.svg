@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 344" role="img" aria-label="A spectrogram: the STFT drawn over time">
 <title>A spectrogram: the STFT drawn over time</title>
-<desc>Time runs left to right, frequency bottom to top, and darker cells hold more amplitude. A 300 Hz sine is one line; the 300 Hz square adds its stack of odd harmonics; a 600 Hz sine is one line again, higher.</desc>
+<desc>Time runs left to right, frequency bottom to top, and darker cells hold more amplitude. A 300 Hz sine is one line; the 300 Hz square adds its odd harmonics at 300, 900 and 1500 Hz plus a fainter interleaved stack at 100, 500, 700, 1100, 1300 and 1700 Hz, which is its harmonics above Nyquist folding back as aliasing; a 600 Hz sine is one line again, higher.</desc>
 <g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
 <line x1="46.0" y1="310" x2="46.0" y2="38"/>
 <line x1="148.2" y1="310" x2="148.2" y2="38"/>

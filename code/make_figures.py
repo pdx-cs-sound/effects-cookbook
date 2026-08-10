@@ -143,8 +143,8 @@ class Plot:
 
     def dots(self, xs, ys, color, radius=2.4, opacity=1.0):
         """A marker per sample. Use where the reader must not read the
-        connecting stroke as data: bin magnitudes exist only at the bin
-        centres, so the segments between them are drawing, not signal."""
+        connecting stroke as data. A bin magnitude exists only at a bin
+        center, so the segments between markers carry no measurement."""
         o = f' fill-opacity="{opacity}"' if opacity < 1.0 else ""
         self.parts.append(f'<g fill="{color}"{o}>')
         for x, y in zip(xs, ys):
@@ -1026,7 +1026,7 @@ def fig_bin_alignment():
     can be attributed to the bin grid rather than to the missing window.
     """
     sr, n = 8000, 512
-    spacing = sr / n              # 15.625 Hz between bin centres
+    spacing = sr / n              # 15.625 Hz between bin centers
     on_bin = 65 * spacing         # 1015.625 Hz, exactly bin 65
     off_bin = 1023.0
 
@@ -1047,11 +1047,11 @@ def fig_bin_alignment():
                 "A tone on a bin and a tone between bins",
                 "Bin magnitudes in dB for two unwindowed sines. The one at "
                 "1015.6 Hz sits exactly on bin 65 and reads as a single bin "
-                "at its true amplitude, every other bin empty. The one at "
-                "1023 Hz sits between bins 65 and 66 and spreads across the "
-                "whole range, its two nearest bins reading about a decibel "
-                "apart. Dots mark the bins; the line between them is drawn, "
-                "not measured.")
+                "at its true amplitude, with every other bin empty. The one "
+                "at 1023 Hz sits between bins 65 and 66 and spreads across "
+                "the whole range, its two nearest bins reading about a "
+                "decibel apart. Dots mark the bins, and the line between the "
+                "dots carries no data.")
     plot.grid(50, 10, "bin frequency (Hz)", "bin magnitude (dB)",
               x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
     plot.ref_vertical(off_bin, "1023 Hz")
@@ -1082,8 +1082,11 @@ def fig_spectrogram():
                 "A spectrogram: the STFT drawn over time",
                 "Time runs left to right, frequency bottom to top, and darker "
                 "cells hold more amplitude. A 300 Hz sine is one line; the "
-                "300 Hz square adds its stack of odd harmonics; a 600 Hz "
-                "sine is one line again, higher.",
+                "300 Hz square adds its odd harmonics at 300, 900 and 1500 Hz "
+                "plus a fainter interleaved stack at 100, 500, 700, 1100, "
+                "1300 and 1700 Hz, which is its harmonics above Nyquist "
+                "folding back as aliasing; a 600 Hz sine is one line again, "
+                "higher.",
                 legend_band=True)
     plot.grid(0.2, 500, "time (s)", "frequency (Hz)",
               x_tick_fmt=lambda v: f"{v:.1f}", y_tick_fmt=lambda v: f"{v:.0f}")
