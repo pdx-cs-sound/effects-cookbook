@@ -141,6 +141,17 @@ class Plot:
         self.parts.append(f'<polyline points="{self._pts(xs, ys)}" fill="none" '
                           f'stroke="{color}" stroke-width="{width}"{d}{o}/>')
 
+    def dots(self, xs, ys, color, radius=2.4, opacity=1.0):
+        """A marker per sample. Use where the reader must not read the
+        connecting stroke as data: bin magnitudes exist only at the bin
+        centres, so the segments between them are drawing, not signal."""
+        o = f' fill-opacity="{opacity}"' if opacity < 1.0 else ""
+        self.parts.append(f'<g fill="{color}"{o}>')
+        for x, y in zip(xs, ys):
+            self.parts.append(f'<circle cx="{self.sx(x):.1f}" cy="{self.sy(y):.1f}" '
+                              f'r="{radius}"/>')
+        self.parts.append('</g>')
+
     def area(self, xs, ys, color, opacity=0.35):
         """Filled region between the curve and the y = 0 baseline."""
         base = self.sy(0.0)
@@ -931,7 +942,7 @@ def fig_fir_response():
         ("8-tap moving average", BLUE, None, 2.2),
         ("first difference", AMBER, None, 2.2),
         ("unity gain", GRAY, "4 3", 2.0),
-    ], x=plot.x0 + 300, y=plot.sy(0.62)),
+    ], x=plot.x0 + 300, y=plot.sy(0.62))
     plot.save("fir_response.svg")
 
 
@@ -1005,6 +1016,54 @@ def fig_leakage():
         ("Hann window", BLUE, None, 2.2),
     ], x=plot.x1 - 130, y=plot.y1 + 16)
     plot.save("leakage.svg")
+
+
+def fig_bin_alignment():
+    """The same unwindowed transform for a tone on a bin and one between.
+
+    The leakage figure varies the window and holds the tone off-bin; this
+    one holds the window (none) and varies the tone, so the spread there
+    can be attributed to the bin grid rather than to the missing window.
+    """
+    sr, n = 8000, 512
+    spacing = sr / n              # 15.625 Hz between bin centres
+    on_bin = 65 * spacing         # 1015.625 Hz, exactly bin 65
+    off_bin = 1023.0
+
+    def spectrum(f):
+        x = [0.5 * math.sin(2.0 * math.pi * f * m / sr) for m in range(n)]
+        mags = magnitudes(fft(x))
+        # An on-bin tone leaves the other bins at rounding noise, so the
+        # clamp is what keeps that line on the plot at all.
+        return [max(-60.0, 20.0 * math.log10(m if m > 1e-9 else 1e-9))
+                for m in mags]
+
+    lo, hi = 58, 75
+    bins = [k * spacing for k in range(lo, hi)]
+    on, off = spectrum(on_bin)[lo:hi], spectrum(off_bin)[lo:hi]
+    # y_min below the clamp so the floored run reads as a line on the plot
+    # rather than as half a stroke along the axis.
+    plot = Plot(520, 340, (900, 1160), (-63, 0),
+                "A tone on a bin and a tone between bins",
+                "Bin magnitudes in dB for two unwindowed sines. The one at "
+                "1015.6 Hz sits exactly on bin 65 and reads as a single bin "
+                "at its true amplitude, every other bin empty. The one at "
+                "1023 Hz sits between bins 65 and 66 and spreads across the "
+                "whole range, its two nearest bins reading about a decibel "
+                "apart. Dots mark the bins; the line between them is drawn, "
+                "not measured.")
+    plot.grid(50, 10, "bin frequency (Hz)", "bin magnitude (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.ref_vertical(off_bin, "1023 Hz")
+    plot.line(bins, on, GREEN, 2.2, opacity=0.85)
+    plot.line(bins, off, AMBER, 2.2, opacity=0.85)
+    plot.dots(bins, on, GREEN, opacity=0.85)
+    plot.dots(bins, off, AMBER, opacity=0.85)
+    plot.legend([
+        ("1015.6 Hz, on bin 65", GREEN, None, 2.2),
+        ("1023 Hz, between bins", AMBER, None, 2.2),
+    ], x=plot.x0 + 10, y=plot.y1 + 16)
+    plot.save("bin_alignment.svg")
 
 
 def fig_spectrogram():
@@ -1104,5 +1163,6 @@ if __name__ == "__main__":
     fig_fir_response()
     fig_iir_response()
     fig_leakage()
+    fig_bin_alignment()
     fig_spectrogram()
     fig_resample_spectrum()

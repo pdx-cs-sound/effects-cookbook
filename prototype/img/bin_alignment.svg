@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="A tone on a bin and a tone between bins">
+<title>A tone on a bin and a tone between bins</title>
+<desc>Bin magnitudes in dB for two unwindowed sines. The one at 1015.6 Hz sits exactly on bin 65 and reads as a single bin at its true amplitude, every other bin empty. The one at 1023 Hz sits between bins 65 and 66 and spreads across the whole range, its two nearest bins reading about a decibel apart. Dots mark the bins; the line between them is drawn, not measured.</desc>
+<g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
+<line x1="46.0" y1="306" x2="46.0" y2="14"/>
+<line x1="134.5" y1="306" x2="134.5" y2="14"/>
+<line x1="222.9" y1="306" x2="222.9" y2="14"/>
+<line x1="311.4" y1="306" x2="311.4" y2="14"/>
+<line x1="399.8" y1="306" x2="399.8" y2="14"/>
+<line x1="488.3" y1="306" x2="488.3" y2="14"/>
+<line x1="46" y1="292.1" x2="506" y2="292.1"/>
+<line x1="46" y1="245.7" x2="506" y2="245.7"/>
+<line x1="46" y1="199.4" x2="506" y2="199.4"/>
+<line x1="46" y1="153.0" x2="506" y2="153.0"/>
+<line x1="46" y1="106.7" x2="506" y2="106.7"/>
+<line x1="46" y1="60.3" x2="506" y2="60.3"/>
+<line x1="46" y1="14.0" x2="506" y2="14.0"/>
+</g>
+<g fill="#888780" font-size="11" font-family="system-ui, sans-serif">
+<text x="46.0" y="322" text-anchor="middle">900</text>
+<text x="134.5" y="322" text-anchor="middle">950</text>
+<text x="222.9" y="322" text-anchor="middle">1000</text>
+<text x="311.4" y="322" text-anchor="middle">1050</text>
+<text x="399.8" y="322" text-anchor="middle">1100</text>
+<text x="488.3" y="322" text-anchor="middle">1150</text>
+<text x="40" y="295.1" text-anchor="end">-60</text>
+<text x="40" y="248.7" text-anchor="end">-50</text>
+<text x="40" y="202.4" text-anchor="end">-40</text>
+<text x="40" y="156.0" text-anchor="end">-30</text>
+<text x="40" y="109.7" text-anchor="end">-20</text>
+<text x="40" y="63.3" text-anchor="end">-10</text>
+<text x="40" y="17.0" text-anchor="end">0</text>
+<text x="276.0" y="336" text-anchor="middle">bin frequency (Hz)</text>
+<text x="13" y="160.0" text-anchor="middle" transform="rotate(-90 13 160.0)">bin magnitude (dB)</text>
+</g>
+<line x1="263.6" y1="306" x2="263.6" y2="14" stroke="#7f77dd" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="268.6" y="24" text-anchor="start" fill="#7f77dd" font-size="10" font-family="system-ui, sans-serif">1023 Hz</text>
+<polyline points="57.1,292.1 84.7,292.1 112.3,292.1 140.0,292.1 167.6,292.1 195.3,292.1 222.9,292.1 250.6,41.9 278.2,292.1 305.9,292.1 333.5,292.1 361.1,292.1 388.8,292.1 416.4,292.1 444.1,292.1 471.7,292.1 499.4,292.1" fill="none" stroke="#1baf7a" stroke-width="2.2" stroke-opacity="0.85"/>
+<polyline points="57.1,167.6 84.7,162.0 112.3,155.5 140.0,147.6 167.6,137.6 195.3,124.1 222.9,103.4 250.6,57.8 278.2,62.5 305.9,105.5 333.5,126.0 361.1,139.6 388.8,149.8 416.4,158.0 444.1,164.8 471.7,170.7 499.4,175.9" fill="none" stroke="#d98a00" stroke-width="2.2" stroke-opacity="0.85"/>
+<g fill="#1baf7a" fill-opacity="0.85">
+<circle cx="57.1" cy="292.1" r="2.4"/>
+<circle cx="84.7" cy="292.1" r="2.4"/>
+<circle cx="112.3" cy="292.1" r="2.4"/>
+<circle cx="140.0" cy="292.1" r="2.4"/>
+<circle cx="167.6" cy="292.1" r="2.4"/>
+<circle cx="195.3" cy="292.1" r="2.4"/>
+<circle cx="222.9" cy="292.1" r="2.4"/>
+<circle cx="250.6" cy="41.9" r="2.4"/>
+<circle cx="278.2" cy="292.1" r="2.4"/>
+<circle cx="305.9" cy="292.1" r="2.4"/>
+<circle cx="333.5" cy="292.1" r="2.4"/>
+<circle cx="361.1" cy="292.1" r="2.4"/>
+<circle cx="388.8" cy="292.1" r="2.4"/>
+<circle cx="416.4" cy="292.1" r="2.4"/>
+<circle cx="444.1" cy="292.1" r="2.4"/>
+<circle cx="471.7" cy="292.1" r="2.4"/>
+<circle cx="499.4" cy="292.1" r="2.4"/>
+</g>
+<g fill="#d98a00" fill-opacity="0.85">
+<circle cx="57.1" cy="167.6" r="2.4"/>
+<circle cx="84.7" cy="162.0" r="2.4"/>
+<circle cx="112.3" cy="155.5" r="2.4"/>
+<circle cx="140.0" cy="147.6" r="2.4"/>
+<circle cx="167.6" cy="137.6" r="2.4"/>
+<circle cx="195.3" cy="124.1" r="2.4"/>
+<circle cx="222.9" cy="103.4" r="2.4"/>
+<circle cx="250.6" cy="57.8" r="2.4"/>
+<circle cx="278.2" cy="62.5" r="2.4"/>
+<circle cx="305.9" cy="105.5" r="2.4"/>
+<circle cx="333.5" cy="126.0" r="2.4"/>
+<circle cx="361.1" cy="139.6" r="2.4"/>
+<circle cx="388.8" cy="149.8" r="2.4"/>
+<circle cx="416.4" cy="158.0" r="2.4"/>
+<circle cx="444.1" cy="164.8" r="2.4"/>
+<circle cx="471.7" cy="170.7" r="2.4"/>
+<circle cx="499.4" cy="175.9" r="2.4"/>
+</g>
+<line x1="56" y1="30" x2="76" y2="30" stroke="#1baf7a" stroke-width="2.2"/>
+<text x="82" y="33.5" fill="#888780" font-size="11" font-family="system-ui, sans-serif">1015.6 Hz, on bin 65</text>
+<line x1="56" y1="45" x2="76" y2="45" stroke="#d98a00" stroke-width="2.2"/>
+<text x="82" y="48.5" fill="#888780" font-size="11" font-family="system-ui, sans-serif">1023 Hz, between bins</text>
+</svg>

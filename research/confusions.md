@@ -107,3 +107,24 @@ anything.
     the slot push is about to overwrite, a FIFO in ring clothing. Fix: comment at the
     read site. Pattern: relative-to-now semantics need a nudge wherever the argument
     looks constant.)
+27. "In leakage.svg there's an asymmetrical plateau for both window and non-window
+    lines — is that expected?" (2026-08-10. Yes, and it was the figure's fault for not
+    saying so. 1023 Hz falls between bins 65 and 66, so both bins read nearly the same
+    and the top draws as a short tilted plateau rather than a spike; bin 65 wins by a
+    decibel because the tone is 7.4 Hz above it and 8.3 Hz below bin 66. Scalloping
+    loss of 3.5 dB against a 3.92 dB worst case. The deeper problem: one figure was
+    carrying two lessons, window vs no window and on-bin vs off-bin, so every off-bin
+    artifact read as something the window had done. Fix: a second figure,
+    bin_alignment.svg, holding the window fixed at none and varying only the tone, and
+    both captions rewritten to say which effect owns which feature. Also new: dots mark
+    the bins, because the on-bin line's neighbours are at the floor and the connecting
+    stroke made them look like real intermediate values. Pattern: a figure that varies
+    two things at once will have all of its features attributed to the labelled one.)
+28. Same figure: the flat blue run along the bottom is the plot's -80 dB clamp, not the
+    signal — the Hann skirt keeps going, reaching -126 dB at the right edge. Nobody
+    asked yet, but #20 was the same species of question. Showing the real skirt over
+    that x-range needs a -130 dB floor, which squashes everything worth seeing into the
+    top third, and there are no sidelobe ripples to reveal anyway: at a half-bin offset
+    the bins land near the sidelobe peaks, so the curve is the smooth 18 dB/octave
+    envelope either way. Fix: caption states the floor is a floor and gives the number
+    it keeps falling to. Pattern: a clipped axis has to admit it is clipping.

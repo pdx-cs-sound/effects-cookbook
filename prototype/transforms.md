@@ -42,8 +42,21 @@ are usually powers of two.
 
 [Chapter 8](frequency-domain.md) noted that a probe over partial cycles reports
 amplitude at frequencies the signal does not contain, and named the error spectral
-leakage. A block of $N$ samples cuts almost every real frequency mid-cycle, so the DFT
-leaks by default. The standard treatment multiplies the block by a window, a curve that
+leakage. The block length decides which frequencies escape it. Bins sit $sr/N$ apart —
+15.625 Hz for the 8000 Hz, 512-sample block used below — and a tone parked exactly on a
+bin centre completes a whole number of cycles in the block. Only those tones come
+through clean. Almost no real tone is one of them:
+
+![Bin magnitudes in dB for two unwindowed sines: the one on a bin centre occupies a single bin, and the one between bins spreads across the whole range.](img/bin_alignment.svg)
+
+*Two sines through the same transform, neither windowed. At 1015.6 Hz the tone is bin 65
+exactly, and it reads $-6$ dB — its true amplitude — with every other bin empty. Move it
+7 Hz to 1023 Hz, still a perfectly steady sine, and no bin reads it correctly: the two
+nearest split it at $-9.5$ and $-10.5$ dB and the rest of the block carries the
+remainder. Dots mark the bins; the line between them is drawn, not measured.*
+
+That spread is leakage, and the figure above pins the cause on the bin grid rather than
+on the transform. The standard treatment multiplies the block by a window, a curve that
 fades the frame in and out so its edges no longer jump:
 
 ```python
@@ -52,9 +65,13 @@ fades the frame in and out so its edges no longer jump:
 
 ![Bin magnitudes in dB for an off-bin sine, transformed without a window and with the Hann window: the unwindowed spectrum leaks across the whole range.](img/leakage.svg)
 
-*A 1023 Hz sine, between bins, transformed both ways. Without a window the tone leaks
-across every bin. The Hann window trades a slightly wider peak for leakage that falls
-away by tens of dB.*
+*The 1023 Hz tone again, now with the window as the only thing that changes. Both traces
+share the same two-bin top, tilted because 1023 Hz sits nearer bin 65 than bin 66 — that
+part is the bin grid's doing, not the window's. What the window changes is the skirt.
+Unwindowed, the tone is still reporting above $-52$ dB at every bin in the range;
+windowed, it is through the $-80$ dB floor of the plot within about ten bins. The flat
+blue run is that floor, not the signal: the windowed skirt keeps falling, below $-100$ dB
+by 700 Hz.*
 
 ## The STFT
 
