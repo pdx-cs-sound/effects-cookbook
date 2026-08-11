@@ -92,10 +92,18 @@ These patterns are the main reason the current prose reads machine-generated:
   direct bin edit deletes some bins," "The simplest way to X is Y," "The cleanest
   approach." The superlative is a verdict the reader cannot check (rule 6), and the
   ranking usually turns out to be unnecessary once the operation is stated plainly.
-  Two tells travel with this frame. A nominalized abstraction becomes the agent of an
-  active verb, so an "edit" deletes something instead of the code setting values to
-  zero. And the sentence announces a category before doing any work in it, which is
-  often the third announcement of a frame the chapter opening already established.
+  It also tends to announce a category before doing any work in it, which is often the
+  third announcement of a frame the chapter opening already established.
+- Abstractions given verbs they cannot perform: "The most direct bin edit deletes some
+  bins," "Digital audio divided the work it used to do," "the bin grid accounts for the
+  difference." An edit does not delete, a medium does not divide, and a grid does not
+  account for anything. The test is the subject. If it is a medium, a field, a process,
+  or a nominalized action rather than a thing that acts, the verb is borrowed and the
+  real agent has gone missing. Name the actor (the code, the systems, the filter) or
+  restate the sentence so the fact is the subject ("the difference comes from the bin
+  grid"). Parameters determining values are not this defect: a cutoff may set a length
+  and a sample rate may set the Nyquist frequency, because that is what those words
+  ordinarily mean.
 - Reader-attention direction: sentences that tell the reader how to regard the material
   instead of stating it. "It is worth chasing down rather than reading past," "note
   that," "importantly," "this is where it gets interesting," "the thing to see here."

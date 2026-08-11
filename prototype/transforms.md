@@ -56,7 +56,7 @@ at $-9.5$ and $-10.5$ dB, and the rest of the block carries the remainder. Dots 
 bins. A magnitude exists only at a dot, and the line between the dots carries no data.*
 
 The spread in the second trace is leakage. Both tones went through the same unwindowed
-transform, so the bin grid accounts for the difference between them. The standard
+transform, so the difference between them comes from the bin grid. The standard
 treatment multiplies the block by a window, a curve that fades the frame in and out so
 its edges no longer jump:
 
