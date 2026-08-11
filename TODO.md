@@ -18,7 +18,8 @@ Working task list for the Digital Audio Effects Cookbook. Design rationale lives
       function — offline loudness normalization (BS.1770/R128) absorbed the transparent
       job, real-time AGC survives in telephony (ITU-T G.169, WebRTC AGC2), hearing aids
       (Kates AGC-i/AGC-o), and SDR. Verified sources + possible agc.md additions in
-      `research/agc-in-the-digital-world.md`
+      `prototype/agc-in-the-digital-world.md` (moved from `research/` and published as an
+      appendix, 2026-08-11)
 - [x] Tone batch done (2026-07-13): STYLE.md rules 10 (plain punctuation) and 11 (no
       idioms); full-book sweep of dashes/semicolons/kickers/reversals/idioms; two stale
       Chapter-7 links caught by the audit and fixed

@@ -57,6 +57,7 @@ nav:
   - Appendix:
       - "Status & scope": status.md
       - References: references.md
+      - "AGC in the digital world": agc-in-the-digital-world.md
       - Visualizations: visualizations.md
 
 extra_javascript:

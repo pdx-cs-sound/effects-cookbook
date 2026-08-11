@@ -153,6 +153,8 @@ def agc(x, sr, target_db=-20.0, attack_ms=50.0, release_ms=2000.0,
 
 ## Learn more
 
+- [AGC in the digital world](agc-in-the-digital-world.md) — an appendix on where the
+  function survives in digital systems, and under what other names.
 - J. M. Woodgate, ISCVE Engineering Note 27.1, "Automatic gain control, limiting and
   compression" (anchored to IEC 60268-8) — the clearest taxonomy of the three.
 - WebRTC AGC2 — a modern, digital, open-source AGC in the browser audio pipeline. (Check
