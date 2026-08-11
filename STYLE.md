@@ -88,6 +88,14 @@ These patterns are the main reason the current prose reads machine-generated:
 - Bold or italics doing work that word order should do (see rule 9).
 - Verdict adjectives standing in for the reason: honest, clean, sane, proper, principled,
   natural, elegant — and their adverbs (genuinely, simply, actually).
+- Superlative topic sentences that rank an approach instead of naming it: "The most
+  direct bin edit deletes some bins," "The simplest way to X is Y," "The cleanest
+  approach." The superlative is a verdict the reader cannot check (rule 6), and the
+  ranking usually turns out to be unnecessary once the operation is stated plainly.
+  Two tells travel with this frame. A nominalized abstraction becomes the agent of an
+  active verb, so an "edit" deletes something instead of the code setting values to
+  zero. And the sentence announces a category before doing any work in it, which is
+  often the third announcement of a frame the chapter opening already established.
 - Reader-attention direction: sentences that tell the reader how to regard the material
   instead of stating it. "It is worth chasing down rather than reading past," "note
   that," "importantly," "this is where it gets interesting," "the thing to see here."

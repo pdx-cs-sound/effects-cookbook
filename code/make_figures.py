@@ -30,7 +30,7 @@ from delays import allpass, comb, echo
 from filters import (FIRST_DIFFERENCE, biquad, fir, frequency_response,
                      moving_average, one_pole, rbj_lowpass)
 from frequency import sine_amount
-from frequency_effects import resample
+from frequency_effects import resample, spectral_lowpass
 from transforms import fft, hann, magnitudes, stft
 from oscillators import (burst_tone, follow, oscillator, sawtooth_shape,
                          sine_shape, sine_wave, square_shape, tremolo,
@@ -1142,6 +1142,49 @@ def fig_resample_spectrum():
     plot.save("resample_spectrum.svg")
 
 
+def fig_spectral_ringing():
+    """One click through the spectral lowpass and through a biquad.
+
+    The rectangular response is a sinc in time, and a sinc is symmetric
+    about its peak, so half the ringing lands before the transient that
+    caused it. No causal design can do that, which is what makes the
+    comparison with the Chapter 9 biquad the point of the figure.
+    """
+    sr, cutoff = 8000, 1000.0
+    n, click = 8192, 4096
+    x = [0.0] * n
+    x[click] = 0.9
+    spectral = spectral_lowpass(x, sr, cutoff)
+    causal = biquad(x, rbj_lowpass(sr, cutoff, 0.707))
+
+    # +/- 10 ms. The ringing runs to about 17 ms either side, but a window
+    # that wide packs 40 cycles of the 1000 Hz oscillation into the plot
+    # and reads as fuzz. The prose carries the extent; the figure carries
+    # the shape.
+    span = 80
+    offs = list(range(-span, span + 1))
+    ms = [d / sr * 1000.0 for d in offs]
+
+    plot = Plot(520, 330, (-10, 10), (-0.1, 0.35),
+                "Ringing: a spectral lowpass against a Chapter 9 biquad",
+                "One click through two 1000 Hz lowpass filters, drawn "
+                "against time either side of the click. The spectral "
+                "filter's response is symmetric about the click, so half of "
+                "its ringing arrives before the transient that caused it. "
+                "The biquad is silent until the click and settles about a "
+                "millisecond after it.")
+    plot.grid(2, 0.1, "time from the click (ms)", "amplitude",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.1f}")
+    plot.ref_vertical(0.0, "click")
+    plot.line(ms, [causal[click + d] for d in offs], BLUE, 2.2, opacity=0.85)
+    plot.line(ms, [spectral[click + d] for d in offs], RED, 2.2, opacity=0.85)
+    plot.legend([
+        ("spectral lowpass", RED, None, 2.2),
+        ("biquad, Q = 0.71", BLUE, None, 2.2),
+    ], x=plot.x0 + 10, y=plot.y1 + 16)
+    plot.save("spectral_ringing.svg")
+
+
 if __name__ == "__main__":
     fig_compression_transfer()
     fig_compression_gain_reduction()
@@ -1169,3 +1212,4 @@ if __name__ == "__main__":
     fig_bin_alignment()
     fig_spectrogram()
     fig_resample_spectrum()
+    fig_spectral_ringing()

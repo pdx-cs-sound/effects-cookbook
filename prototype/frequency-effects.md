@@ -39,19 +39,38 @@ and the phase vocoder cited under Learn more is the standard way to do it.
 
 ## Spectral filtering
 
-The most direct bin edit deletes some bins. Zeroing everything above a cutoff is a
-lowpass filter with a perfectly rectangular response, which no
-[Chapter 9](filters.md) design achieves:
+Zeroing every bin above a cutoff is a lowpass filter with an exactly rectangular
+response, which no [Chapter 9](filters.md) design achieves:
 
 ```python
 --8<-- "code/frequency_effects.py:spectral"
 ```
 
-The rectangular response has a cost. Each frame's edit spreads over the frame's whole
-duration on resynthesis, so sharp spectral edges produce ringing around transients,
-and heavy bin editing produces the watery artifact known as musical noise. Frequency-
-domain filtering trades the smooth compromises of Chapter 9 for an exact response and
-a new class of artifacts.
+The rectangular response has a cost. A rectangle in the frequency domain becomes one
+tall peak with symmetric ripples either side in the time domain, and the ripples shrink
+as the distance from the peak grows. That shape is the sinc function, $\sin(x)/x$. The
+filter's impulse response is a sinc, so one input sample comes out as a decaying
+oscillation at the cutoff frequency. A narrower rectangle produces a wider sinc, so the
+ringing lengthens as the cutoff falls. Measured down to a hundredth of the peak, it runs
+about 18 ms either side of a transient at a 1000 Hz cutoff and about 7 ms at 2000 Hz. A
+longer frame does not lengthen it. The frame bounds how far the spread can reach, and
+the cutoff sets it.
+
+![A click through a spectral lowpass and through a biquad: the spectral filter's ringing is symmetric around the click and begins before it, while the biquad holds at zero until the click and rings briefly after.](img/spectral_ringing.svg)
+
+*One click through both filters at a 1000 Hz cutoff, generated with the
+`spectral_lowpass` above and the Chapter 9 biquad. The spectral filter's response is
+symmetric about the click, so half of its ringing arrives before the transient that
+caused it. The biquad holds at zero until the click and settles about a millisecond
+after. The plot spans 10 ms either side, and the spectral ringing continues past both
+edges of it.*
+
+No Chapter 9 design can reproduce the sinc's symmetry. A causal filter cannot respond
+before its input arrives, so its ringing follows the transient. The spectral filter's
+ringing is centered on the transient, and the half arriving first is audible as
+pre-echo. Heavy bin editing adds the watery artifact known as musical noise.
+Frequency-domain filtering trades the smooth compromises of Chapter 9 for an exact
+response and a new class of artifacts.
 
 ## Robotization
 
