@@ -13,16 +13,16 @@ For simple updates, edit a markdown file and push to `main` - this will re-publi
 
 | Path                            | Contents                                                                                       |
 |---------------------------------|------------------------------------------------------------------------------------------------|
-| `prototype/`                    | The book itself. MkDocs `docs_dir`. One file per page.                                         |
-| `prototype/img/`                | Generated SVG figures, committed.                                                              |
-| `prototype/audio/`              | Generated WAV demos, committed.                                                                |
+| `prototype/`                    | The book contents, the `docs_dir` for MkDocs.                                                  |
+| `prototype/img/`                | Generated SVG figures                                                                          |
+| `prototype/audio/`              | Generated WAV demos (currently not used)                                                       |
 | `prototype/visualization/`      | AudioExplorer widgets and the compressor decision map.                                         |
 | `code/`                         | Reference implementations, their unit tests, and the figure, demo, and embed-check scripts.    |
 | `mkdocs.yml`                    | Site config. The `nav` block is the chapter order.                                             |
 | `.github/workflows/publish.yml` | The publish gate: tests, build, embed check, deploy.                                           |
 | `DESIGN.md`                     | Purpose, scope, page template, and the decision log (§8).                                      |
 | `STYLE.md`                      | Prose rules for the pages. Rule 12 requires an adversarial pass on new prose.                  |
-| `TODO.md`                       | The actionable task list, ordered, with completed items kept for history.                      |
+| `TODO.md`                       | The task list, including completed items                                                       |
 | `research/`                     | Source notes, feedback logs, and voice samples. Not published.                                 |
 | `site/`                         | This is a local build artifact and is gitignored. Nothing in it should be edited or committed. |
 
@@ -63,10 +63,7 @@ Four things are unfinished and are not visible from the code:
 ### Picking the work up
 
 `TODO.md` is the working list, and its "Now" section is ordered. `DESIGN.md` §8 records why
-past decisions went the way they did. Read the relevant entry before reversing one. Any new
-prose for the book goes through the `STYLE.md` rule 12 pass before it is committed, on the
-whole delivery rather than page by page, because the patterns it catches cluster in whatever
-was written last.
+past decisions went the way they did. The original version of this book used Claude but the AI guidance is the same for any model.  Fable was excellent at creating reusable code, like the Plot library and AudioExplorer widgets, both of which call the example code shown in the book.  The graphs themselves were usually based on a good idea and needed some tweaks from a reviewer to bring those out.  Text voice has been a consistent problem and requires vigilance - specific tics have been identified and eliminated and rules have been established to run an adversarial scan for AI-voice but it continues to creep back in.
 
 ## Updating
 
