@@ -1,4 +1,4 @@
-"""Tests for the Chapter 10 transforms.
+"""Tests for the Chapter 11 transforms.
 
 Run from the repo root:  python3 -m unittest discover -s code
 """

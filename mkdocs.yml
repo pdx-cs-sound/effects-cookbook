@@ -52,8 +52,9 @@ nav:
       - Reverb: reverb.md
   - "8 — The frequency domain": frequency-domain.md
   - "9 — Filters": filters.md
-  - "10 — DFT, FFT, STFT": transforms.md
-  - "11 — Frequency-domain effects": frequency-effects.md
+  - "10 — Filter effects": filter-effects.md
+  - "11 — DFT, FFT, STFT": transforms.md
+  - "12 — Frequency-domain effects": frequency-effects.md
   - Appendix:
       - "Status & scope": status.md
       - References: references.md

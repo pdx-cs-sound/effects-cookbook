@@ -115,8 +115,10 @@ itself.*
   follower's machinery.
 - [Delay lines](delay-modulation.md): the comb and allpass are filters built from long
   delays, and the reverberator is a filter network.
+- [Filter effects](filter-effects.md): equalization, wah, and phasing built from the
+  filters on this page.
 - [Frequency-domain effects](frequency-effects.md): reshaping the spectrum directly,
-  once [Chapter 10](transforms.md) provides the transform.
+  once [Chapter 11](transforms.md) provides the transform.
 
 ## Learn more
 

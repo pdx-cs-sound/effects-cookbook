@@ -1,11 +1,11 @@
-"""Frequency-domain effects (Chapter 11).
+"""Frequency-domain effects (Chapter 12).
 
 This module is the single source for the chapter's code. The pages include
 the marked sections at build time, and the figure generators import the
 functions.
 
 Standard library only. The spectral effects follow one pattern: analyze
-with the Chapter 10 STFT, change the bins, resynthesize with the inverse.
+with the Chapter 11 STFT, change the bins, resynthesize with the inverse.
 """
 
 from transforms import istft, stft

@@ -62,7 +62,7 @@ Each rule is checkable during review.
     case. The pass is a separate read of the finished draft against the tic list
     below, made before delivery, and it is not satisfied by having written carefully.
 
-    Documented cases. The chapter 8-9 draft (2026-08-03). The chapter 10 figure
+    Documented cases. The chapter 8-9 draft (2026-08-03). The Chapter 11 figure
     captions (2026-08-10): roughly thirty lines of new prose, delivered without the
     pass, carried one reader-direction fragment, five prose em-dashes, four British
     spellings, four reversal pairs, two personifications, one reader address, and

@@ -40,12 +40,14 @@ sequence below after any change under `code/`.
 
 ### Where the work stands
 
-All eleven chapters have drafted content in the book's flat register, but maintenance of the flat register is a 
-continuing process.  Despite admonitions to avoid default AI speech in `STYLE.md` and the requirement of an adversarial pass to detect AI speech, it will creep back in. 
+All twelve chapters have drafted content in the book's flat register, but maintenance of
+the flat register is a continuing process.
+Despite admonitions to avoid default AI speech in `STYLE.md` and the requirement of an
+adversarial pass to detect AI speech, it will creep back in.
 
 The reader-facing status page is the [Status & scope](prototype/status.md) appendix which will be updated before handoff.
 
-Twenty-seven figures are embedded, which is every SVG in `prototype/img/`. Three AudioExplorers are
+Thirty figures are embedded, which is every SVG in `prototype/img/`. Three AudioExplorers are
 embedded, on the Waveforms, Tremolo, and Vibrato pages.
 
 Four things are unfinished and are not visible from the code:

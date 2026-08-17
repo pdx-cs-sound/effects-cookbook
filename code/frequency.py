@@ -5,7 +5,7 @@ the marked sections at build time, and the figure generators import the
 functions.
 
 Standard library only. Signals are plain Python lists of floats. The probe
-here measures one frequency at a time; the transforms of Chapter 10 compute
+here measures one frequency at a time; the transforms of Chapter 11 compute
 every probe at once.
 """
 

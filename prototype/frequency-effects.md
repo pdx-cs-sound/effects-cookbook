@@ -3,13 +3,13 @@
 > Analyze with the STFT, change the bins, resynthesize with the inverse. Every effect in
 > this chapter is one edit inside that pattern.
 
-*Chapter 11 — frequency-domain effects.*
+*Chapter 12 — frequency-domain effects.*
 
 ---
 
 ## The pattern
 
-[Chapter 10](transforms.md) ended with a round trip: `istft(stft(x))` returns the
+[Chapter 11](transforms.md) ended with a round trip: `istft(stft(x))` returns the
 signal it was given. That identity path is the basis for every effect here. The
 forward transform turns audio into editable spectra, the edit does the effect's work,
 and the inverse turns the result back into sound. The time-domain chapters worked with
@@ -78,7 +78,7 @@ response and a new class of artifacts.
 Each frame then resynthesizes with all of its content aligned to the frame start, so
 the output pulses at the frame rate no matter what pitch came in. Speech keeps its
 vowels and consonants, since those live in the amplitude spectrum, but lands on one
-constant buzz. [Chapter 10](transforms.md) listed phase as half the data; robotization
+constant buzz. [Chapter 11](transforms.md) listed phase as half the data; robotization
 deletes that half deliberately.
 
 ## Key parameters

@@ -1,4 +1,4 @@
-"""Tests for the Chapter 11 frequency-domain effects.
+"""Tests for the Chapter 12 frequency-domain effects.
 
 Run from the repo root:  python3 -m unittest discover -s code
 """

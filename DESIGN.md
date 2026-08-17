@@ -28,13 +28,14 @@ Cookbook ethos: consistent template per effect, copy-pasteable, learn-by-doing.
   2 = everyday worker in the space, 3 = dissertation-grade. We aim at **1, occasionally 2**.
   Explicitly **not** state-of-the-art; we are not pushing the envelope.
 - **Prerequisites assumed:** TBD (basic programming; comfort with samples and dB).
-- **Structure: eleven chapters** (2026-07-13, from meeting feedback; supersedes the
-  ten-chapter plan). Ordered by machinery:
+- **Structure: twelve chapters** (Chapter 10 added 2026-08-17; supersedes the
+  eleven-chapter plan). Ordered by machinery:
   1. Introduction. 2. Measuring sound. 3. Single-sample effects (volume, distortion, bit
   crush; mu-law dropped). 4. Waveforms & oscillators. 5. Tremolo & envelopes (tremolo first, 2026-07-19). 6. Companding
   (compression, limiter, expander, AGC). 7. Delay & modulation. 8. The frequency domain.
-  9. Filters. 10. DFT/FFT/STFT. 11. Frequency-domain effects.
-  Chapters 1-7 are specified in more detail than 8-11; the complexity trend is the point.
+  9. Filters. 10. Filter effects (EQ, wah, phaser). 11. DFT/FFT/STFT.
+  12. Frequency-domain effects.
+  Chapters 1-7 are specified in more detail than 8-12; the complexity trend is the point.
 - **Naming note:** "Companding" is chapter 6's title, restored 2026-07-13: dropping
   mu-law (the codec-sense companding) dissolved the collision that had retired it.
 
@@ -264,3 +265,4 @@ The project is **rigorous about attribution and copyright.** Working policy (ref
 | 2026-07-27 | **Reader prose describes audio, not the book's apparatus**: build-time inclusion, testedness, and "first in the book" narration removed from pages; one "How the book is built" paragraph in Status & scope; captions keep a compressed origin clause ("generated with the `echo` above") and drop generator filenames | Apparatus claims are true but not about sound; one statement beats a recurring subtitle |
 | 2026-07-27 | **No assertions in teaching snippets**: preconditions live in docstrings, enforcement lives in the test suite | Every snippet line is pedagogy; an assert teaches defensive programming, not audio |
 | 2026-07-27 | **Terminology and audience baseline**: use the literature's term at first use (phase wraparound), never promote a casually used word to a definite term; standard CS structures (ring buffer) are assumed known, pages teach the audio-to-structure mapping | CS416/516 readers own the data structures; the book owns the audio |
+| 2026-08-17 | Added **Chapter 10, Filter effects**: parametric EQ, LFO wah, and phaser. The former Chapters 10 and 11 became Chapters 11 and 12. | Chapter 9 defined filter machinery but deferred its direct musical applications. Chapter 10 applies fixed and moving filters before the book changes representation with the DFT. |

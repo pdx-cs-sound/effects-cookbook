@@ -86,19 +86,19 @@ inharmonic content.
 !!! warning "Pitfalls"
     - The probe assumes whole cycles. Measured over a window that cuts a cycle short, a
       probe reports some amplitude at frequencies the signal does not contain. The
-      error is called spectral leakage, and [Chapter 10](transforms.md) returns to it.
+      error is called spectral leakage, and [Chapter 11](transforms.md) returns to it.
     - The Nyquist frequency itself is not usable. Content at exactly
       $f_s / 2$ has two samples per cycle with no room for phase, and real systems
       filter before it.
     - A spectrum with no time axis describes a steady signal. Real audio changes, and
       describing change requires measuring spectra over short windows, which is the
-      short-time analysis of [Chapter 10](transforms.md).
+      short-time analysis of [Chapter 11](transforms.md).
 
 ## Where this leads
 
 [Chapter 9](filters.md) builds the effects that reshape a spectrum: gain per frequency.
-[Chapter 10](transforms.md) computes every probe at once, which is the DFT.
-[Chapter 11](frequency-effects.md) edits the measured spectrum directly and turns it
+[Chapter 11](transforms.md) computes every probe at once, which is the DFT.
+[Chapter 12](frequency-effects.md) edits the measured spectrum directly and turns it
 back into sound.
 
 ## Learn more

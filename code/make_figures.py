@@ -27,8 +27,9 @@ from xml.sax.saxutils import escape
 
 from compressor import compress, db_from_amplitude
 from delays import allpass, comb, echo
-from filters import (FIRST_DIFFERENCE, biquad, fir, frequency_response,
-                     moving_average, one_pole, rbj_lowpass)
+from filters import (FIRST_DIFFERENCE, biquad, equalizer, fir,
+                     frequency_response, moving_average, one_pole, phaser,
+                     rbj_lowpass, rbj_peaking)
 from frequency import sine_amount
 from frequency_effects import resample, spectral_lowpass
 from transforms import fft, hann, magnitudes, stft
@@ -984,7 +985,100 @@ def fig_iir_response():
 
 
 # --------------------------------------------------------------------------
-# Figures: transforms (Chapter 10)
+# Figures: filter effects (Chapter 10)
+# --------------------------------------------------------------------------
+
+def _gain_db(gains, floor=-30.0):
+    return [max(floor, 20.0 * math.log10(g if g > 1e-9 else 1e-9))
+            for g in gains]
+
+
+def fig_equalizer_response():
+    """Three peaking sections and their combined EQ response."""
+    sr = 8000
+    freqs = [40.0 * k for k in range(1, 100)]
+    bands = [(250.0, 6.0, 1.2), (1000.0, -8.0, 1.5),
+             (2800.0, 5.0, 1.0)]
+    total = _gain_db(frequency_response(
+        lambda x: equalizer(x, sr, bands), sr, freqs))
+
+    plot = Plot(520, 340, (0, 4000), (-12, 9),
+                "A three-band parametric equalizer",
+                "Measured gain in dB for three peaking filters in series. "
+                "The low and high bands boost their regions, the middle "
+                "band cuts, and the output contains the combined response.")
+    plot.grid(1000, 3, "frequency (Hz)", "gain (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.line([0, 4000], [0.0, 0.0], GRAY, 2.0, dash="4 3")
+    plot.line(freqs, total, BLUE, 2.4)
+    for freq, gain, _q in bands:
+        plot.ref_vertical(freq, f"{gain:+.0f} dB")
+    plot.legend([
+        ("combined response", BLUE, None, 2.4),
+        ("unity gain", GRAY, "4 3", 2.0),
+    ], x=plot.x0 + 300, y=plot.sy(7.5))
+    plot.save("equalizer_response.svg")
+
+
+def fig_wah_sweep():
+    """Three stationary positions from a wah's resonant sweep."""
+    sr = 8000
+    freqs = [40.0 * k for k in range(1, 100)]
+    centers = [350.0, 900.0, 2200.0]
+    colors = [GREEN, BLUE, AMBER]
+
+    plot = Plot(520, 340, (0, 4000), (-3, 18),
+                "Three positions in a wah sweep",
+                "Measured response of the same 15 dB peaking filter at "
+                "350, 900, and 2200 Hz. A wah moves continuously through "
+                "these positions while it processes the signal.")
+    plot.grid(1000, 3, "frequency (Hz)", "gain (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.line([0, 4000], [0.0, 0.0], GRAY, 2.0, dash="4 3")
+    for center, color in zip(centers, colors):
+        gains = frequency_response(
+            lambda x, c=center: biquad(x, rbj_peaking(sr, c, 15.0, 2.5)),
+            sr, freqs)
+        plot.line(freqs, _gain_db(gains, -3.0), color, 2.2, opacity=0.85)
+    plot.legend([
+        ("350 Hz", GREEN, None, 2.2),
+        ("900 Hz", BLUE, None, 2.2),
+        ("2200 Hz", AMBER, None, 2.2),
+    ], x=plot.x0 + 320, y=plot.sy(16.5))
+    plot.save("wah_sweep.svg")
+
+
+def fig_phaser_response():
+    """A phaser's notches at three stationary sweep positions."""
+    sr = 8000
+    freqs = [40.0 * k for k in range(1, 100)]
+    centers = [300.0, 700.0, 1600.0]
+    colors = [GREEN, BLUE, AMBER]
+
+    plot = Plot(520, 340, (0, 4000), (-30, 3),
+                "The moving notches of a phaser",
+                "Measured response of a four-stage phaser at three fixed "
+                "points in its sweep. Each response comes from mixing the "
+                "dry signal with the output of the allpass cascade.")
+    plot.grid(1000, 5, "frequency (Hz)", "gain (dB)",
+              x_tick_fmt=lambda v: f"{v:.0f}", y_tick_fmt=lambda v: f"{v:.0f}")
+    plot.line([0, 4000], [0.0, 0.0], GRAY, 2.0, dash="4 3")
+    for center, color in zip(centers, colors):
+        gains = frequency_response(
+            lambda x, c=center: phaser(x, sr, low=c, high=c, rate=0.0,
+                                       stages=4),
+            sr, freqs)
+        plot.line(freqs, _gain_db(gains), color, 2.2, opacity=0.85)
+    plot.legend([
+        ("300 Hz center", GREEN, None, 2.2),
+        ("700 Hz center", BLUE, None, 2.2),
+        ("1600 Hz center", AMBER, None, 2.2),
+    ], x=plot.x0 + 290, y=plot.sy(-20))
+    plot.save("phaser_response.svg")
+
+
+# --------------------------------------------------------------------------
+# Figures: transforms (Chapter 11)
 # --------------------------------------------------------------------------
 
 def fig_leakage():
@@ -1112,7 +1206,7 @@ def fig_spectrogram():
 
 
 # --------------------------------------------------------------------------
-# Figure: frequency-domain effects (Chapter 11)
+# Figure: frequency-domain effects (Chapter 12)
 # --------------------------------------------------------------------------
 
 def fig_resample_spectrum():
@@ -1208,6 +1302,9 @@ if __name__ == "__main__":
     fig_aliasing()
     fig_fir_response()
     fig_iir_response()
+    fig_equalizer_response()
+    fig_wah_sweep()
+    fig_phaser_response()
     fig_leakage()
     fig_bin_alignment()
     fig_spectrogram()

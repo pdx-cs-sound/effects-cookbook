@@ -1,4 +1,4 @@
-"""The DFT, FFT, and STFT (Chapter 10).
+"""The DFT, FFT, and STFT (Chapter 11).
 
 This module is the single source for the chapter's code. The pages include
 the marked sections at build time, and the figure generators import the

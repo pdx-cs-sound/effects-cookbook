@@ -28,7 +28,7 @@ deeper.
 
 ## Chapter status
 
-The book follows an eleven-chapter plan (see the [Introduction](index.md)). All eleven
+The book follows a twelve-chapter plan (see the [Introduction](index.md)). All twelve
 chapters have drafted content. Drafted pages follow the book's flat register.
 
 ## Deferred topics

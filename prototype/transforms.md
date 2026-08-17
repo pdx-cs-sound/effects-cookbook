@@ -4,9 +4,12 @@
 > samples in, one complete spectrum out. The FFT computes the same numbers quickly, and
 > the STFT repeats the measurement over time.
 
-*Chapter 10 — the transforms.*
+*Chapter 11 — the transforms.*
 
 ---
+
+[Chapter 10](filter-effects.md) applied filters directly to samples. The code in this
+chapter changes representation by turning a block of samples into frequency bins.
 
 ## The DFT
 
@@ -104,7 +107,7 @@ bandlimited oscillator would leave only the three true lines.
 
 The inverse path matters as much as the forward one. `istft` adds the overlapping frames
 back together, and with the Hann window at half-frame overlap the shifted windows sum to
-one, so a signal survives the round trip unchanged. [Chapter 11](frequency-effects.md)
+one, so a signal survives the round trip unchanged. [Chapter 12](frequency-effects.md)
 edits the bins between the two directions.
 
 ## Key parameters
@@ -124,12 +127,12 @@ edits the bins between the two directions.
       6400 Hz spans two hundred, so low notes blur together in a spectrogram long
       before high ones.
     - Phase is half the data. Amplitude spectra read well, and resynthesis without the
-      phases produces a different signal, which [Chapter 11](frequency-effects.md)
+      phases produces a different signal, which [Chapter 12](frequency-effects.md)
       turns into an effect on purpose.
 
 ## Where this leads
 
-[Chapter 11](frequency-effects.md) runs effects inside the transform: analyze, change
+[Chapter 12](frequency-effects.md) runs effects inside the transform: analyze, change
 the bins, resynthesize.
 
 ## Learn more

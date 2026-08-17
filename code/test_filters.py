@@ -6,8 +6,9 @@ Run from the repo root:  python3 -m unittest discover -s code
 import math
 import unittest
 
-from filters import (FIRST_DIFFERENCE, biquad, fir, frequency_response,
-                     moving_average, one_pole, rbj_highpass, rbj_lowpass)
+from filters import (FIRST_DIFFERENCE, biquad, equalizer, fir,
+                     frequency_response, moving_average, one_pole, phaser,
+                     rbj_allpass, rbj_highpass, rbj_lowpass, rbj_peaking, wah)
 
 SR = 8000
 
@@ -70,3 +71,40 @@ class TestBiquad(unittest.TestCase):
         coeffs = rbj_lowpass(SR, 500.0)
         y = biquad([1.0] + [0.0] * (SR - 1), coeffs)
         self.assertLess(max(abs(v) for v in y[SR // 2:]), 1e-6)
+
+    def test_peaking_eq_has_requested_center_gain(self):
+        coeffs = rbj_peaking(SR, 1000.0, 12.0, q=2.0)
+        gain = frequency_response(lambda x: biquad(x, coeffs), SR,
+                                  [1000.0])[0]
+        self.assertAlmostEqual(20.0 * math.log10(gain), 12.0, delta=0.1)
+
+    def test_allpass_has_unity_gain(self):
+        coeffs = rbj_allpass(SR, 1000.0, q=0.7)
+        gains = frequency_response(lambda x: biquad(x, coeffs), SR,
+                                   [100.0, 500.0, 1000.0, 3000.0])
+        for gain in gains:
+            self.assertAlmostEqual(gain, 1.0, delta=0.02)
+
+
+class TestFilterEffects(unittest.TestCase):
+    def test_equalizer_combines_independent_bands(self):
+        bands = [(250.0, 6.0, 2.0), (2000.0, -9.0, 2.0)]
+        gains = frequency_response(lambda x: equalizer(x, SR, bands), SR,
+                                   [250.0, 2000.0])
+        self.assertGreater(gains[0], 1.8)
+        self.assertLess(gains[1], 0.4)
+
+    def test_wah_is_finite_and_keeps_signal_length(self):
+        x = [0.5 * math.sin(2.0 * math.pi * 440.0 * n / SR)
+             for n in range(SR)]
+        y = wah(x, SR)
+        self.assertEqual(len(y), len(x))
+        self.assertTrue(all(math.isfinite(v) for v in y))
+
+    def test_phaser_creates_a_notch_when_the_sweep_is_stationary(self):
+        gains = frequency_response(
+            lambda x: phaser(x, SR, low=1000.0, high=1000.0, rate=0.0,
+                             stages=4),
+            SR, [100.0, 1000.0, 3000.0])
+        self.assertLess(min(gains), 0.25)
+        self.assertGreater(max(gains), 0.7)
