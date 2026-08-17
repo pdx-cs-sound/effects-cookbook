@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibrato — AudioExplorer</title>
+<link rel="stylesheet" href="lib/audio_explorer.css">
+<style>
+  :root {
+    color-scheme: light dark;
+    --text: #333;
+    --faint: #888780;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #d8d8d2; }
+  }
+  body {
+    font-family: system-ui, sans-serif;
+    color: var(--text);
+    margin: 1rem;
+    background: transparent;
+  }
+</style>
+</head>
+<body>
+<div id="explorer"></div>
+<script type="module">
+import {AudioExplorer} from "./lib/audio_explorer.js";
+
+new AudioExplorer({
+  mount: document.getElementById("explorer"),
+  processorUrl: "lib/vibrato_processor.js",
+  processorName: "vibrato-processor",
+  controls: [
+    {id: "volume", label: "Volume", min: 0, max: 1, step: 0.01, value: 0.5,
+     format: (v) => Math.round(v * 100) + "%"},
+    {id: "frequency", label: "Tone frequency", min: 110, max: 880, step: 1,
+     value: 220, format: (v) => Math.round(v) + " Hz"},
+    {id: "rate", label: "Vibrato rate", min: 0.5, max: 12, step: 0.1,
+     value: 5, format: (v) => v.toFixed(1) + " Hz"},
+    {id: "depth", label: "Vibrato depth", min: 0, max: 10, step: 0.1,
+     value: 2, format: (v) => v.toFixed(1) + " ms"},
+  ],
+  scope: {
+    mode: "cycles",
+    gainLabel: null,
+    description: "Oscilloscope view of three cycles of the vibrato output, " +
+      "stretching and compressing as the swept delay shifts the pitch.",
+  },
+});
+</script>
+</body>
+</html>

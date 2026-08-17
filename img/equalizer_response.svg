@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="A three-band parametric equalizer">
+<title>A three-band parametric equalizer</title>
+<desc>Measured gain in dB for three peaking filters in series. The low and high bands boost their regions, the middle band cuts, and the output contains the combined response.</desc>
+<g stroke="#888780" stroke-opacity="0.25" stroke-width="1">
+<line x1="46.0" y1="306" x2="46.0" y2="14"/>
+<line x1="161.0" y1="306" x2="161.0" y2="14"/>
+<line x1="276.0" y1="306" x2="276.0" y2="14"/>
+<line x1="391.0" y1="306" x2="391.0" y2="14"/>
+<line x1="506.0" y1="306" x2="506.0" y2="14"/>
+<line x1="46" y1="306.0" x2="506" y2="306.0"/>
+<line x1="46" y1="264.3" x2="506" y2="264.3"/>
+<line x1="46" y1="222.6" x2="506" y2="222.6"/>
+<line x1="46" y1="180.9" x2="506" y2="180.9"/>
+<line x1="46" y1="139.1" x2="506" y2="139.1"/>
+<line x1="46" y1="97.4" x2="506" y2="97.4"/>
+<line x1="46" y1="55.7" x2="506" y2="55.7"/>
+<line x1="46" y1="14.0" x2="506" y2="14.0"/>
+</g>
+<g fill="#888780" font-size="11" font-family="system-ui, sans-serif">
+<text x="46.0" y="322" text-anchor="middle">0</text>
+<text x="161.0" y="322" text-anchor="middle">1000</text>
+<text x="276.0" y="322" text-anchor="middle">2000</text>
+<text x="391.0" y="322" text-anchor="middle">3000</text>
+<text x="506.0" y="322" text-anchor="middle">4000</text>
+<text x="40" y="309.0" text-anchor="end">-12</text>
+<text x="40" y="267.3" text-anchor="end">-9</text>
+<text x="40" y="225.6" text-anchor="end">-6</text>
+<text x="40" y="183.9" text-anchor="end">-3</text>
+<text x="40" y="142.1" text-anchor="end">0</text>
+<text x="40" y="100.4" text-anchor="end">3</text>
+<text x="40" y="58.7" text-anchor="end">6</text>
+<text x="40" y="17.0" text-anchor="end">9</text>
+<text x="276.0" y="336" text-anchor="middle">frequency (Hz)</text>
+<text x="13" y="160.0" text-anchor="middle" transform="rotate(-90 13 160.0)">gain (dB)</text>
+</g>
+<polyline points="46.0,139.1 506.0,139.1" fill="none" stroke="#888780" stroke-width="2.0" stroke-dasharray="4 3"/>
+<polyline points="50.6,137.6 55.2,132.3 59.8,121.6 64.4,103.0 69.0,77.4 73.6,59.6 78.2,66.1 82.8,84.3 87.4,100.8 92.0,113.7 96.6,123.9 101.2,132.5 105.8,140.1 110.4,147.5 115.0,154.9 119.6,162.8 124.2,171.3 128.8,180.7 133.4,190.9 138.0,201.9 142.6,213.4 147.2,224.6 151.8,234.2 156.4,240.9 161.0,243.2 165.6,241.1 170.2,235.4 174.8,227.5 179.4,218.8 184.0,210.1 188.6,201.9 193.2,194.3 197.8,187.5 202.4,181.3 207.0,175.8 211.6,170.8 216.2,166.3 220.8,162.2 225.4,158.5 230.0,155.0 234.6,151.8 239.2,148.8 243.8,146.0 248.4,143.2 253.0,140.6 257.6,138.1 262.2,135.6 266.8,133.1 271.4,130.6 276.0,128.1 280.6,125.6 285.2,123.1 289.8,120.4 294.4,117.7 299.0,114.9 303.6,112.0 308.2,109.0 312.8,105.9 317.4,102.6 322.0,99.3 326.6,95.9 331.2,92.4 335.8,88.9 340.4,85.4 345.0,82.1 349.6,79.0 354.2,76.4 358.8,74.2 363.4,72.8 368.0,72.1 372.6,72.4 377.2,73.6 381.8,75.6 386.4,78.4 391.0,81.9 395.6,85.8 400.2,90.0 404.8,94.4 409.4,98.7 414.0,102.9 418.6,107.0 423.2,110.8 427.8,114.4 432.4,117.7 437.0,120.7 441.6,123.4 446.2,125.9 450.8,128.1 455.4,130.0 460.0,131.7 464.6,133.2 469.2,134.5 473.8,135.7 478.4,136.6 483.0,137.4 487.6,138.0 492.2,138.5 496.8,138.9 501.4,139.1" fill="none" stroke="#378add" stroke-width="2.4"/>
+<line x1="74.8" y1="306" x2="74.8" y2="14" stroke="#7f77dd" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="79.8" y="24" text-anchor="start" fill="#7f77dd" font-size="10" font-family="system-ui, sans-serif">+6 dB</text>
+<line x1="161.0" y1="306" x2="161.0" y2="14" stroke="#7f77dd" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="166.0" y="24" text-anchor="start" fill="#7f77dd" font-size="10" font-family="system-ui, sans-serif">-8 dB</text>
+<line x1="368.0" y1="306" x2="368.0" y2="14" stroke="#7f77dd" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="373.0" y="24" text-anchor="start" fill="#7f77dd" font-size="10" font-family="system-ui, sans-serif">+5 dB</text>
+<line x1="346" y1="34.85714285714283" x2="366" y2="34.85714285714283" stroke="#378add" stroke-width="2.4"/>
+<text x="372" y="38.35714285714283" fill="#888780" font-size="11" font-family="system-ui, sans-serif">combined response</text>
+<line x1="346" y1="49.85714285714283" x2="366" y2="49.85714285714283" stroke="#888780" stroke-width="2.0" stroke-dasharray="4 3"/>
+<text x="372" y="53.35714285714283" fill="#888780" font-size="11" font-family="system-ui, sans-serif">unity gain</text>
+</svg>
